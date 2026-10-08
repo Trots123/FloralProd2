@@ -72,7 +72,7 @@ public class TestRepository {
     }
 
 
-    public void getInsert() {
+    public List<product_flor> getInsert(product_flor product) {
 
         String sql = """
             INSERT INTO product_flor (name, price, description)
@@ -83,10 +83,9 @@ public class TestRepository {
              PreparedStatement statement =
                      connection.prepareStatement(sql)) {
 
-            statement.setString(1, "rose");
-            statement.setBigDecimal(2, BigDecimal.valueOf(110));
-            statement.setString(3, "black");
-
+            statement.setString(1, product.getName());
+            statement.setBigDecimal(2, product.getPrice());
+            statement.setString(3, product.getDescription());
             int rows = statement.executeUpdate();
 
             System.out.println("Добавлено строк: " + rows);
@@ -94,6 +93,7 @@ public class TestRepository {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+        return null;
     }
 
     public List<product_flor> getAllAdditional() {

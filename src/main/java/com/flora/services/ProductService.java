@@ -14,4 +14,8 @@ public class ProductService {
         return testRepository.getAll();
     }
 
+    public List<product_flor> addProduct(product_flor product) {
+        return testRepository.getInsert(product);
+    }
+
 }

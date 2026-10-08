@@ -14,7 +14,7 @@ public class FloralProd {
     public static void main(String[] args) {
         SpringApplication.run(FloralProd.class, args);
 
-        TestRepository repository = new TestRepository();
+     /*   TestRepository repository = new TestRepository();
 
         repository.getInsert();
 
@@ -29,5 +29,8 @@ public class FloralProd {
             );
 
         }
+
+
+      */
     }
 }
