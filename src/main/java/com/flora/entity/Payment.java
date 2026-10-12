@@ -3,18 +3,18 @@ package com.flora.entity;
 
 import java.math.BigDecimal;
 
-public class payment {
+public class Payment {
 
     private BigDecimal full_cost;
     private boolean paid = false;
     private int order_id;
 
-    public payment() {
+    public Payment() {
 
     }
 
-    public static payment.Builder builder() {
-        return new payment.Builder();
+    public static Payment.Builder builder() {
+        return new Payment.Builder();
     }
 
 
@@ -25,26 +25,26 @@ public class payment {
         private int order_id;
 
 
-        public payment.Builder full_cost(BigDecimal full_cost) {
+        public Payment.Builder full_cost(BigDecimal full_cost) {
             this.full_cost = full_cost;
             return this;
         }
 
 
-        public payment.Builder paid(boolean paid) {
+        public Payment.Builder paid(boolean paid) {
             this.paid = paid;
             return this;
         }
 
-        public payment.Builder order_id(int order_id) {
+        public Payment.Builder order_id(int order_id) {
             this.order_id = order_id;
             return this;
         }
 
 
-        public payment build() {
+        public Payment build() {
 
-            payment payment = new payment();
+            Payment payment = new Payment();
 
             payment.full_cost = this.full_cost;
             payment.paid = this.paid;

@@ -3,19 +3,19 @@ package com.flora.entity;
 import java.math.BigDecimal;
 
 
-public class order {
+public class Order {
 
     private int id;
 
     private int cart_id;
     private BigDecimal total_price;
 
-    public order() {
+    public Order() {
 
     }
 
-    public static order.Builder builder() {
-        return new order.Builder();
+    public static Order.Builder builder() {
+        return new Order.Builder();
     }
 
 
@@ -25,21 +25,21 @@ public class order {
         private BigDecimal total_price;
 
 
-        public order.Builder cart_id(int cart_id) {
+        public Order.Builder cart_id(int cart_id) {
             this.cart_id = cart_id;
             return this;
         }
 
 
-        public order.Builder total_price(BigDecimal total_price) {
+        public Order.Builder total_price(BigDecimal total_price) {
             this.total_price = total_price;
             return this;
         }
 
 
-        public order build() {
+        public Order build() {
 
-            order order = new order();
+            Order order = new Order();
 
             order.cart_id = this.cart_id;
             order.total_price = this.total_price;

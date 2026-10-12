@@ -1,6 +1,6 @@
 package com.flora.entity;
 
-public class item_cart {
+public class ItemCart {
 
 
     private int id;
@@ -9,12 +9,12 @@ public class item_cart {
     private int prod_id;
     private int quantity;
 
-    public item_cart() {
+    public ItemCart() {
 
     }
 
-    public static item_cart.Builder builder() {
-        return new item_cart.Builder();
+    public static ItemCart.Builder builder() {
+        return new ItemCart.Builder();
     }
 
 
@@ -25,27 +25,27 @@ public class item_cart {
         private int quantity;
 
 
-        public item_cart.Builder cart_id(int cart_id) {
+        public ItemCart.Builder cart_id(int cart_id) {
             this.cart_id = cart_id;
             return this;
         }
 
 
-        public item_cart.Builder prod_id(int prod_id) {
+        public ItemCart.Builder prod_id(int prod_id) {
             this.prod_id = prod_id;
             return this;
         }
 
 
-        public item_cart.Builder quantity(int quantity) {
+        public ItemCart.Builder quantity(int quantity) {
             this.quantity = quantity;
             return this;
 
         }
 
-        public item_cart build() {
+        public ItemCart build() {
 
-            item_cart itemCart = new item_cart();
+            ItemCart itemCart = new ItemCart();
 
             itemCart.cart_id = this.cart_id;
             itemCart.prod_id = this.prod_id;

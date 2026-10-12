@@ -1,21 +1,24 @@
 package com.flora.services;
 
-import com.flora.entity.product_flor;
-import com.flora.repository.TestRepository;
+import com.flora.entity.ProductFlor;
+import com.flora.repository.ProductRepository;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class ProductService {
-   private TestRepository testRepository = new TestRepository();
+    private final ProductRepository productRepository;
 
-
-
-    public List<product_flor> getAllProduct() {
-        return testRepository.getAll();
+    public ProductService(ProductRepository productRepository) {
+        this.productRepository = productRepository;
     }
 
-    public List<product_flor> addProduct(product_flor product) {
-        return testRepository.getInsert(product);
+    public List<ProductFlor> getAllProduct() {
+        return productRepository.getAll();
     }
 
+    public void addProduct(ProductFlor product) {
+        productRepository.getInsert(product);
+    }
 }

@@ -1,18 +1,18 @@
 package com.flora.entity;
 
 
-public class cart {
+public class Cart {
 
     private int id;
 
     private int user_id;
     private boolean dral_ststus = false;
 
-    public static cart.Builder builder() {
-        return new cart.Builder();
+    public static Cart.Builder builder() {
+        return new Cart.Builder();
     }
 
-    public cart() {
+    public Cart() {
     }
 
     public static class Builder {
@@ -21,21 +21,21 @@ public class cart {
         private boolean dral_ststus = false;
 
 
-        public cart.Builder user_id(int user_id) {
+        public Cart.Builder user_id(int user_id) {
             this.user_id = user_id;
             return this;
         }
 
 
-        public cart.Builder dral_ststus(boolean dral_ststus) {
+        public Cart.Builder dral_ststus(boolean dral_ststus) {
             this.dral_ststus = dral_ststus;
             return this;
         }
 
 
-        public cart build() {
+        public Cart build() {
 
-            cart cartD = new cart();
+            Cart cartD = new Cart();
 
             cartD.user_id = this.user_id;
             cartD.dral_ststus = this.dral_ststus;

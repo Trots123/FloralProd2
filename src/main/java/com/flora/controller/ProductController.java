@@ -1,7 +1,7 @@
 package com.flora.controller;
 
 
-import com.flora.entity.product_flor;
+import com.flora.entity.ProductFlor;
 import com.flora.services.ProductService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -11,25 +11,24 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-public class FirstController {
+public class ProductController {
 
-    ProductService productService = new ProductService();
+    private final ProductService productService;
 
+    public ProductController(ProductService productService) {
+        this.productService = productService;
+    }
 
-
-
-   @GetMapping("/testget")
-    public List<product_flor> testController (){
+    @GetMapping("/testget")
+    public List<ProductFlor> testController() {
         return productService.getAllProduct();
     }
 
-///
+
     @PostMapping("/testpost")
-    public void testPost(@RequestBody product_flor product) {
+    public void testPost(@RequestBody ProductFlor product) {
         productService.addProduct(product);
     }
-
-
 
 
 }

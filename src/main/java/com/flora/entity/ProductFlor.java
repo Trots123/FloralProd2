@@ -2,7 +2,7 @@ package com.flora.entity;
 
 import java.math.BigDecimal;
 
-public class product_flor {
+public class ProductFlor {
 
     private int id;
 
@@ -10,19 +10,19 @@ public class product_flor {
     private BigDecimal price;
     private String description;
 
-    public product_flor() {
+    public ProductFlor() {
 
     }
 
-    public product_flor(int id ,String name, BigDecimal price, String description) {
+    public ProductFlor(int id , String name, BigDecimal price, String description) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.description = description;
     }
 
-    public static product_flor.Builder builder() {
-        return new product_flor.Builder();
+    public static ProductFlor.Builder builder() {
+        return new ProductFlor.Builder();
     }
 
 
@@ -31,26 +31,26 @@ public class product_flor {
         private BigDecimal price;
         private String description;
 
-        public product_flor.Builder name(String name) {
+        public ProductFlor.Builder name(String name) {
             this.name = name;
             return this;
         }
 
 
-        public product_flor.Builder price(BigDecimal price) {
+        public ProductFlor.Builder price(BigDecimal price) {
             this.price = price;
             return this;
         }
 
-        public product_flor.Builder description(String description) {
+        public ProductFlor.Builder description(String description) {
             this.description = description;
             return this;
         }
 
 
-        public product_flor build() {
+        public ProductFlor build() {
 
-            product_flor productFlor = new product_flor();
+            ProductFlor productFlor = new ProductFlor();
 
             productFlor.name = this.name;
             productFlor.price = this.price;
