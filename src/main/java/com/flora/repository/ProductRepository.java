@@ -11,6 +11,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class ProductRepository {
@@ -21,11 +22,10 @@ public class ProductRepository {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    // метод getAll который должен вернуть Лист продуктов флор
+
+    // возврат все продуктов
     public List<ProductFlor> getAll() {
-
         String sqlGetAll = "SELECT * FROM product_flor";
-
 
         return jdbcTemplate.query(sqlGetAll, (rs, rowNum) ->
                 new ProductFlor(
@@ -35,28 +35,68 @@ public class ProductRepository {
                         rs.getString("description")
                 )
         );
-
     }
-
+    // создание продукта
     public int getInsert(ProductFlor product) {
-
         String sql = """
                 
                     INSERT INTO product_flor (name, price, description)
                 VALUES (?, ?, ?)
                 """;
-
         int rows = jdbcTemplate.update(
                 sql,
                 product.getName(),
                 product.getPrice(),
                 product.getDescription()
         );
-
-        System.out.println("Добавлено строк: " + rows);
-
         return
                 rows;
+    }
+
+    // поиск продукта по ID
+    public Optional<ProductFlor> getById(int id) {
+        String sql = """
+            SELECT id, name, price, description
+            FROM product_flor
+            WHERE id = ?
+            """;
+        List<ProductFlor> products = jdbcTemplate.query(
+                sql,
+                (rs, rowNum) -> new ProductFlor(
+                        rs.getInt("id"),
+                        rs.getString("name"),
+                        rs.getBigDecimal("price"),
+                        rs.getString("description")
+                ),
+                id
+        );
+
+        return products.stream().findFirst();
+    }
+
+    // изменение продукта
+    public int updateProduct(int id, ProductFlor product) {
+        String sql = """
+            UPDATE product_flor
+            SET name = ?, price = ?, description = ?
+            WHERE id = ?
+            """;
+        return jdbcTemplate.update(
+                sql,
+                product.getName(),
+                product.getPrice(),
+                product.getDescription(),
+                id
+        );
+    }
+
+    //удаление продукта
+    public int deleteProduct(int id) {
+        String sql = """
+            DELETE FROM product_flor
+            WHERE id = ?
+            """;
+        return jdbcTemplate.update(sql, id);
     }
 }
 

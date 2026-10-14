@@ -5,56 +5,21 @@ public class ItemCart {
 
     private int id;
 
-    private int cart_id;
-    private int prod_id;
+    private int cartId;
+    private int prodId;
     private int quantity;
 
-    public ItemCart() {
+    public ItemCart(int id, Cart cart, int prodId, int quantity) {
 
     }
 
-    public static ItemCart.Builder builder() {
-        return new ItemCart.Builder();
+    public ItemCart(int id, int cartId, int prodId, int quantity) {
+        this.id = id;
+        this.cartId = cartId;
+        this.prodId = prodId;
+        this.quantity = quantity;
     }
 
-
-    public static class Builder {
-
-        private int cart_id;
-        private int prod_id;
-        private int quantity;
-
-
-        public ItemCart.Builder cart_id(int cart_id) {
-            this.cart_id = cart_id;
-            return this;
-        }
-
-
-        public ItemCart.Builder prod_id(int prod_id) {
-            this.prod_id = prod_id;
-            return this;
-        }
-
-
-        public ItemCart.Builder quantity(int quantity) {
-            this.quantity = quantity;
-            return this;
-
-        }
-
-        public ItemCart build() {
-
-            ItemCart itemCart = new ItemCart();
-
-            itemCart.cart_id = this.cart_id;
-            itemCart.prod_id = this.prod_id;
-            itemCart.quantity = this.quantity;
-
-            return itemCart;
-        }
-
-    }
 
     public int getId() {
         return id;
@@ -64,20 +29,20 @@ public class ItemCart {
         this.id = id;
     }
 
-    public int getCart_id() {
-        return cart_id;
+    public int getCartId() {
+        return cartId;
     }
 
-    public void setCart_id(int cart_id) {
-        this.cart_id = cart_id;
+    public void setCartId(int cartId) {
+        this.cartId = cartId;
     }
 
-    public int getProd_id() {
-        return prod_id;
+    public int getProdId() {
+        return prodId;
     }
 
-    public void setProd_id(int prod_id) {
-        this.prod_id = prod_id;
+    public void setProdId(int prodId) {
+        this.prodId = prodId;
     }
 
     public int getQuantity() {

@@ -5,12 +5,18 @@ import java.math.BigDecimal;
 
 public class Payment {
 
-    private BigDecimal full_cost;
+    private BigDecimal fullCost;
     private boolean paid = false;
-    private int order_id;
+    private int orderId;
 
     public Payment() {
 
+    }
+
+    public Payment(BigDecimal fullCost, boolean paid, int orderId) {
+        this.fullCost = fullCost;
+        this.paid = paid;
+        this.orderId = orderId;
     }
 
     public static Payment.Builder builder() {
@@ -20,13 +26,13 @@ public class Payment {
 
     public static class Builder {
 
-        private BigDecimal full_cost;
+        private BigDecimal fullCost;
         private boolean paid = false;
-        private int order_id;
+        private int orderId;
 
 
-        public Payment.Builder full_cost(BigDecimal full_cost) {
-            this.full_cost = full_cost;
+        public Payment.Builder fullCost(BigDecimal fullCost) {
+            this.fullCost = fullCost;
             return this;
         }
 
@@ -36,8 +42,8 @@ public class Payment {
             return this;
         }
 
-        public Payment.Builder order_id(int order_id) {
-            this.order_id = order_id;
+        public Payment.Builder orderId(int orderId) {
+            this.orderId = orderId;
             return this;
         }
 
@@ -46,20 +52,20 @@ public class Payment {
 
             Payment payment = new Payment();
 
-            payment.full_cost = this.full_cost;
+            payment.fullCost = this.fullCost;
             payment.paid = this.paid;
-            payment.order_id = this.order_id;
+            payment.orderId = this.orderId;
 
             return payment;
         }
     }
 
-    public BigDecimal getFull_cost() {
-        return full_cost;
+    public BigDecimal getFullCost() {
+        return fullCost;
     }
 
-    public void setFull_cost(BigDecimal full_cost) {
-        this.full_cost = full_cost;
+    public void setFullCost(BigDecimal fullCost) {
+        this.fullCost = fullCost;
     }
 
     public boolean isPaid() {
@@ -70,11 +76,11 @@ public class Payment {
         this.paid = paid;
     }
 
-    public int getOrder_id() {
-        return order_id;
+    public int getOrderId() {
+        return orderId;
     }
 
-    public void setOrder_id(int order_id) {
-        this.order_id = order_id;
+    public void setOrderId(int order_id) {
+        this.orderId = orderId;
     }
 }

@@ -24,13 +24,15 @@ public class ClientRepository {
 
     public ClientRepository(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
+    }
 
 
-    } // Получить всех клиентов
 
+    // Получить всех клиентов
     public List<ClientFlorr> getAllClient() {
         String sql = """ 
-                SELECT * FROM client_florr 
+                SELECT * 
+                FROM client_florr 
                 """;
         return jdbcTemplate.query(sql, (rs, rowNum) ->
                 new ClientFlorr(
@@ -38,32 +40,36 @@ public class ClientRepository {
                         rs.getString("name"),
                         rs.getString("phone_number") ,
                         rs.getBigDecimal("balance")));
-
     }
+
 
     // Найти клиента по ID public
-    Optional<ClientFlorr> getByIdClient(long id) {
+    public Optional<ClientFlorr> getByIdClient(long id) {
         String sql = """ 
-                SELECT * FROM client_florr WHERE id = ? 
+                SELECT * 
+                FROM client_florr
+                WHERE id = ? 
                 """;
-
-
-        List<ClientFlorr> clients = jdbcTemplate.query(sql, (rs, rowNum) ->
-                new ClientFlorr(
+        List<ClientFlorr> clients = jdbcTemplate.query(
+                sql,
+                (rs, rowNum) -> new ClientFlorr(
                         rs.getInt("id"),
                         rs.getString("name"),
-                        rs.getString("phone_number") ,
-                        rs.getBigDecimal("balance")), id);
+                        rs.getString("phone_number"),
+                        rs.getBigDecimal("balance")
+                ),
+                id
+        );
         return clients.stream().findFirst();
-
     }
-    public int addClient(ClientFlorr client) {
 
+
+    // создание клиента
+    public int addClient(ClientFlorr client) {
         String sql = """
             INSERT INTO client_florr (name,  phone_number , balance)
             VALUES (?, ?, ?)
             """;
-
         return jdbcTemplate.update(
                 sql,
                 client.getName(),
@@ -71,5 +77,31 @@ public class ClientRepository {
                 client.getBalance()
         );
     }
+
+
+    // Изменение клиента
+    public int updateClient(int id, ClientFlorr client) {
+        String sql = """
+            UPDATE client_florr
+            SET name = ?, phone_number = ?, balance = ?
+            WHERE id = ?
+            """;
+        return jdbcTemplate.update(
+                sql,
+                client.getName(),
+                client.getPhoneNumber(),
+                client.getBalance(),
+                id
+        );
+    }
+
+    //удаление клиента
+    public int deleteClient(int id) {
+        String sql = """
+            DELETE FROM client_florr
+            WHERE id = ?
+            """;
+        return jdbcTemplate.update(sql, id);
+    }
 }
-//
+

@@ -7,11 +7,17 @@ public class Order {
 
     private int id;
 
-    private int cart_id;
-    private BigDecimal total_price;
+    private int cartId;
+    private BigDecimal totalPrice;
 
     public Order() {
 
+    }
+
+    public Order(int id, int cartId, BigDecimal totalPrice) {
+        this.id = id;
+        this.cartId = cartId;
+        this.totalPrice = totalPrice;
     }
 
     public static Order.Builder builder() {
@@ -21,18 +27,18 @@ public class Order {
 
     public static class Builder {
 
-        private int cart_id;
-        private BigDecimal total_price;
+        private int cartId;
+        private BigDecimal totalPrice;
 
 
-        public Order.Builder cart_id(int cart_id) {
-            this.cart_id = cart_id;
+        public Order.Builder cartId(int cartId) {
+            this.cartId = cartId;
             return this;
         }
 
 
-        public Order.Builder total_price(BigDecimal total_price) {
-            this.total_price = total_price;
+        public Order.Builder totalPrice(BigDecimal totalPrice) {
+            this.totalPrice = totalPrice;
             return this;
         }
 
@@ -41,8 +47,8 @@ public class Order {
 
             Order order = new Order();
 
-            order.cart_id = this.cart_id;
-            order.total_price = this.total_price;
+            order.cartId = this.cartId;
+            order.totalPrice = this.totalPrice;
 
             return order;
         }
@@ -57,19 +63,19 @@ public class Order {
         this.id = id;
     }
 
-    public int getCart_id() {
-        return cart_id;
+    public int getCartId() {
+        return cartId;
     }
 
-    public void setCart_id(int cart_id) {
-        this.cart_id = cart_id;
+    public void setCartId(int cartId) {
+        this.cartId = cartId;
     }
 
-    public BigDecimal getTotal_price() {
-        return total_price;
+    public BigDecimal getTotalPrice() {
+        return totalPrice;
     }
 
-    public void setTotal_price(BigDecimal total_price) {
-        this.total_price = total_price;
+    public void setTotalPrice(BigDecimal totalPrice) {
+        this.totalPrice = totalPrice;
     }
 }

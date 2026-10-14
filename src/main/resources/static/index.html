@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flora — магазин цветов</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f8f7f3;
+            color: #292d27;
+        }
+
+        header {
+            padding: 18px 8%;
+            background: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            border-bottom: 1px solid #e8e7e0;
+        }
+
+        header h1 {
+            margin: 0;
+            color: #476448;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        main {
+            max-width: 1100px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .intro {
+            margin-bottom: 32px;
+        }
+
+        .intro h2 {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        #flowers {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+        }
+
+        .flower {
+            padding: 24px;
+            background: white;
+            border-radius: 14px;
+            border: 1px solid #e8e7e0;
+        }
+
+        .flower h3 {
+            color: #476448;
+        }
+
+        .price {
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        button {
+            padding: 12px 18px;
+            border: 0;
+            border-radius: 8px;
+            background: #476448;
+            color: white;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #354e36;
+        }
+
+        .secondary-button {
+            background: #e9eee5;
+            color: #354e36;
+        }
+
+        .secondary-button:hover {
+            background: #dce5d7;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* Модальные окна */
+
+        .modal {
+            position: fixed;
+            inset: 0;
+            z-index: 10;
+            background: rgba(0, 0, 0, 0.45);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .modal-content {
+            width: 100%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 26px;
+            background: white;
+            border-radius: 16px;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .modal-header h2 {
+            margin-top: 0;
+        }
+
+        .close-button {
+            padding: 7px 12px;
+            background: #e9eee5;
+            color: #354e36;
+        }
+
+        .registration-form {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .registration-form label {
+            font-weight: bold;
+        }
+
+        .registration-form input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #d5d8d0;
+            border-radius: 8px;
+        }
+
+        .message {
+            margin-top: 16px;
+        }
+
+        .account-section {
+            padding: 16px 0;
+            border-bottom: 1px solid #e8e7e0;
+        }
+
+        .account-section:last-child {
+            border-bottom: 0;
+        }
+
+        .account-section h3 {
+            color: #476448;
+        }
+
+        @media (max-width: 520px) {
+            header {
+                padding: 16px;
+            }
+
+            main {
+                margin-top: 24px;
+            }
+
+            .header-actions {
+                gap: 6px;
+            }
+
+            button {
+                padding: 10px 12px;
+            }
+
+            .intro h2 {
+                font-size: 26px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h1>Flora</h1>
+
+    <div class="header-actions">
+        <button id="accountButton" class="secondary-button">
+            Регистрация
+        </button>
+
+        <button id="cartButton" class="secondary-button">
+            Корзина (<span id="cartCount">0</span>)
+        </button>
+    </div>
+</header>
+
+<main>
+    <section class="intro">
+        <h2>Цветы для особенных моментов</h2>
+        <p>Выбирай любимые цветы из нашего каталога.</p>
+    </section>
+
+    <h2>Наши цветы</h2>
+
+    <p id="message">Загружаем каталог...</p>
+    <section id="flowers"></section>
+</main>
+
+<!-- Окно регистрации -->
+
+<div id="registrationModal" class="modal hidden">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>Регистрация покупателя</h2>
+            <button type="button" class="close-button"
+                    data-close="registrationModal">✕</button>
+        </div>
+
+        <form id="registrationForm" class="registration-form">
+            <label for="name">Имя</label>
+            <input type="text" id="name" required>
+
+            <label for="phoneNumber">Номер телефона</label>
+            <input type="tel" id="phoneNumber" required>
+
+            <label for="balance">Баланс (€)</label>
+            <input type="number" id="balance"
+                   min="0" step="0.01" required>
+
+            <button type="submit">Зарегистрироваться</button>
+        </form>
+
+        <p id="registrationMessage" class="message"></p>
+    </div>
+</div>
+
+<!-- Личный кабинет -->
+
+<div id="accountModal" class="modal hidden">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>Личный кабинет</h2>
+            <button type="button" class="close-button"
+                    data-close="accountModal">✕</button>
+        </div>
+
+        <section class="account-section">
+            <h3>Мои данные</h3>
+            <p>Имя: <span id="accountName">—</span></p>
+            <p>Телефон: <span id="accountPhone">—</span></p>
+            <p>Баланс: <span id="accountBalance">—</span> €</p>
+        </section>
+
+        <section class="account-section">
+            <h3>История заказов</h3>
+            <p id="ordersMessage">
+                История заказов пока не подключена.
+            </p>
+        </section>
+
+        <button id="logoutButton" class="secondary-button">
+            Выйти из аккаунта
+        </button>
+    </div>
+</div>
+
+<!-- Корзина: пока демонстрационная -->
+
+<div id="cartModal" class="modal hidden">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>Корзина</h2>
+            <button type="button" class="close-button"
+                    data-close="cartModal">✕</button>
+        </div>
+
+        <div id="cartItems">
+            <p>Корзина пуста.</p>
+        </div>
+
+        <p class="price">
+            Итого: <span id="cartTotal">0.00</span> €
+        </p>
+    </div>
+</div>
+
+<script>
+    let currentClient = null;
+    let cart = [];
+
+    const accountButton = document.getElementById("accountButton");
+
+    function openModal(id) {
+        document.getElementById(id).classList.remove("hidden");
+    }
+
+    function closeModal(id) {
+        document.getElementById(id).classList.add("hidden");
+    }
+
+    document.querySelectorAll("[data-close]").forEach(button => {
+        button.addEventListener("click", () => {
+            closeModal(button.dataset.close);
+        });
+    });
+
+    // Закрытие окна нажатием на затемнённый фон
+    document.querySelectorAll(".modal").forEach(modal => {
+        modal.addEventListener("click", event => {
+            if (event.target === modal) {
+                modal.classList.add("hidden");
+            }
+        });
+    });
+
+    function updateAccountButton() {
+        if (currentClient) {
+            accountButton.textContent = "Личный кабинет";
+        } else {
+            accountButton.textContent = "Регистрация";
+        }
+    }
+
+    function showAccount() {
+        document.getElementById("accountName").textContent =
+            currentClient.name;
+
+        document.getElementById("accountPhone").textContent =
+            currentClient.phoneNumber;
+
+        document.getElementById("accountBalance").textContent =
+            Number(currentClient.balance).toFixed(2);
+
+        openModal("accountModal");
+    }
+
+    accountButton.addEventListener("click", () => {
+        if (currentClient) {
+            showAccount();
+        } else {
+            document.getElementById("registrationMessage").textContent = "";
+            openModal("registrationModal");
+        }
+    });
+
+    // Загрузка каталога
+    async function loadFlowers() {
+        const container = document.getElementById("flowers");
+        const message = document.getElementById("message");
+
+        message.textContent = "Загружаем каталог...";
+        container.replaceChildren();
+
+        try {
+            const response = await fetch("/product");
+
+            if (!response.ok) {
+                throw new Error("HTTP " + response.status);
+            }
+
+            const flowers = await response.json();
+
+            if (!Array.isArray(flowers) || flowers.length === 0) {
+                message.textContent = "Пока цветов нет в каталоге.";
+                return;
+            }
+
+            flowers.forEach(flower => {
+                const card = document.createElement("article");
+                card.className = "flower";
+
+                const name = document.createElement("h3");
+                name.textContent = flower.name;
+
+                const description = document.createElement("p");
+                description.textContent = flower.description ?? "";
+
+                const price = document.createElement("p");
+                price.className = "price";
+                price.textContent = flower.price + " €";
+
+                const addButton = document.createElement("button");
+                addButton.textContent = "В корзину";
+
+                addButton.addEventListener("click", () => {
+                    addToCart(flower);
+                });
+
+                card.append(name, description, price, addButton);
+                container.appendChild(card);
+            });
+
+            message.textContent = "";
+        } catch (error) {
+            message.textContent =
+                "Не удалось загрузить каталог. Проверь GET //product.";
+            console.error(error);
+        }
+    }
+
+    // Регистрация
+    document.getElementById("registrationForm")
+        .addEventListener("submit", async function (event) {
+            event.preventDefault();
+
+            const message =
+                document.getElementById("registrationMessage");
+
+            const client = {
+                name: document.getElementById("name").value.trim(),
+                phoneNumber:
+                    document.getElementById("phoneNumber").value.trim(),
+                balance: Number(
+                    document.getElementById("balance").value
+                )
+            };
+
+            if (!client.name || !client.phoneNumber) {
+                message.textContent = "Заполни все поля.";
+                return;
+            }
+
+            if (!Number.isFinite(client.balance) || client.balance < 0) {
+                message.textContent = "Проверь введённый баланс.";
+                return;
+            }
+
+            try {
+                const response = await fetch("/clients", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(client)
+                });
+
+                if (!response.ok) {
+                    throw new Error("HTTP " + response.status);
+                }
+
+                // Если сервер вернул созданного клиента в JSON,
+                // используем его данные, включая ID.
+                const responseText = await response.text();
+                let savedClient = client;
+
+                if (responseText.trim()) {
+                    try {
+                        const result = JSON.parse(responseText);
+
+                        if (result && typeof result === "object") {
+                            savedClient = { ...client, ...result };
+                        }
+                    } catch {
+                        // Сервер мог вернуть обычный текст.
+                    }
+                }
+
+                currentClient = {
+                    ...savedClient,
+                    name: savedClient.name ?? client.name,
+                    phoneNumber:
+                        savedClient.phoneNumber ?? client.phoneNumber,
+                    balance: savedClient.balance ?? client.balance
+                };
+
+                // Сохраняем состояние в текущем браузере.
+                sessionStorage.setItem(
+                    "floraClient",
+                    JSON.stringify(currentClient)
+                );
+
+                updateAccountButton();
+                closeModal("registrationModal");
+                this.reset();
+
+            } catch (error) {
+                message.textContent =
+                    "Ошибка регистрации. Проверь backend.";
+                console.error(error);
+            }
+        });
+
+    // Восстановление данных при обновлении страницы
+    try {
+        const saved = sessionStorage.getItem("floraClient");
+
+        if (saved) {
+            currentClient = JSON.parse(saved);
+            updateAccountButton();
+        }
+    } catch (error) {
+        sessionStorage.removeItem("floraClient");
+    }
+
+    // Демонстрационная корзина в браузере
+    function addToCart(flower) {
+        const existing = cart.find(item => item.id === flower.id);
+
+        if (existing) {
+            existing.quantity++;
+        } else {
+            cart.push({
+                id: flower.id,
+                name: flower.name,
+                price: Number(flower.price),
+                quantity: 1
+            });
+        }
+
+        renderCart();
+    }
+
+    function renderCart() {
+        const container = document.getElementById("cartItems");
+        container.replaceChildren();
+
+        let total = 0;
+        let count = 0;
+
+        if (cart.length === 0) {
+            container.textContent = "Корзина пуста.";
+        }
+
+        cart.forEach(item => {
+            const row = document.createElement("p");
+            row.textContent =
+                `${item.name} × ${item.quantity} — ` +
+                `${(item.price * item.quantity).toFixed(2)} €`;
+
+            container.appendChild(row);
+
+            total += item.price * item.quantity;
+            count += item.quantity;
+        });
+
+        document.getElementById("cartCount").textContent = count;
+        document.getElementById("cartTotal").textContent =
+            total.toFixed(2);
+    }
+
+    document.getElementById("cartButton").addEventListener("click", () => {
+        openModal("cartModal");
+    });
+
+    document.getElementById("logoutButton").addEventListener("click", () => {
+        currentClient = null;
+        sessionStorage.removeItem("floraClient");
+        updateAccountButton();
+        closeModal("accountModal");
+    });
+
+    loadFlowers();
+    renderCart();
+</script>
+
+</body>
+</html>
