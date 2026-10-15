@@ -30,6 +30,7 @@ public class ProductController {
     public List<ProductFlor> getProduct() {
         return productService.getAllProduct();
     }
+
     //создание продукта
     @PostMapping
     public void addProduct(@RequestBody ProductFlor product) {

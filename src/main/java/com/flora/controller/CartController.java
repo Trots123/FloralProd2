@@ -17,13 +17,13 @@ public class CartController {
         this.cartService = cartService;
     }
 
-    
+
     // READ: получить все корзины
     @GetMapping
     public List<Cart> getAllCarts() {
         return cartService.getAllCarts();
     }
-    
+
 
     // READ: получить корзину по ID
     @GetMapping("/{id}")

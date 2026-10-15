@@ -6,195 +6,395 @@
     <title>Flora — магазин цветов</title>
 
     <style>
+        :root {
+            --green: #285943;
+            --green-dark: #183e2e;
+            --green-light: #e8f0e8;
+            --cream: #f8f8f1;
+            --white: #ffffff;
+            --text: #26372c;
+            --muted: #7b897d;
+            --border: #e1e8df;
+            --danger: #b44242;
+        }
+
         * {
             box-sizing: border-box;
+            margin: 0;
+            padding: 0;
         }
 
         body {
-            margin: 0;
             font-family: Arial, sans-serif;
-            background: #f8f7f3;
-            color: #292d27;
+            color: var(--text);
+            background: var(--cream);
+        }
+
+        button, input {
+            font: inherit;
+        }
+
+        button {
+            cursor: pointer;
         }
 
         header {
-            padding: 18px 8%;
-            background: white;
+            min-height: 78px;
+            padding: 16px 6%;
+            background: var(--white);
+            border-bottom: 1px solid var(--border);
             display: flex;
             justify-content: space-between;
             align-items: center;
-            gap: 16px;
-            border-bottom: 1px solid #e8e7e0;
+            gap: 20px;
+            position: sticky;
+            top: 0;
+            z-index: 10;
         }
 
-        header h1 {
-            margin: 0;
-            color: #476448;
+        .logo {
+            font-size: 30px;
+            font-weight: 800;
+            letter-spacing: -1px;
+            color: var(--green);
+            cursor: pointer;
+        }
+
+        .logo span {
+            color: #92a77e;
         }
 
         .header-actions {
             display: flex;
-            gap: 10px;
             align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
         }
 
-        main {
-            max-width: 1100px;
-            margin: 40px auto;
-            padding: 0 20px;
-        }
-
-        .intro {
-            margin-bottom: 32px;
-        }
-
-        .intro h2 {
-            font-size: 32px;
-            margin-bottom: 10px;
-        }
-
-        #flowers {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 20px;
-        }
-
-        .flower {
-            padding: 24px;
-            background: white;
-            border-radius: 14px;
-            border: 1px solid #e8e7e0;
-        }
-
-        .flower h3 {
-            color: #476448;
-        }
-
-        .price {
-            font-size: 20px;
-            font-weight: bold;
-        }
-
-        button {
+        .btn {
             padding: 12px 18px;
-            border: 0;
+            border: 1px solid var(--green);
             border-radius: 8px;
-            background: #476448;
+            background: var(--green);
             color: white;
-            cursor: pointer;
+            transition: 0.2s;
         }
 
-        button:hover {
-            background: #354e36;
+        .btn:hover {
+            background: var(--green-dark);
         }
 
-        .secondary-button {
-            background: #e9eee5;
-            color: #354e36;
+        .btn-outline {
+            background: white;
+            color: var(--green);
         }
 
-        .secondary-button:hover {
-            background: #dce5d7;
+        .btn-outline:hover {
+            background: var(--green-light);
+            color: var(--green-dark);
         }
 
         .hidden {
             display: none !important;
         }
 
-        /* Модальные окна */
-
-        .modal {
-            position: fixed;
-            inset: 0;
-            z-index: 10;
-            background: rgba(0, 0, 0, 0.45);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            overflow-y: auto;
-        }
-
-        .modal-content {
-            width: 100%;
-            max-width: 500px;
-            max-height: 90vh;
-            overflow-y: auto;
-            padding: 26px;
-            background: white;
-            border-radius: 16px;
-        }
-
-        .modal-header {
+        .hero {
+            padding: 65px 8%;
+            background: #e8efe4;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            gap: 12px;
+            gap: 30px;
         }
 
-        .modal-header h2 {
-            margin-top: 0;
+        .hero-content {
+            max-width: 650px;
         }
 
-        .close-button {
-            padding: 7px 12px;
-            background: #e9eee5;
-            color: #354e36;
+        .eyebrow {
+            color: var(--green);
+            font-size: 12px;
+            font-weight: bold;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 18px;
         }
 
-        .registration-form {
+        .hero h1 {
+            font-size: clamp(36px, 5vw, 60px);
+            line-height: 1.08;
+            color: var(--green-dark);
+            margin-bottom: 20px;
+        }
+
+        .hero p {
+            color: #657466;
+            line-height: 1.8;
+            font-size: 17px;
+        }
+
+        .hero-decoration {
+            color: #6f8c6c;
+            font-size: clamp(75px, 12vw, 150px);
+            padding: 20px;
+        }
+
+        main, .page {
+            max-width: 1200px;
+            margin: auto;
+            padding: 42px 24px 65px;
+        }
+
+        .section-heading {
+            display: flex;
+            justify-content: space-between;
+            align-items: end;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .section-heading h2, .page-title {
+            color: var(--green-dark);
+            font-size: 30px;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            color: var(--muted);
+            line-height: 1.6;
+        }
+
+        .products {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+            gap: 22px;
+        }
+
+        .product-card {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 24px;
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            min-height: 260px;
+            transition: transform 0.2s, box-shadow 0.2s;
         }
 
-        .registration-form label {
+        .product-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 28px #183e2e0c;
+        }
+
+        .product-symbol {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: var(--green-light);
+            display: grid;
+            place-items: center;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .product-card h3 {
+            font-size: 21px;
+            margin-bottom: 12px;
+            overflow-wrap: anywhere;
+        }
+
+        .product-description {
+            color: var(--muted);
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 18px;
+            overflow-wrap: anywhere;
+        }
+
+        .product-bottom {
+            margin-top: auto;
+        }
+
+        .product-price {
+            font-size: 22px;
             font-weight: bold;
+            color: var(--green);
+            margin-bottom: 16px;
         }
 
-        .registration-form input {
+        .product-card .btn {
             width: 100%;
-            padding: 12px;
-            border: 1px solid #d5d8d0;
+        }
+
+        .panel {
+            padding: 28px;
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            margin-top: 22px;
+        }
+
+        .panel h2 {
+            color: var(--green-dark);
+            margin-bottom: 22px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 13px;
+            border: 1px solid #d8e1d6;
             border-radius: 8px;
+            background: #fff;
+            outline: none;
+        }
+
+        .form-group input:focus {
+            border-color: var(--green);
+        }
+
+        .form-note {
+            color: var(--muted);
+            font-size: 13px;
+            line-height: 1.6;
+            margin: 14px 0;
         }
 
         .message {
-            margin-top: 16px;
+            white-space: pre-wrap;
+            overflow-wrap: anywhere;
+            line-height: 1.6;
+            margin-top: 15px;
         }
 
-        .account-section {
-            padding: 16px 0;
-            border-bottom: 1px solid #e8e7e0;
+        .error {
+            color: var(--danger);
         }
 
-        .account-section:last-child {
-            border-bottom: 0;
+        .success {
+            color: var(--green);
         }
 
-        .account-section h3 {
-            color: #476448;
+        .account-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 15px;
         }
 
-        @media (max-width: 520px) {
+        .account-field {
+            padding: 17px;
+            border-radius: 9px;
+            background: #f5f7f2;
+        }
+
+        .account-field span {
+            display: block;
+            color: var(--muted);
+            font-size: 13px;
+            margin-bottom: 9px;
+        }
+
+        .account-field strong {
+            overflow-wrap: anywhere;
+        }
+
+        .page-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 22px;
+        }
+
+        .cart-row, .order-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            padding: 18px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .cart-row:last-child, .order-row:last-child {
+            border-bottom: none;
+        }
+
+        .cart-row h3, .order-row h3 {
+            margin-bottom: 8px;
+        }
+
+        .cart-row p, .order-row p {
+            color: var(--muted);
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .cart-total {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+            border-top: 1px solid var(--border);
+            padding-top: 22px;
+            margin-top: 15px;
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        .empty {
+            color: var(--muted);
+            padding: 20px 0;
+            line-height: 1.7;
+        }
+
+        .loading {
+            color: var(--muted);
+            padding: 15px 0;
+        }
+
+        footer {
+            padding: 28px 20px;
+            text-align: center;
+            color: var(--muted);
+            background: white;
+            border-top: 1px solid var(--border);
+        }
+
+        @media (max-width: 600px) {
             header {
-                padding: 16px;
+                padding: 14px;
             }
 
-            main {
-                margin-top: 24px;
+            .logo {
+                font-size: 24px;
             }
 
-            .header-actions {
-                gap: 6px;
+            .hero {
+                padding: 42px 24px;
             }
 
-            button {
-                padding: 10px 12px;
+            .hero-decoration {
+                display: none;
             }
 
-            .intro h2 {
-                font-size: 26px;
+            main, .page {
+                padding: 30px 16px 45px;
+            }
+
+            .panel {
+                padding: 20px;
+            }
+
+            .cart-row, .order-row {
+                align-items: flex-start;
             }
         }
     </style>
@@ -203,376 +403,662 @@
 <body>
 
 <header>
-    <h1>Flora</h1>
+    <div class="logo" onclick="showPage('home')">
+        Flora<span>.</span>
+    </div>
 
     <div class="header-actions">
-        <button id="accountButton" class="secondary-button">
-            Регистрация
+        <button id="accountButton" class="btn btn-outline hidden"
+                onclick="openAccount()">
+            Личный кабинет
         </button>
 
-        <button id="cartButton" class="secondary-button">
-            Корзина (<span id="cartCount">0</span>)
+        <button id="cartButton" class="btn btn-outline hidden"
+                onclick="openCart()">
+            Корзина
+        </button>
+
+        <button id="registerButton" class="btn"
+                onclick="showPage('register')">
+            Регистрация
         </button>
     </div>
 </header>
 
-<main>
-    <section class="intro">
-        <h2>Цветы для особенных моментов</h2>
-        <p>Выбирай любимые цветы из нашего каталога.</p>
-    </section>
-
-    <h2>Наши цветы</h2>
-
-    <p id="message">Загружаем каталог...</p>
-    <section id="flowers"></section>
-</main>
-
-<!-- Окно регистрации -->
-
-<div id="registrationModal" class="modal hidden">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h2>Регистрация покупателя</h2>
-            <button type="button" class="close-button"
-                    data-close="registrationModal">✕</button>
-        </div>
-
-        <form id="registrationForm" class="registration-form">
-            <label for="name">Имя</label>
-            <input type="text" id="name" required>
-
-            <label for="phoneNumber">Номер телефона</label>
-            <input type="tel" id="phoneNumber" required>
-
-            <label for="balance">Баланс (€)</label>
-            <input type="number" id="balance"
-                   min="0" step="0.01" required>
-
-            <button type="submit">Зарегистрироваться</button>
-        </form>
-
-        <p id="registrationMessage" class="message"></p>
-    </div>
-</div>
-
-<!-- Личный кабинет -->
-
-<div id="accountModal" class="modal hidden">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h2>Личный кабинет</h2>
-            <button type="button" class="close-button"
-                    data-close="accountModal">✕</button>
-        </div>
-
-        <section class="account-section">
-            <h3>Мои данные</h3>
-            <p>Имя: <span id="accountName">—</span></p>
-            <p>Телефон: <span id="accountPhone">—</span></p>
-            <p>Баланс: <span id="accountBalance">—</span> €</p>
-        </section>
-
-        <section class="account-section">
-            <h3>История заказов</h3>
-            <p id="ordersMessage">
-                История заказов пока не подключена.
-            </p>
-        </section>
-
-        <button id="logoutButton" class="secondary-button">
-            Выйти из аккаунта
+<section id="hero" class="hero">
+    <div class="hero-content">
+        <div class="eyebrow">Flora · Flower shop</div>
+        <h1>Природа ближе, чем кажется</h1>
+        <p>
+            Выбирай цветы для важных моментов.
+            Найди свой букет в нашем каталоге.
+        </p>
+        <br>
+        <button class="btn" onclick="showPage('home')">
+            Перейти в каталог
         </button>
     </div>
-</div>
 
-<!-- Корзина: пока демонстрационная -->
+    <div class="hero-decoration">❀</div>
+</section>
 
-<div id="cartModal" class="modal hidden">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h2>Корзина</h2>
-            <button type="button" class="close-button"
-                    data-close="cartModal">✕</button>
+
+<!-- КАТАЛОГ -->
+
+<main id="homePage">
+    <div class="section-heading">
+        <div>
+            <h2>Каталог цветов</h2>
+            <p class="subtitle">Товары из базы данных Flora.</p>
         </div>
-
-        <div id="cartItems">
-            <p>Корзина пуста.</p>
-        </div>
-
-        <p class="price">
-            Итого: <span id="cartTotal">0.00</span> €
-        </p>
     </div>
-</div>
+
+    <p id="productsMessage" class="message"></p>
+    <div id="productsContainer" class="products"></div>
+</main>
+
+
+<!-- РЕГИСТРАЦИЯ -->
+
+<section id="registerPage" class="page hidden">
+    <h1 class="page-title">Создание аккаунта</h1>
+    <p class="subtitle">Зарегистрируйся, чтобы пользоваться корзиной.</p>
+
+    <div class="panel">
+        <form id="registerForm">
+            <div class="form-group">
+                <label for="clientName">Имя</label>
+                <input id="clientName" name="name"
+                       required placeholder="Введите имя">
+            </div>
+
+            <div class="form-group">
+                <label for="clientPhone">Номер телефона</label>
+                <input id="clientPhone" name="phone_number"
+                       required type="tel" placeholder="+380...">
+            </div>
+
+            <div class="form-group">
+                <label for="clientBalance">Баланс</label>
+                <input id="clientBalance" name="balance"
+                       required type="number" min="0" step="0.01" value="0">
+            </div>
+
+            <p class="form-note">
+                Данные будут отправлены на твой Java-бэкенд.
+            </p>
+
+            <button id="registerSubmit" class="btn" type="submit">
+                Зарегистрировать клиента
+            </button>
+
+            <p id="registerMessage" class="message"></p>
+        </form>
+    </div>
+</section>
+
+
+<!-- ЛИЧНЫЙ КАБИНЕТ -->
+
+<section id="accountPage" class="page hidden">
+    <h1 class="page-title">Личный кабинет</h1>
+    <p class="subtitle">Информация о клиенте из твоей базы данных.</p>
+
+    <div class="panel">
+        <h2>Мои данные</h2>
+
+        <div class="account-grid">
+            <div class="account-field">
+                <span>ID клиента</span>
+                <strong id="accountId">—</strong>
+            </div>
+
+            <div class="account-field">
+                <span>Имя</span>
+                <strong id="accountName">—</strong>
+            </div>
+
+            <div class="account-field">
+                <span>Телефон</span>
+                <strong id="accountPhone">—</strong>
+            </div>
+
+            <div class="account-field">
+                <span>Баланс</span>
+                <strong id="accountBalance">—</strong>
+            </div>
+        </div>
+
+        <p id="accountMessage" class="message"></p>
+    </div>
+
+    <div class="panel">
+        <h2>История заказов</h2>
+        <div id="ordersContainer">
+            <p class="empty">
+                История заказов пока не подключена к этому экрану.
+            </p>
+        </div>
+    </div>
+
+    <div class="page-actions">
+        <button class="btn" onclick="openCart()">Моя корзина</button>
+        <button class="btn btn-outline" onclick="showPage('home')">
+            Вернуться в каталог
+        </button>
+    </div>
+</section>
+
+
+<!-- КОРЗИНА -->
+
+<section id="cartPage" class="page hidden">
+    <h1 class="page-title">Моя корзина</h1>
+    <p class="subtitle">Товары, сохранённые на твоём Java-бэкенде.</p>
+
+    <div class="panel">
+        <div id="cartContainer">
+            <p class="loading">Загрузка корзины...</p>
+        </div>
+
+        <div id="cartTotalBlock" class="cart-total hidden">
+            <span>Итого</span>
+            <span id="cartTotal">—</span>
+        </div>
+
+        <p id="cartMessage" class="message"></p>
+    </div>
+
+    <div class="page-actions">
+        <button class="btn btn-outline" onclick="showPage('home')">
+            Продолжить покупки
+        </button>
+    </div>
+</section>
+
+
+<footer>
+    Flora · Магазин цветов
+</footer>
+
 
 <script>
+    // Все запросы идут на тот же Spring Boot сервер.
+    const API = {
+        products: "/product",
+        clients: "/clients",
+        carts: "/carts",
+        cartItems: "/item-carts",
+        cartDTO: clientId => `/cartsDTO/${clientId}/cart`
+    };
+
     let currentClient = null;
-    let cart = [];
+    let currentCartId = null;
+    let cartItems = [];
 
-    const accountButton = document.getElementById("accountButton");
 
-    function openModal(id) {
-        document.getElementById(id).classList.remove("hidden");
-    }
+    // ------------------------------
+    // Переключение экранов
+    // ------------------------------
 
-    function closeModal(id) {
-        document.getElementById(id).classList.add("hidden");
-    }
+    function showPage(page) {
+        const pages = {
+            home: "homePage",
+            register: "registerPage",
+            account: "accountPage",
+            cart: "cartPage"
+        };
 
-    document.querySelectorAll("[data-close]").forEach(button => {
-        button.addEventListener("click", () => {
-            closeModal(button.dataset.close);
+        Object.values(pages).forEach(id => {
+            document.getElementById(id).classList.add("hidden");
         });
-    });
 
-    // Закрытие окна нажатием на затемнённый фон
-    document.querySelectorAll(".modal").forEach(modal => {
-        modal.addEventListener("click", event => {
-            if (event.target === modal) {
-                modal.classList.add("hidden");
+        document.getElementById(pages[page]).classList.remove("hidden");
+
+        document.getElementById("hero").classList.toggle(
+            "hidden", page !== "home"
+        );
+
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+
+    function updateHeader() {
+        const registered = currentClient !== null;
+
+        document.getElementById("registerButton")
+            .classList.toggle("hidden", registered);
+
+        document.getElementById("accountButton")
+            .classList.toggle("hidden", !registered);
+
+        document.getElementById("cartButton")
+            .classList.toggle("hidden", !registered);
+    }
+
+
+    // ------------------------------
+    // Работа с HTTP
+    // ------------------------------
+
+    async function request(url, options = {}) {
+        const response = await fetch(url, {
+            ...options,
+            headers: {
+                ...(options.body ? {
+                    "Content-Type": "application/json"
+                } : {}),
+                ...options.headers
             }
         });
-    });
 
-    function updateAccountButton() {
-        if (currentClient) {
-            accountButton.textContent = "Личный кабинет";
-        } else {
-            accountButton.textContent = "Регистрация";
+        if (!response.ok) {
+            const details = await response.text();
+            throw new Error(
+                `HTTP ${response.status}` +
+                (details ? `: ${details}` : "")
+            );
         }
-    }
 
-    function showAccount() {
-        document.getElementById("accountName").textContent =
-            currentClient.name;
-
-        document.getElementById("accountPhone").textContent =
-            currentClient.phoneNumber;
-
-        document.getElementById("accountBalance").textContent =
-            Number(currentClient.balance).toFixed(2);
-
-        openModal("accountModal");
-    }
-
-    accountButton.addEventListener("click", () => {
-        if (currentClient) {
-            showAccount();
-        } else {
-            document.getElementById("registrationMessage").textContent = "";
-            openModal("registrationModal");
-        }
-    });
-
-    // Загрузка каталога
-    async function loadFlowers() {
-        const container = document.getElementById("flowers");
-        const message = document.getElementById("message");
-
-        message.textContent = "Загружаем каталог...";
-        container.replaceChildren();
+        const text = await response.text();
+        if (!text) return null;
 
         try {
-            const response = await fetch("/product");
+            return JSON.parse(text);
+        } catch {
+            return text;
+        }
+    }
 
-            if (!response.ok) {
-                throw new Error("HTTP " + response.status);
+
+    function money(value) {
+        const number = Number(value);
+
+        if (!Number.isFinite(number)) {
+            return value ?? "—";
+        }
+
+        return number.toLocaleString("ru-RU", {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        });
+    }
+
+
+    function showMessage(id, text, type = "") {
+        const element = document.getElementById(id);
+        element.className = "message " + type;
+        element.textContent = text;
+    }
+
+
+    // ------------------------------
+    // Каталог: GET /product
+    // ------------------------------
+
+    async function loadProducts() {
+        const container = document.getElementById("productsContainer");
+
+        container.innerHTML =
+            '<p class="loading">Загружаем товары из базы данных...</p>';
+
+        try {
+            const products = await request(API.products);
+
+            if (!Array.isArray(products)) {
+                throw new Error("Контроллер не вернул список товаров.");
             }
 
-            const flowers = await response.json();
+            container.innerHTML = "";
 
-            if (!Array.isArray(flowers) || flowers.length === 0) {
-                message.textContent = "Пока цветов нет в каталоге.";
+            if (products.length === 0) {
+                container.innerHTML =
+                    '<p class="empty">В базе пока нет товаров.</p>';
                 return;
             }
 
-            flowers.forEach(flower => {
+            products.forEach(product => {
                 const card = document.createElement("article");
-                card.className = "flower";
+                card.className = "product-card";
+
+                const symbol = document.createElement("div");
+                symbol.className = "product-symbol";
+                symbol.textContent = "❀";
 
                 const name = document.createElement("h3");
-                name.textContent = flower.name;
+                name.textContent = product.name ?? "Без названия";
 
                 const description = document.createElement("p");
-                description.textContent = flower.description ?? "";
+                description.className = "product-description";
+                description.textContent =
+                    product.description ?? "Описание не указано.";
+
+                const bottom = document.createElement("div");
+                bottom.className = "product-bottom";
 
                 const price = document.createElement("p");
-                price.className = "price";
-                price.textContent = flower.price + " €";
+                price.className = "product-price";
+                price.textContent = money(product.price);
 
-                const addButton = document.createElement("button");
-                addButton.textContent = "В корзину";
+                const button = document.createElement("button");
+                button.className = "btn";
+                button.textContent = "Добавить в корзину";
 
-                addButton.addEventListener("click", () => {
-                    addToCart(flower);
-                });
+                button.onclick = () => addProductToCart(product);
 
-                card.append(name, description, price, addButton);
+                bottom.append(price, button);
+                card.append(symbol, name, description, bottom);
                 container.appendChild(card);
             });
 
-            message.textContent = "";
+            showMessage("productsMessage", "");
+
         } catch (error) {
-            message.textContent =
-                "Не удалось загрузить каталог. Проверь GET //product.";
-            console.error(error);
+            container.innerHTML = "";
+            showMessage(
+                "productsMessage",
+                "Не удалось загрузить товары: " + error.message,
+                "error"
+            );
         }
     }
 
-    // Регистрация
-    document.getElementById("registrationForm")
-        .addEventListener("submit", async function (event) {
+
+    // ------------------------------
+    // Регистрация: POST /clients
+    // ------------------------------
+
+    document.getElementById("registerForm").addEventListener(
+        "submit", async event => {
             event.preventDefault();
 
-            const message =
-                document.getElementById("registrationMessage");
+            const button = document.getElementById("registerSubmit");
+            button.disabled = true;
 
             const client = {
-                name: document.getElementById("name").value.trim(),
-                phoneNumber:
-                    document.getElementById("phoneNumber").value.trim(),
+                name: document.getElementById("clientName").value.trim(),
+                phone_number:
+                    document.getElementById("clientPhone").value.trim(),
                 balance: Number(
-                    document.getElementById("balance").value
+                    document.getElementById("clientBalance").value
                 )
             };
 
-            if (!client.name || !client.phoneNumber) {
-                message.textContent = "Заполни все поля.";
-                return;
-            }
-
-            if (!Number.isFinite(client.balance) || client.balance < 0) {
-                message.textContent = "Проверь введённый баланс.";
-                return;
-            }
-
             try {
-                const response = await fetch("/clients", {
+                // Твой ClientController возвращает void.
+                await request(API.clients, {
                     method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
                     body: JSON.stringify(client)
                 });
 
-                if (!response.ok) {
-                    throw new Error("HTTP " + response.status);
+                // Получаем реальный ID созданного клиента.
+                // Это нужно, потому что POST /clients не возвращает ID.
+                const clients = await request(API.clients);
+
+                if (!Array.isArray(clients)) {
+                    throw new Error("Не удалось получить список клиентов.");
                 }
 
-                // Если сервер вернул созданного клиента в JSON,
-                // используем его данные, включая ID.
-                const responseText = await response.text();
-                let savedClient = client;
-
-                if (responseText.trim()) {
-                    try {
-                        const result = JSON.parse(responseText);
-
-                        if (result && typeof result === "object") {
-                            savedClient = { ...client, ...result };
-                        }
-                    } catch {
-                        // Сервер мог вернуть обычный текст.
-                    }
-                }
-
-                currentClient = {
-                    ...savedClient,
-                    name: savedClient.name ?? client.name,
-                    phoneNumber:
-                        savedClient.phoneNumber ?? client.phoneNumber,
-                    balance: savedClient.balance ?? client.balance
-                };
-
-                // Сохраняем состояние в текущем браузере.
-                sessionStorage.setItem(
-                    "floraClient",
-                    JSON.stringify(currentClient)
+                const savedClient = clients.find(item =>
+                    (item.phone_number ?? item.phoneNumber) ===
+                    client.phone_number
                 );
 
-                updateAccountButton();
-                closeModal("registrationModal");
-                this.reset();
+                if (!savedClient) {
+                    throw new Error(
+                        "Клиент добавлен, но найти его ID не удалось. " +
+                        "Проверь JSON-поля ClientFlorr."
+                    );
+                }
+
+                currentClient = savedClient;
+
+                // Создаём корзину через твой CartController.
+                // POST /carts?clientId=... возвращает int.
+                const cartId = await request(
+                    `${API.carts}?clientId=${encodeURIComponent(currentClient.id)}`,
+                    { method: "POST" }
+                );
+
+                currentCartId = Number(cartId);
+
+                if (!Number.isInteger(currentCartId) || currentCartId <= 0) {
+                    throw new Error(
+                        "Клиент создан, но сервер не вернул корректный ID корзины."
+                    );
+                }
+
+                updateHeader();
+                renderAccount();
+
+                document.getElementById("registerForm").reset();
+
+                showMessage(
+                    "registerMessage",
+                    "Клиент успешно зарегистрирован.",
+                    "success"
+                );
+
+                showPage("account");
 
             } catch (error) {
-                message.textContent =
-                    "Ошибка регистрации. Проверь backend.";
-                console.error(error);
+                showMessage(
+                    "registerMessage",
+                    "Ошибка: " + error.message,
+                    "error"
+                );
+            } finally {
+                button.disabled = false;
             }
-        });
-
-    // Восстановление данных при обновлении страницы
-    try {
-        const saved = sessionStorage.getItem("floraClient");
-
-        if (saved) {
-            currentClient = JSON.parse(saved);
-            updateAccountButton();
         }
-    } catch (error) {
-        sessionStorage.removeItem("floraClient");
+    );
+
+
+    // ------------------------------
+    // Личный кабинет: GET /clients/{id}
+    // ------------------------------
+
+    async function openAccount() {
+        if (!currentClient) {
+            showPage("register");
+            return;
+        }
+
+        showPage("account");
+
+        try {
+            const client = await request(
+                `${API.clients}/${currentClient.id}`
+            );
+
+            if (client) {
+                currentClient = client;
+                renderAccount();
+            }
+        } catch (error) {
+            showMessage(
+                "accountMessage",
+                "Не удалось обновить информацию: " + error.message,
+                "error"
+            );
+        }
     }
 
-    // Демонстрационная корзина в браузере
-    function addToCart(flower) {
-        const existing = cart.find(item => item.id === flower.id);
 
-        if (existing) {
-            existing.quantity++;
-        } else {
-            cart.push({
-                id: flower.id,
-                name: flower.name,
-                price: Number(flower.price),
-                quantity: 1
+    function renderAccount() {
+        if (!currentClient) return;
+
+        document.getElementById("accountId").textContent =
+            currentClient.id ?? "—";
+
+        document.getElementById("accountName").textContent =
+            currentClient.name ?? "—";
+
+        document.getElementById("accountPhone").textContent =
+            currentClient.phone_number ??
+            currentClient.phoneNumber ?? "—";
+
+        document.getElementById("accountBalance").textContent =
+            money(currentClient.balance);
+    }
+
+
+    // ------------------------------
+    // Добавление позиции в корзину
+    // POST /item-carts
+    // ------------------------------
+
+    async function addProductToCart(product) {
+        if (!currentClient) {
+            showPage("register");
+            showMessage(
+                "registerMessage",
+                "Сначала зарегистрируй клиента, чтобы добавлять товары.",
+                ""
+            );
+            return;
+        }
+
+        if (!currentCartId) {
+            showMessage(
+                "productsMessage",
+                "Не найден ID корзины. Проверь создание корзины.",
+                "error"
+            );
+            return;
+        }
+
+        try {
+            // Используем сущность ItemCart на бэкенде.
+            // Предполагаемые поля: cartId, prodId, quantity.
+            await request(API.cartItems, {
+                method: "POST",
+                body: JSON.stringify({
+                    cartId: currentCartId,
+                    prodId: product.id,
+                    quantity: 1
+                })
             });
+
+            showMessage(
+                "productsMessage",
+                "Товар добавлен в корзину.",
+                "success"
+            );
+
+        } catch (error) {
+            showMessage(
+                "productsMessage",
+                "Не удалось добавить товар: " + error.message,
+                "error"
+            );
+        }
+    }
+
+
+    // ------------------------------
+    // Корзина: GET /cartsDTO/{clientId}/cart
+    // ------------------------------
+
+    async function openCart() {
+        if (!currentClient) {
+            showPage("register");
+            return;
         }
 
-        renderCart();
+        showPage("cart");
+
+        const container = document.getElementById("cartContainer");
+        container.innerHTML =
+            '<p class="loading">Загружаем корзину...</p>';
+
+        document.getElementById("cartTotalBlock")
+            .classList.add("hidden");
+
+        try {
+            const data = await request(
+                API.cartDTO(currentClient.id)
+            );
+
+            if (!Array.isArray(data)) {
+                throw new Error("Контроллер не вернул список товаров.");
+            }
+
+            cartItems = data;
+            renderCart();
+
+        } catch (error) {
+            container.innerHTML = "";
+            showMessage(
+                "cartMessage",
+                "Не удалось загрузить корзину: " + error.message,
+                "error"
+            );
+        }
     }
+
 
     function renderCart() {
-        const container = document.getElementById("cartItems");
-        container.replaceChildren();
+        const container = document.getElementById("cartContainer");
+        const totalBlock = document.getElementById("cartTotalBlock");
 
-        let total = 0;
-        let count = 0;
+        container.innerHTML = "";
+        showMessage("cartMessage", "");
 
-        if (cart.length === 0) {
-            container.textContent = "Корзина пуста.";
+        if (cartItems.length === 0) {
+            container.innerHTML =
+                '<p class="empty">В корзине пока нет товаров.</p>';
+
+            totalBlock.classList.add("hidden");
+            return;
         }
 
-        cart.forEach(item => {
-            const row = document.createElement("p");
-            row.textContent =
-                `${item.name} × ${item.quantity} — ` +
-                `${(item.price * item.quantity).toFixed(2)} €`;
+        // Отображаем ответ CartDTO.
+        // Стоимость и итог берём с сервера, а не рассчитываем заново.
+        cartItems.forEach(item => {
+            const row = document.createElement("div");
+            row.className = "cart-row";
 
+            const info = document.createElement("div");
+
+            const title = document.createElement("h3");
+            title.textContent = item.prodName ?? "Товар";
+
+            const quantity = document.createElement("p");
+            quantity.textContent = "Количество: " + (item.quantity ?? "—");
+
+            const price = document.createElement("p");
+            price.textContent = "Цена: " + money(item.price);
+
+            info.append(title, quantity, price);
+
+            const total = document.createElement("strong");
+            total.textContent = money(item.total);
+
+            row.append(info, total);
             container.appendChild(row);
-
-            total += item.price * item.quantity;
-            count += item.quantity;
         });
 
-        document.getElementById("cartCount").textContent = count;
+        // Сумма берётся из поля total каждой строки CartDTO.
+        // Это только отображение серверных данных.
+        const serverTotal = cartItems.reduce(
+            (sum, item) => sum + (Number(item.total) || 0),
+            0
+        );
+
         document.getElementById("cartTotal").textContent =
-            total.toFixed(2);
+            money(serverTotal);
+
+        totalBlock.classList.remove("hidden");
     }
 
-    document.getElementById("cartButton").addEventListener("click", () => {
-        openModal("cartModal");
-    });
 
-    document.getElementById("logoutButton").addEventListener("click", () => {
-        currentClient = null;
-        sessionStorage.removeItem("floraClient");
-        updateAccountButton();
-        closeModal("accountModal");
-    });
+    // ------------------------------
+    // Запуск
+    // ------------------------------
 
-    loadFlowers();
-    renderCart();
+    updateHeader();
+    loadProducts();
 </script>
 
 </body>

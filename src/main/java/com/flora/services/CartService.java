@@ -1,4 +1,5 @@
 package com.flora.services;
+
 import com.flora.entity.Cart;
 import com.flora.repository.CartRepository;
 import org.springframework.stereotype.Service;
@@ -38,14 +39,5 @@ public class CartService {
     // удалить корзину
     public boolean deleteCart(int id) {
         return cartRepository.deleteCart(id) > 0;
-    }
-
-    // Получить существующую корзину или создать новую
-    public Cart getOrCreateCart(int clientId) {
-        return cartRepository.getCartByClientId(clientId)
-                .orElseGet(() -> {
-                    int cartId = cartRepository.createCart(clientId);
-                    return new Cart(cartId, clientId, true);
-                });
     }
 }

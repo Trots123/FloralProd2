@@ -9,56 +9,27 @@ public class ProductFlor {
     private String name;
     private BigDecimal price;
     private String description;
-
-    public ProductFlor() {
+    private int stockQuantity;
+    public ProductFlor(int id, String name, BigDecimal price, String description) {
 
     }
 
-    public ProductFlor(int id , String name, BigDecimal price, String description) {
+    public ProductFlor(int id, String name, BigDecimal price, String description, int stockQuantity) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.description = description;
-    }
-
-    public static ProductFlor.Builder builder() {
-        return new ProductFlor.Builder();
+        this.stockQuantity = stockQuantity;
     }
 
 
-    public static class Builder {
-        private String name;
-        private BigDecimal price;
-        private String description;
 
-        public ProductFlor.Builder name(String name) {
-            this.name = name;
-            return this;
-        }
+    public int getStockQuantity() {
+        return stockQuantity;
+    }
 
-
-        public ProductFlor.Builder price(BigDecimal price) {
-            this.price = price;
-            return this;
-        }
-
-        public ProductFlor.Builder description(String description) {
-            this.description = description;
-            return this;
-        }
-
-
-        public ProductFlor build() {
-
-            ProductFlor productFlor = new ProductFlor();
-
-            productFlor.name = this.name;
-            productFlor.price = this.price;
-            productFlor.description = this.description;
-
-            return productFlor;
-        }
-
+    public void setStockQuantity(int stockQuantity) {
+        this.stockQuantity = stockQuantity;
     }
 
     public int getId() {

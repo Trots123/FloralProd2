@@ -44,7 +44,7 @@ public class ClientRepository {
 
 
     // Найти клиента по ID public
-    public Optional<ClientFlorr> getByIdClient(long id) {
+    public Optional<ClientFlorr> getByIdClient( int id) {
         String sql = """ 
                 SELECT * 
                 FROM client_florr

@@ -18,40 +18,6 @@ public class Order {
         this.id = id;
         this.cartId = cartId;
         this.totalPrice = totalPrice;
-    }
-
-    public static Order.Builder builder() {
-        return new Order.Builder();
-    }
-
-
-    public static class Builder {
-
-        private int cartId;
-        private BigDecimal totalPrice;
-
-
-        public Order.Builder cartId(int cartId) {
-            this.cartId = cartId;
-            return this;
-        }
-
-
-        public Order.Builder totalPrice(BigDecimal totalPrice) {
-            this.totalPrice = totalPrice;
-            return this;
-        }
-
-
-        public Order build() {
-
-            Order order = new Order();
-
-            order.cartId = this.cartId;
-            order.totalPrice = this.totalPrice;
-
-            return order;
-        }
 
     }
 
