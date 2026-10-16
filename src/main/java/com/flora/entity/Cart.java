@@ -8,7 +8,13 @@ public class Cart {
     private int userId;
     private boolean dralStstus = false;
 
+    public Cart() {
+    }
+
     public Cart(int id, int userId, boolean dralStstus) {
+        this.id = id;
+        this.userId = userId;
+        this.dralStstus = dralStstus;
     }
 
 

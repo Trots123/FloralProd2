@@ -25,7 +25,10 @@ public class ProductRepository {
 
     // возврат все продуктов
     public List<ProductFlor> getAll() {
-        String sqlGetAll = "SELECT * FROM product_flor";
+        String sqlGetAll = """ 
+                SELECT * 
+                FROM product_flor 
+                """;
 
         return jdbcTemplate.query(sqlGetAll, (rs, rowNum) ->
                 new ProductFlor(

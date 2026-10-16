@@ -117,4 +117,45 @@ public class ItemCartRepository {
 
         return jdbcTemplate.update(sql, id);
     }
+    // Получить все позиции конкретной корзины
+    public List<ItemCart> getItemsByCartId(int cartId) {
+        String sql = """
+            SELECT id, cart_id, prod_id, quantity
+            FROM item_cart
+            WHERE cart_id = ?
+            """;
+
+        return jdbcTemplate.query(sql, (rs, rowNum) -> {
+            Cart cart = cartRepository.getCartById(cartId)
+                    .orElseThrow(() ->
+                            new IllegalStateException(
+                                    "Cart not found: " + cartId));
+
+            return new ItemCart(
+                    rs.getInt("id"),
+                    cart,
+                    rs.getInt("prod_id"),
+                    rs.getInt("quantity")
+            );
+        }, cartId);
+    }
+    // Получить общее количество товара в корзине
+    public int getQuantityInCart(int cartId, int prodId, int excludeItemId) {
+        String sql = """
+            SELECT COALESCE(SUM(quantity), 0)
+            FROM item_cart
+            WHERE cart_id = ?
+              AND prod_id = ?
+              AND id <> ?
+            """;
+
+        return jdbcTemplate.queryForObject(
+                sql,
+                Integer.class,
+                cartId,
+                prodId,
+                excludeItemId
+        );
+    }
+
 }

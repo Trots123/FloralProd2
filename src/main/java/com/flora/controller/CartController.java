@@ -27,13 +27,13 @@ public class CartController {
 
     // READ: получить корзину по ID
     @GetMapping("/{id}")
-    public Optional<Cart> getCartById(@PathVariable(name = "product_id") int id) {
+    public Optional<Cart> getCartById(@PathVariable("id") int id) {
         return cartService.getCartById(id);
     }
 
     // CREATE: создать корзину
     @PostMapping
-    public int createCart(@RequestParam int clientId) {
+    public int createCart(@RequestParam("clientId") int clientId) {
         return cartService.createCart(clientId);
     }
 

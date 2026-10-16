@@ -8,8 +8,8 @@
     <style>
         :root {
             --green: #285943;
-            --green-dark: #183e2e;
-            --green-light: #e8f0e8;
+            --dark-green: #183e2e;
+            --light-green: #e8f0e8;
             --cream: #f8f8f1;
             --white: #ffffff;
             --text: #26372c;
@@ -26,8 +26,9 @@
 
         body {
             font-family: Arial, sans-serif;
-            color: var(--text);
             background: var(--cream);
+            color: var(--text);
+            line-height: 1.5;
         }
 
         button, input {
@@ -39,25 +40,25 @@
         }
 
         header {
-            min-height: 78px;
-            padding: 16px 6%;
-            background: var(--white);
-            border-bottom: 1px solid var(--border);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 20px;
             position: sticky;
             top: 0;
             z-index: 10;
+            background: white;
+            border-bottom: 1px solid var(--border);
+            padding: 16px 6%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            flex-wrap: wrap;
         }
 
         .logo {
+            color: var(--green);
             font-size: 30px;
             font-weight: 800;
-            letter-spacing: -1px;
-            color: var(--green);
             cursor: pointer;
+            letter-spacing: -1px;
         }
 
         .logo span {
@@ -66,22 +67,27 @@
 
         .header-actions {
             display: flex;
+            gap: 10px;
             align-items: center;
             flex-wrap: wrap;
-            gap: 10px;
         }
 
         .btn {
-            padding: 12px 18px;
             border: 1px solid var(--green);
             border-radius: 8px;
+            padding: 11px 17px;
             background: var(--green);
             color: white;
-            transition: 0.2s;
+            transition: .2s;
         }
 
         .btn:hover {
-            background: var(--green-dark);
+            background: var(--dark-green);
+        }
+
+        .btn:disabled {
+            opacity: .6;
+            cursor: wait;
         }
 
         .btn-outline {
@@ -90,199 +96,164 @@
         }
 
         .btn-outline:hover {
-            background: var(--green-light);
-            color: var(--green-dark);
+            color: white;
         }
 
-        .hidden {
-            display: none !important;
+        main {
+            width: min(1180px, 90%);
+            margin: 35px auto 70px;
         }
 
         .hero {
-            padding: 65px 8%;
-            background: #e8efe4;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 30px;
-        }
-
-        .hero-content {
-            max-width: 650px;
-        }
-
-        .eyebrow {
-            color: var(--green);
-            font-size: 12px;
-            font-weight: bold;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            margin-bottom: 18px;
+            background: var(--light-green);
+            border-radius: 18px;
+            padding: 48px;
+            margin-bottom: 35px;
         }
 
         .hero h1 {
-            font-size: clamp(36px, 5vw, 60px);
-            line-height: 1.08;
-            color: var(--green-dark);
-            margin-bottom: 20px;
+            font-size: clamp(30px, 4vw, 48px);
+            line-height: 1.15;
+            color: var(--dark-green);
+            max-width: 650px;
+            margin-bottom: 15px;
         }
 
         .hero p {
-            color: #657466;
-            line-height: 1.8;
-            font-size: 17px;
+            max-width: 600px;
+            color: #536b59;
+            margin-bottom: 22px;
         }
 
-        .hero-decoration {
-            color: #6f8c6c;
-            font-size: clamp(75px, 12vw, 150px);
-            padding: 20px;
+        h2 {
+            font-size: 28px;
+            margin-bottom: 22px;
+            color: var(--dark-green);
         }
 
-        main, .page {
-            max-width: 1200px;
-            margin: auto;
-            padding: 42px 24px 65px;
-        }
-
-        .section-heading {
-            display: flex;
-            justify-content: space-between;
-            align-items: end;
-            gap: 15px;
-            margin-bottom: 25px;
-        }
-
-        .section-heading h2, .page-title {
-            color: var(--green-dark);
-            font-size: 30px;
+        h3 {
             margin-bottom: 8px;
-        }
-
-        .subtitle {
-            color: var(--muted);
-            line-height: 1.6;
         }
 
         .products {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(235px, 1fr));
             gap: 22px;
         }
 
         .product-card {
             background: white;
             border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 24px;
+            border-radius: 14px;
+            padding: 22px;
             display: flex;
             flex-direction: column;
-            min-height: 260px;
-            transition: transform 0.2s, box-shadow 0.2s;
+            min-width: 0;
+            transition: transform .2s, box-shadow .2s;
         }
 
         .product-card:hover {
             transform: translateY(-3px);
-            box-shadow: 0 10px 28px #183e2e0c;
+            box-shadow: 0 8px 25px #183e2e12;
         }
 
-        .product-symbol {
-            width: 48px;
-            height: 48px;
-            border-radius: 50%;
-            background: var(--green-light);
+        .flower-icon {
+            height: 120px;
+            border-radius: 10px;
+            background: var(--light-green);
             display: grid;
             place-items: center;
-            font-size: 24px;
-            margin-bottom: 20px;
-        }
-
-        .product-card h3 {
-            font-size: 21px;
-            margin-bottom: 12px;
-            overflow-wrap: anywhere;
+            font-size: 55px;
+            margin-bottom: 18px;
         }
 
         .product-description {
             color: var(--muted);
-            font-size: 14px;
-            line-height: 1.6;
-            margin-bottom: 18px;
+            margin: 6px 0 20px;
+            white-space: pre-wrap;
             overflow-wrap: anywhere;
         }
 
         .product-bottom {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
             margin-top: auto;
         }
 
         .product-price {
-            font-size: 22px;
-            font-weight: bold;
             color: var(--green);
-            margin-bottom: 16px;
+            font-size: 23px;
+            font-weight: bold;
         }
 
-        .product-card .btn {
-            width: 100%;
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
         }
 
         .panel {
-            padding: 28px;
             background: white;
             border: 1px solid var(--border);
-            border-radius: 12px;
-            margin-top: 22px;
-        }
-
-        .panel h2 {
-            color: var(--green-dark);
+            border-radius: 14px;
+            padding: 28px;
             margin-bottom: 22px;
         }
 
-        .form-group {
-            margin-bottom: 18px;
+        .form {
+            max-width: 500px;
         }
 
-        .form-group label {
+        .field {
+            margin-bottom: 17px;
+        }
+
+        .field label {
             display: block;
-            font-size: 14px;
+            margin-bottom: 6px;
             font-weight: bold;
-            margin-bottom: 8px;
         }
 
-        .form-group input {
+        .field input {
             width: 100%;
-            padding: 13px;
-            border: 1px solid #d8e1d6;
+            border: 1px solid #cbd7ca;
             border-radius: 8px;
-            background: #fff;
-            outline: none;
+            padding: 12px;
+            background: white;
+            color: var(--text);
         }
 
-        .form-group input:focus {
+        .field input:focus {
+            outline: 2px solid #9bbba3;
             border-color: var(--green);
         }
 
-        .form-note {
-            color: var(--muted);
-            font-size: 13px;
-            line-height: 1.6;
-            margin: 14px 0;
-        }
-
         .message {
-            white-space: pre-wrap;
+            margin: 15px 0;
+            padding: 12px;
+            border-radius: 8px;
             overflow-wrap: anywhere;
-            line-height: 1.6;
-            margin-top: 15px;
         }
 
-        .error {
-            color: var(--danger);
+        .message:empty {
+            display: none;
         }
 
-        .success {
-            color: var(--green);
+        .message.error {
+            color: #8e2929;
+            background: #ffeded;
+        }
+
+        .message.success {
+            color: #205d36;
+            background: #e9f7eb;
+        }
+
+        .muted {
+            color: var(--muted);
         }
 
         .account-grid {
@@ -291,28 +262,22 @@
             gap: 15px;
         }
 
-        .account-field {
+        .account-item {
+            background: var(--cream);
             padding: 17px;
-            border-radius: 9px;
-            background: #f5f7f2;
-        }
-
-        .account-field span {
-            display: block;
-            color: var(--muted);
-            font-size: 13px;
-            margin-bottom: 9px;
-        }
-
-        .account-field strong {
+            border-radius: 10px;
             overflow-wrap: anywhere;
         }
 
-        .page-actions {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-top: 22px;
+        .account-item span {
+            display: block;
+            color: var(--muted);
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+
+        .account-item strong {
+            font-size: 18px;
         }
 
         .cart-row, .order-row {
@@ -328,65 +293,73 @@
             border-bottom: none;
         }
 
-        .cart-row h3, .order-row h3 {
-            margin-bottom: 8px;
-        }
-
         .cart-row p, .order-row p {
             color: var(--muted);
-            font-size: 14px;
-            line-height: 1.6;
+            margin-top: 4px;
+        }
+
+        .cart-row strong, .order-row strong {
+            white-space: nowrap;
         }
 
         .cart-total {
             display: flex;
+            align-items: center;
             justify-content: space-between;
-            gap: 15px;
+            flex-wrap: wrap;
+            gap: 18px;
             border-top: 1px solid var(--border);
-            padding-top: 22px;
             margin-top: 15px;
-            font-size: 22px;
-            font-weight: bold;
+            padding-top: 22px;
+        }
+
+        .cart-total strong {
+            font-size: 26px;
+            color: var(--green);
         }
 
         .empty {
+            padding: 25px 0;
             color: var(--muted);
-            padding: 20px 0;
-            line-height: 1.7;
         }
 
         .loading {
+            padding: 25px 0;
             color: var(--muted);
-            padding: 15px 0;
         }
 
         footer {
-            padding: 28px 20px;
+            padding: 30px 5%;
             text-align: center;
-            color: var(--muted);
             background: white;
             border-top: 1px solid var(--border);
+            color: var(--muted);
         }
 
         @media (max-width: 600px) {
             header {
-                padding: 14px;
+                padding: 14px 5%;
             }
 
             .logo {
-                font-size: 24px;
+                font-size: 26px;
+            }
+
+            .header-actions {
+                width: 100%;
+            }
+
+            .header-actions button {
+                flex: 1;
+            }
+
+            main {
+                width: 92%;
+                margin-top: 22px;
             }
 
             .hero {
-                padding: 42px 24px;
-            }
-
-            .hero-decoration {
-                display: none;
-            }
-
-            main, .page {
-                padding: 30px 16px 45px;
+                padding: 28px 22px;
             }
 
             .panel {
@@ -407,261 +380,309 @@
         Flora<span>.</span>
     </div>
 
-    <div class="header-actions">
-        <button id="accountButton" class="btn btn-outline hidden"
-                onclick="openAccount()">
-            Личный кабинет
+    <nav class="header-actions">
+        <button class="btn btn-outline" onclick="showPage('home')">
+            Каталог
         </button>
 
-        <button id="cartButton" class="btn btn-outline hidden"
-                onclick="openCart()">
-            Корзина
-        </button>
-
-        <button id="registerButton" class="btn"
+        <button class="btn" id="registerButton"
                 onclick="showPage('register')">
             Регистрация
         </button>
-    </div>
+
+        <button class="btn btn-outline" id="accountButton"
+                hidden onclick="openAccount()">
+            Личный кабинет
+        </button>
+
+        <button class="btn btn-outline" id="cartButton"
+                hidden onclick="openCart()">
+            Корзина
+        </button>
+    </nav>
 </header>
 
-<section id="hero" class="hero">
-    <div class="hero-content">
-        <div class="eyebrow">Flora · Flower shop</div>
-        <h1>Природа ближе, чем кажется</h1>
-        <p>
-            Выбирай цветы для важных моментов.
-            Найди свой букет в нашем каталоге.
-        </p>
-        <br>
-        <button class="btn" onclick="showPage('home')">
-            Перейти в каталог
-        </button>
-    </div>
+<main>
 
-    <div class="hero-decoration">❀</div>
-</section>
+    <!-- ГЛАВНЫЙ ЭКРАН -->
 
-
-<!-- КАТАЛОГ -->
-
-<main id="homePage">
-    <div class="section-heading">
-        <div>
-            <h2>Каталог цветов</h2>
-            <p class="subtitle">Товары из базы данных Flora.</p>
+    <section id="home" class="section active">
+        <div class="hero">
+            <h1>Цветы, которые говорят за вас</h1>
+            <p>
+                Выбирайте цветы для особенных моментов.
+                Каталог загружается непосредственно из вашего бэкенда.
+            </p>
+            <button class="btn" onclick="loadProducts()">
+                Обновить каталог
+            </button>
         </div>
-    </div>
 
-    <p id="productsMessage" class="message"></p>
-    <div id="productsContainer" class="products"></div>
+        <h2>Наши цветы</h2>
+
+        <div id="products" class="products">
+            <p class="loading">Загрузка товаров...</p>
+        </div>
+
+        <div id="productsMessage" class="message"></div>
+    </section>
+
+
+    <!-- РЕГИСТРАЦИЯ -->
+
+    <section id="register" class="section">
+        <div class="panel">
+            <h2>Регистрация клиента</h2>
+
+            <p class="muted">
+                Заполните данные, чтобы пользоваться личным кабинетом
+                и корзиной.
+            </p>
+
+            <form id="registerForm" class="form">
+                <div class="field">
+                    <label for="clientName">Имя</label>
+                    <input id="clientName" name="name"
+                           type="text" required maxlength="100"
+                           placeholder="Введите имя">
+                </div>
+
+                <div class="field">
+                    <label for="clientPhone">Номер телефона</label>
+                    <input id="clientPhone" name="phoneNumber"
+                           type="tel" required maxlength="30"
+                           placeholder="+380991234567">
+                </div>
+
+                <div class="field">
+                    <label for="clientBalance">Баланс</label>
+                    <input id="clientBalance" name="balance"
+                           type="number" required min="0" step="0.01"
+                           value="0">
+                    <p class="muted">
+                        Поле соответствует текущей модели клиента.
+                        Это не пополнение реальными деньгами.
+                    </p>
+                </div>
+
+                <button class="btn" id="registerSubmit" type="submit">
+                    Зарегистрироваться
+                </button>
+            </form>
+
+            <div id="registerMessage" class="message"></div>
+        </div>
+    </section>
+
+
+    <!-- ЛИЧНЫЙ КАБИНЕТ -->
+
+    <section id="account" class="section">
+        <h2>Личный кабинет</h2>
+
+        <div class="panel">
+            <h3>Данные клиента</h3>
+
+            <div class="account-grid">
+                <div class="account-item">
+                    <span>ID клиента</span>
+                    <strong id="accountId">—</strong>
+                </div>
+
+                <div class="account-item">
+                    <span>Имя</span>
+                    <strong id="accountName">—</strong>
+                </div>
+
+                <div class="account-item">
+                    <span>Телефон</span>
+                    <strong id="accountPhone">—</strong>
+                </div>
+
+                <div class="account-item">
+                    <span>Баланс</span>
+                    <strong id="accountBalance">—</strong>
+                </div>
+            </div>
+
+            <div id="accountMessage" class="message"></div>
+
+            <button class="btn btn-outline" onclick="openAccount()">
+                Обновить данные
+            </button>
+        </div>
+
+        <div class="panel">
+            <h3>История заказов</h3>
+
+            <p class="muted">
+                Заказы загружаются из API /orders и связываются
+                с клиентом через его корзины.
+            </p>
+
+            <div id="orderHistory">
+                <p class="loading">Загрузка истории...</p>
+            </div>
+
+            <div id="historyMessage" class="message"></div>
+        </div>
+    </section>
+
+
+    <!-- КОРЗИНА -->
+
+    <section id="cart" class="section">
+        <h2>Корзина</h2>
+
+        <div class="panel">
+            <div id="cartContainer">
+                <p class="loading">Загрузка корзины...</p>
+            </div>
+
+            <div id="cartMessage" class="message"></div>
+
+            <div id="cartTotalBlock" class="cart-total" hidden>
+                <div>
+                    <p class="muted">Итого</p>
+                    <strong id="cartTotal">0</strong>
+                </div>
+
+                <button class="btn" onclick="openPayment()">
+                    Перейти к оплате
+                </button>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- ЭКРАН ОПЛАТЫ -->
+
+    <section id="payment" class="section">
+        <h2>Оформление заказа</h2>
+
+        <div class="panel">
+            <h3>Ваш заказ</h3>
+
+            <div id="paymentSummary">
+                <p class="loading">Загрузка данных...</p>
+            </div>
+
+            <div class="cart-total">
+                <div>
+                    <p class="muted">Сумма заказа</p>
+                    <strong id="paymentTotal">0</strong>
+                </div>
+
+                <button class="btn" id="confirmPayment"
+                        onclick="confirmPayment()">
+                    Подтвердить
+                </button>
+            </div>
+
+            <div id="paymentMessage" class="message"></div>
+
+            <p class="muted">
+                Текущий API сохраняет заказ и запись о платеже.
+                Он не подключён к банковской системе и не проводит
+                реальное списание денег.
+            </p>
+
+            <button class="btn btn-outline"
+                    onclick="openCart()">
+                Вернуться в корзину
+            </button>
+        </div>
+    </section>
+
 </main>
 
-
-<!-- РЕГИСТРАЦИЯ -->
-
-<section id="registerPage" class="page hidden">
-    <h1 class="page-title">Создание аккаунта</h1>
-    <p class="subtitle">Зарегистрируйся, чтобы пользоваться корзиной.</p>
-
-    <div class="panel">
-        <form id="registerForm">
-            <div class="form-group">
-                <label for="clientName">Имя</label>
-                <input id="clientName" name="name"
-                       required placeholder="Введите имя">
-            </div>
-
-            <div class="form-group">
-                <label for="clientPhone">Номер телефона</label>
-                <input id="clientPhone" name="phone_number"
-                       required type="tel" placeholder="+380...">
-            </div>
-
-            <div class="form-group">
-                <label for="clientBalance">Баланс</label>
-                <input id="clientBalance" name="balance"
-                       required type="number" min="0" step="0.01" value="0">
-            </div>
-
-            <p class="form-note">
-                Данные будут отправлены на твой Java-бэкенд.
-            </p>
-
-            <button id="registerSubmit" class="btn" type="submit">
-                Зарегистрировать клиента
-            </button>
-
-            <p id="registerMessage" class="message"></p>
-        </form>
-    </div>
-</section>
-
-
-<!-- ЛИЧНЫЙ КАБИНЕТ -->
-
-<section id="accountPage" class="page hidden">
-    <h1 class="page-title">Личный кабинет</h1>
-    <p class="subtitle">Информация о клиенте из твоей базы данных.</p>
-
-    <div class="panel">
-        <h2>Мои данные</h2>
-
-        <div class="account-grid">
-            <div class="account-field">
-                <span>ID клиента</span>
-                <strong id="accountId">—</strong>
-            </div>
-
-            <div class="account-field">
-                <span>Имя</span>
-                <strong id="accountName">—</strong>
-            </div>
-
-            <div class="account-field">
-                <span>Телефон</span>
-                <strong id="accountPhone">—</strong>
-            </div>
-
-            <div class="account-field">
-                <span>Баланс</span>
-                <strong id="accountBalance">—</strong>
-            </div>
-        </div>
-
-        <p id="accountMessage" class="message"></p>
-    </div>
-
-    <div class="panel">
-        <h2>История заказов</h2>
-        <div id="ordersContainer">
-            <p class="empty">
-                История заказов пока не подключена к этому экрану.
-            </p>
-        </div>
-    </div>
-
-    <div class="page-actions">
-        <button class="btn" onclick="openCart()">Моя корзина</button>
-        <button class="btn btn-outline" onclick="showPage('home')">
-            Вернуться в каталог
-        </button>
-    </div>
-</section>
-
-
-<!-- КОРЗИНА -->
-
-<section id="cartPage" class="page hidden">
-    <h1 class="page-title">Моя корзина</h1>
-    <p class="subtitle">Товары, сохранённые на твоём Java-бэкенде.</p>
-
-    <div class="panel">
-        <div id="cartContainer">
-            <p class="loading">Загрузка корзины...</p>
-        </div>
-
-        <div id="cartTotalBlock" class="cart-total hidden">
-            <span>Итого</span>
-            <span id="cartTotal">—</span>
-        </div>
-
-        <p id="cartMessage" class="message"></p>
-    </div>
-
-    <div class="page-actions">
-        <button class="btn btn-outline" onclick="showPage('home')">
-            Продолжить покупки
-        </button>
-    </div>
-</section>
-
-
 <footer>
-    Flora · Магазин цветов
+    Flora — цветочный магазин
 </footer>
 
 
 <script>
-    // Все запросы идут на тот же Spring Boot сервер.
+    // URL соответствуют контроллерам из проекта FloralProd2.
     const API = {
         products: "/product",
         clients: "/clients",
         carts: "/carts",
         cartItems: "/item-carts",
-        cartDTO: clientId => `/cartsDTO/${clientId}/cart`
+        cartDTO: clientId => `/cartsDTO/${clientId}/cart`,
+        orders: "/orders",
+        payments: "/payments"
     };
 
+    // Данные активного клиента хранятся в текущем сеансе страницы.
     let currentClient = null;
     let currentCartId = null;
     let cartItems = [];
+    let cartTotal = 0;
 
+    const money = value => {
+        const number = Number(value);
 
-    // ------------------------------
-    // Переключение экранов
-    // ------------------------------
+        if (!Number.isFinite(number)) {
+            return "—";
+        }
 
-    function showPage(page) {
-        const pages = {
-            home: "homePage",
-            register: "registerPage",
-            account: "accountPage",
-            cart: "cartPage"
-        };
+        return new Intl.NumberFormat("ru-RU", {
+            style: "currency",
+            currency: "EUR"
+        }).format(number);
+    };
 
-        Object.values(pages).forEach(id => {
-            document.getElementById(id).classList.add("hidden");
+    function showMessage(id, message, type = "") {
+        const element = document.getElementById(id);
+        element.textContent = message || "";
+        element.className = "message" + (type ? " " + type : "");
+    }
+
+    function showPage(pageId) {
+        document.querySelectorAll(".section").forEach(section => {
+            section.classList.remove("active");
         });
 
-        document.getElementById(pages[page]).classList.remove("hidden");
+        const page = document.getElementById(pageId);
 
-        document.getElementById("hero").classList.toggle(
-            "hidden", page !== "home"
-        );
+        if (page) {
+            page.classList.add("active");
+        }
 
         window.scrollTo({ top: 0, behavior: "smooth" });
     }
 
-
     function updateHeader() {
-        const registered = currentClient !== null;
+        const registered = Boolean(currentClient);
 
-        document.getElementById("registerButton")
-            .classList.toggle("hidden", registered);
-
-        document.getElementById("accountButton")
-            .classList.toggle("hidden", !registered);
-
-        document.getElementById("cartButton")
-            .classList.toggle("hidden", !registered);
+        document.getElementById("registerButton").hidden = registered;
+        document.getElementById("accountButton").hidden = !registered;
+        document.getElementById("cartButton").hidden = !registered;
     }
 
-
-    // ------------------------------
-    // Работа с HTTP
-    // ------------------------------
-
+    // Общая функция HTTP-запросов к Spring Boot.
     async function request(url, options = {}) {
         const response = await fetch(url, {
             ...options,
             headers: {
-                ...(options.body ? {
-                    "Content-Type": "application/json"
-                } : {}),
-                ...options.headers
+                ...(options.body
+                    ? { "Content-Type": "application/json" }
+                    : {}),
+                ...(options.headers || {})
             }
         });
 
+        const text = await response.text();
+
         if (!response.ok) {
-            const details = await response.text();
             throw new Error(
-                `HTTP ${response.status}` +
-                (details ? `: ${details}` : "")
+                text || `Ошибка сервера: HTTP ${response.status}`
             );
         }
 
-        const text = await response.text();
-        if (!text) return null;
+        if (!text) {
+            return null;
+        }
 
         try {
             return JSON.parse(text);
@@ -670,50 +691,46 @@
         }
     }
 
-
-    function money(value) {
-        const number = Number(value);
-
-        if (!Number.isFinite(number)) {
-            return value ?? "—";
+    function requireClient() {
+        if (currentClient) {
+            return true;
         }
 
-        return number.toLocaleString("ru-RU", {
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2
-        });
+        showPage("register");
+        showMessage(
+            "registerMessage",
+            "Сначала зарегистрируйте клиента.",
+            "error"
+        );
+
+        return false;
     }
 
 
-    function showMessage(id, text, type = "") {
-        const element = document.getElementById(id);
-        element.className = "message " + type;
-        element.textContent = text;
-    }
-
-
-    // ------------------------------
-    // Каталог: GET /product
-    // ------------------------------
+    // -----------------------------
+    // КАТАЛОГ: GET /product
+    // -----------------------------
 
     async function loadProducts() {
-        const container = document.getElementById("productsContainer");
+        const container = document.getElementById("products");
 
         container.innerHTML =
-            '<p class="loading">Загружаем товары из базы данных...</p>';
+            '<p class="loading">Загрузка товаров...</p>';
+
+        showMessage("productsMessage", "");
 
         try {
             const products = await request(API.products);
 
             if (!Array.isArray(products)) {
-                throw new Error("Контроллер не вернул список товаров.");
+                throw new Error("Сервер не вернул список товаров.");
             }
 
             container.innerHTML = "";
 
             if (products.length === 0) {
                 container.innerHTML =
-                    '<p class="empty">В базе пока нет товаров.</p>';
+                    '<p class="empty">В каталоге пока нет товаров.</p>';
                 return;
             }
 
@@ -721,9 +738,9 @@
                 const card = document.createElement("article");
                 card.className = "product-card";
 
-                const symbol = document.createElement("div");
-                symbol.className = "product-symbol";
-                symbol.textContent = "❀";
+                const icon = document.createElement("div");
+                icon.className = "flower-icon";
+                icon.textContent = "🌷";
 
                 const name = document.createElement("h3");
                 name.textContent = product.name ?? "Без названия";
@@ -736,22 +753,19 @@
                 const bottom = document.createElement("div");
                 bottom.className = "product-bottom";
 
-                const price = document.createElement("p");
+                const price = document.createElement("div");
                 price.className = "product-price";
                 price.textContent = money(product.price);
 
                 const button = document.createElement("button");
                 button.className = "btn";
                 button.textContent = "Добавить в корзину";
-
                 button.onclick = () => addProductToCart(product);
 
                 bottom.append(price, button);
-                card.append(symbol, name, description, bottom);
+                card.append(icon, name, description, bottom);
                 container.appendChild(card);
             });
-
-            showMessage("productsMessage", "");
 
         } catch (error) {
             container.innerHTML = "";
@@ -764,35 +778,36 @@
     }
 
 
-    // ------------------------------
-    // Регистрация: POST /clients
-    // ------------------------------
+    // -----------------------------
+    // РЕГИСТРАЦИЯ: POST /clients
+    // -----------------------------
 
     document.getElementById("registerForm").addEventListener(
-        "submit", async event => {
+        "submit",
+        async event => {
             event.preventDefault();
 
             const button = document.getElementById("registerSubmit");
             button.disabled = true;
+            showMessage("registerMessage", "");
 
             const client = {
                 name: document.getElementById("clientName").value.trim(),
-                phone_number:
-                    document.getElementById("clientPhone").value.trim(),
+                phoneNumber: document.getElementById("clientPhone").value.trim(),
                 balance: Number(
                     document.getElementById("clientBalance").value
                 )
             };
 
             try {
-                // Твой ClientController возвращает void.
+                // В ClientFlorr Java-свойство называется phoneNumber.
                 await request(API.clients, {
                     method: "POST",
                     body: JSON.stringify(client)
                 });
 
-                // Получаем реальный ID созданного клиента.
-                // Это нужно, потому что POST /clients не возвращает ID.
+                // POST /clients возвращает void, поэтому получаем
+                // созданного клиента из списка.
                 const clients = await request(API.clients);
 
                 if (!Array.isArray(clients)) {
@@ -800,21 +815,27 @@
                 }
 
                 const savedClient = clients.find(item =>
-                    (item.phone_number ?? item.phoneNumber) ===
-                    client.phone_number
+                    String(item.phoneNumber ?? item.phone_number ?? "") ===
+                    client.phoneNumber
                 );
 
                 if (!savedClient) {
                     throw new Error(
-                        "Клиент добавлен, но найти его ID не удалось. " +
-                        "Проверь JSON-поля ClientFlorr."
+                        "Клиент отправлен, но не найден в ответе API. " +
+                        "Проверьте сериализацию ClientFlorr и наличие getId()."
+                    );
+                }
+
+                if (!savedClient.id) {
+                    throw new Error(
+                        "Бэкенд не вернул ID клиента. " +
+                        "Добавьте getId() в ClientFlorr и повторите регистрацию."
                     );
                 }
 
                 currentClient = savedClient;
 
-                // Создаём корзину через твой CartController.
-                // POST /carts?clientId=... возвращает int.
+                // POST /carts?clientId=ID
                 const cartId = await request(
                     `${API.carts}?clientId=${encodeURIComponent(currentClient.id)}`,
                     { method: "POST" }
@@ -824,27 +845,26 @@
 
                 if (!Number.isInteger(currentCartId) || currentCartId <= 0) {
                     throw new Error(
-                        "Клиент создан, но сервер не вернул корректный ID корзины."
+                        "Не удалось получить ID новой корзины."
                     );
                 }
 
                 updateHeader();
                 renderAccount();
-
                 document.getElementById("registerForm").reset();
 
                 showMessage(
                     "registerMessage",
-                    "Клиент успешно зарегистрирован.",
+                    "Регистрация завершена.",
                     "success"
                 );
 
-                showPage("account");
+                showPage("home");
 
             } catch (error) {
                 showMessage(
                     "registerMessage",
-                    "Ошибка: " + error.message,
+                    error.message,
                     "error"
                 );
             } finally {
@@ -854,36 +874,10 @@
     );
 
 
-    // ------------------------------
-    // Личный кабинет: GET /clients/{id}
-    // ------------------------------
-
-    async function openAccount() {
-        if (!currentClient) {
-            showPage("register");
-            return;
-        }
-
-        showPage("account");
-
-        try {
-            const client = await request(
-                `${API.clients}/${currentClient.id}`
-            );
-
-            if (client) {
-                currentClient = client;
-                renderAccount();
-            }
-        } catch (error) {
-            showMessage(
-                "accountMessage",
-                "Не удалось обновить информацию: " + error.message,
-                "error"
-            );
-        }
-    }
-
+    // -----------------------------
+    // ЛИЧНЫЙ КАБИНЕТ
+    // GET /clients/{id}
+    // -----------------------------
 
     function renderAccount() {
         if (!currentClient) return;
@@ -895,42 +889,137 @@
             currentClient.name ?? "—";
 
         document.getElementById("accountPhone").textContent =
-            currentClient.phone_number ??
-            currentClient.phoneNumber ?? "—";
+            currentClient.phoneNumber ??
+            currentClient.phone_number ?? "—";
 
         document.getElementById("accountBalance").textContent =
             money(currentClient.balance);
     }
 
+    async function openAccount() {
+        if (!requireClient()) return;
 
-    // ------------------------------
-    // Добавление позиции в корзину
+        showPage("account");
+        showMessage("accountMessage", "");
+
+        try {
+            const client = await request(
+                `${API.clients}/${currentClient.id}`
+            );
+
+            if (client) {
+                currentClient = client;
+                renderAccount();
+            }
+
+            await loadOrderHistory();
+
+        } catch (error) {
+            showMessage(
+                "accountMessage",
+                "Не удалось обновить данные: " + error.message,
+                "error"
+            );
+        }
+    }
+
+
+    // -----------------------------
+    // ИСТОРИЯ ЗАКАЗОВ
+    // GET /carts и GET /orders
+    // -----------------------------
+
+    async function loadOrderHistory() {
+        const container = document.getElementById("orderHistory");
+
+        container.innerHTML =
+            '<p class="loading">Загрузка истории заказов...</p>';
+
+        showMessage("historyMessage", "");
+
+        try {
+            const [carts, orders] = await Promise.all([
+                request(API.carts),
+                request(API.orders)
+            ]);
+
+            if (!Array.isArray(carts) || !Array.isArray(orders)) {
+                throw new Error("API не вернул список корзин или заказов.");
+            }
+
+            const clientCartIds = new Set(
+                carts
+                    .filter(cart =>
+                        Number(cart.userId ?? cart.user_id) ===
+                        Number(currentClient.id)
+                    )
+                    .map(cart => Number(cart.id))
+            );
+
+            const clientOrders = orders.filter(order =>
+                clientCartIds.has(Number(order.cartId ?? order.cart_id))
+            );
+
+            container.innerHTML = "";
+
+            if (clientOrders.length === 0) {
+                container.innerHTML =
+                    '<p class="empty">Заказов пока нет.</p>';
+                return;
+            }
+
+            clientOrders.forEach(order => {
+                const row = document.createElement("div");
+                row.className = "order-row";
+
+                const info = document.createElement("div");
+
+                const title = document.createElement("h3");
+                title.textContent = `Заказ №${order.id}`;
+
+                const details = document.createElement("p");
+                details.textContent =
+                    `Корзина №${order.cartId ?? order.cart_id}`;
+
+                const amount = document.createElement("strong");
+                amount.textContent = money(
+                    order.totalPrice ?? order.total_price
+                );
+
+                info.append(title, details);
+                row.append(info, amount);
+                container.appendChild(row);
+            });
+
+        } catch (error) {
+            container.innerHTML = "";
+            showMessage(
+                "historyMessage",
+                "Не удалось загрузить историю: " + error.message,
+                "error"
+            );
+        }
+    }
+
+
+    // -----------------------------
+    // ДОБАВЛЕНИЕ ТОВАРА
     // POST /item-carts
-    // ------------------------------
+    // -----------------------------
 
     async function addProductToCart(product) {
-        if (!currentClient) {
-            showPage("register");
-            showMessage(
-                "registerMessage",
-                "Сначала зарегистрируй клиента, чтобы добавлять товары.",
-                ""
-            );
-            return;
-        }
+        if (!requireClient()) return;
 
         if (!currentCartId) {
             showMessage(
                 "productsMessage",
-                "Не найден ID корзины. Проверь создание корзины.",
+                "Не найден ID корзины. Проверьте создание корзины.",
                 "error"
             );
             return;
         }
 
         try {
-            // Используем сущность ItemCart на бэкенде.
-            // Предполагаемые поля: cartId, prodId, quantity.
             await request(API.cartItems, {
                 method: "POST",
                 body: JSON.stringify({
@@ -956,24 +1045,21 @@
     }
 
 
-    // ------------------------------
-    // Корзина: GET /cartsDTO/{clientId}/cart
-    // ------------------------------
+    // -----------------------------
+    // КОРЗИНА: GET /cartsDTO/{clientId}/cart
+    // -----------------------------
 
     async function openCart() {
-        if (!currentClient) {
-            showPage("register");
-            return;
-        }
+        if (!requireClient()) return;
 
         showPage("cart");
 
         const container = document.getElementById("cartContainer");
         container.innerHTML =
-            '<p class="loading">Загружаем корзину...</p>';
+            '<p class="loading">Загрузка корзины...</p>';
 
-        document.getElementById("cartTotalBlock")
-            .classList.add("hidden");
+        document.getElementById("cartTotalBlock").hidden = true;
+        showMessage("cartMessage", "");
 
         try {
             const data = await request(
@@ -981,7 +1067,7 @@
             );
 
             if (!Array.isArray(data)) {
-                throw new Error("Контроллер не вернул список товаров.");
+                throw new Error("Сервер не вернул список товаров корзины.");
             }
 
             cartItems = data;
@@ -997,7 +1083,6 @@
         }
     }
 
-
     function renderCart() {
         const container = document.getElementById("cartContainer");
         const totalBlock = document.getElementById("cartTotalBlock");
@@ -1009,12 +1094,10 @@
             container.innerHTML =
                 '<p class="empty">В корзине пока нет товаров.</p>';
 
-            totalBlock.classList.add("hidden");
+            totalBlock.hidden = true;
             return;
         }
 
-        // Отображаем ответ CartDTO.
-        // Стоимость и итог берём с сервера, а не рассчитываем заново.
         cartItems.forEach(item => {
             const row = document.createElement("div");
             row.className = "cart-row";
@@ -1025,41 +1108,154 @@
             title.textContent = item.prodName ?? "Товар";
 
             const quantity = document.createElement("p");
-            quantity.textContent = "Количество: " + (item.quantity ?? "—");
+            quantity.textContent =
+                "Количество: " + (item.quantity ?? "—");
 
             const price = document.createElement("p");
             price.textContent = "Цена: " + money(item.price);
 
-            info.append(title, quantity, price);
-
             const total = document.createElement("strong");
             total.textContent = money(item.total);
 
+            info.append(title, quantity, price);
             row.append(info, total);
             container.appendChild(row);
         });
 
-        // Сумма берётся из поля total каждой строки CartDTO.
-        // Это только отображение серверных данных.
-        const serverTotal = cartItems.reduce(
+        // Суммируем итоги строк, которые вернул CartDTO.
+        // Цены и суммы отдельных позиций получены с бэкенда.
+        cartTotal = cartItems.reduce(
             (sum, item) => sum + (Number(item.total) || 0),
             0
         );
 
         document.getElementById("cartTotal").textContent =
-            money(serverTotal);
+            money(cartTotal);
 
-        totalBlock.classList.remove("hidden");
+        totalBlock.hidden = false;
     }
 
 
-    // ------------------------------
-    // Запуск
-    // ------------------------------
+    // -----------------------------
+    // ОФОРМЛЕНИЕ: POST /orders
+    // -----------------------------
+
+    async function openPayment() {
+        if (!requireClient()) return;
+
+        if (!currentCartId) {
+            showMessage(
+                "cartMessage",
+                "Не найден ID корзины.",
+                "error"
+            );
+            return;
+        }
+
+        if (cartItems.length === 0 || cartTotal <= 0) {
+            showMessage(
+                "cartMessage",
+                "Нельзя оформить пустую корзину.",
+                "error"
+            );
+            return;
+        }
+
+        showPage("payment");
+
+        const summary = document.getElementById("paymentSummary");
+        summary.innerHTML = "";
+
+        cartItems.forEach(item => {
+            const row = document.createElement("div");
+            row.className = "cart-row";
+
+            const name = document.createElement("span");
+            name.textContent =
+                `${item.prodName ?? "Товар"} × ${item.quantity}`;
+
+            const total = document.createElement("strong");
+            total.textContent = money(item.total);
+
+            row.append(name, total);
+            summary.appendChild(row);
+        });
+
+        document.getElementById("paymentTotal").textContent =
+            money(cartTotal);
+
+        showMessage("paymentMessage", "");
+    }
+
+    async function confirmPayment() {
+        if (!requireClient()) return;
+
+        const button = document.getElementById("confirmPayment");
+        button.disabled = true;
+        showMessage("paymentMessage", "");
+
+        try {
+            if (!currentCartId || cartTotal <= 0) {
+                throw new Error("Корзина пуста или не найдена.");
+            }
+
+            // Создаём заказ через существующий OrderController.
+            const orderId = await request(API.orders, {
+                method: "POST",
+                body: JSON.stringify({
+                    cartId: currentCartId,
+                    totalPrice: cartTotal
+                })
+            });
+
+            const parsedOrderId = Number(orderId);
+
+            if (!Number.isInteger(parsedOrderId) || parsedOrderId <= 0) {
+                throw new Error(
+                    "Сервер не вернул корректный ID заказа."
+                );
+            }
+
+            // Сохраняем запись платежа через PaymentController.
+            // Это НЕ является реальным банковским списанием.
+            await request(API.payments, {
+                method: "POST",
+                body: JSON.stringify({
+                    fullCost: cartTotal,
+                    paid: true,
+                    orderId: parsedOrderId
+                })
+            });
+
+            showMessage(
+                "paymentMessage",
+                `Заказ №${parsedOrderId} создан, запись о платеже сохранена. ` +
+                "Реальная оплата не проводилась.",
+                "success"
+            );
+
+            // Обновляем историю через API.
+            await loadOrderHistory();
+
+        } catch (error) {
+            showMessage(
+                "paymentMessage",
+                "Не удалось оформить заказ: " + error.message,
+                "error"
+            );
+        } finally {
+            button.disabled = false;
+        }
+    }
+
+
+    // -----------------------------
+    // СТАРТ СТРАНИЦЫ
+    // -----------------------------
 
     updateHeader();
     loadProducts();
 </script>
 
 </body>
-</html>
+</html>l>

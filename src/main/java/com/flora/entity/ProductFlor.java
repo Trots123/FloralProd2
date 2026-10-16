@@ -9,28 +9,17 @@ public class ProductFlor {
     private String name;
     private BigDecimal price;
     private String description;
-    private int stockQuantity;
-    public ProductFlor(int id, String name, BigDecimal price, String description) {
+    public ProductFlor() {
 
     }
 
-    public ProductFlor(int id, String name, BigDecimal price, String description, int stockQuantity) {
+    public ProductFlor(int id, String name, BigDecimal price, String description ) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.description = description;
-        this.stockQuantity = stockQuantity;
     }
 
-
-
-    public int getStockQuantity() {
-        return stockQuantity;
-    }
-
-    public void setStockQuantity(int stockQuantity) {
-        this.stockQuantity = stockQuantity;
-    }
 
     public int getId() {
         return id;

@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/item-carts")
+@RequestMapping("/item_carts")
 public class ItemCartController {
 
     private final ItemCartService itemCartService;
@@ -27,6 +27,12 @@ public class ItemCartController {
     public Optional<ItemCart> getItemCartById(@PathVariable int id) {
         return itemCartService.getItemCartById(id);
     }
+//    // CREATE: создать корзину
+//    @PostMapping
+//    public int createCart(@RequestParam("clientId") int clientId) {
+//        return cartService.createCart(clientId);
+//    }
+
 
     // Добавить позицию в корзину
     @PostMapping

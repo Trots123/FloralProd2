@@ -48,7 +48,7 @@ public class CartRepository {
     public int createCart(int clientId) {
         String sql = """
                 INSERT INTO cart (user_id, dral_ststus)
-                VALUES (?, true)
+                VALUES (?, false)
                 RETURNING id
                 """;
 

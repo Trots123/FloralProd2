@@ -39,9 +39,7 @@ public class ProductController {
 
     // поиск по ID
     @GetMapping("/{id}")
-    public Optional<ProductFlor> getProductById(
-            @PathVariable("id") int id
-    ) {
+    public Optional<ProductFlor> getProductById(@PathVariable("id") int id) {
         return productService.getProductById(id);
     }
 
