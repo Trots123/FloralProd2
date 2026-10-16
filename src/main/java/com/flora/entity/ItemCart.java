@@ -9,11 +9,10 @@ public class ItemCart {
     private int prodId;
     private int quantity;
 
-    public ItemCart(int id, Cart cart, int prodId, int quantity) {
-
+    public ItemCart() {
     }
 
-    public ItemCart(int id, int cartId, int prodId, int quantity) {
+    public ItemCart(int id, int cart, int prodId, int quantity) {
         this.id = id;
         this.cartId = cartId;
         this.prodId = prodId;

@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/item_carts")
+@RequestMapping("/item-carts")
 public class ItemCartController {
 
     private final ItemCartService itemCartService;

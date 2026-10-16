@@ -13,6 +13,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -25,6 +26,44 @@ public class ClientRepository {
     public ClientRepository(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
+
+
+    // поиск клиента по номеру телефона
+    public Optional<ClientFlorr> findByPhoneNumber(String phoneNumber) {
+
+        String sql = """
+            SELECT id, name, phone_number, balance,
+                   password_hash, created_at
+            FROM client_florr
+            WHERE phone_number = ?
+            """;
+
+        return jdbcTemplate.query(sql, (rs, rowNum) -> {
+
+            ClientFlorr client = new ClientFlorr();
+
+            client.setId(rs.getInt("id"));
+            client.setName(rs.getString("name"));
+            client.setPhoneNumber(rs.getString("phone_number"));
+            client.setBalance(rs.getBigDecimal("balance"));
+            client.setPasswordHash(rs.getString("password_hash"));
+
+            Timestamp createdAt = rs.getTimestamp("created_at");
+
+            if (createdAt != null) {
+                client.setCreatedAt(createdAt.toLocalDateTime());
+            }
+
+            return client;
+
+            // возвращает первый подходящий элемент findFirst();
+        }, phoneNumber).stream().findFirst();
+    }
+
+
+
+
+
 
 
 
@@ -41,6 +80,7 @@ public class ClientRepository {
                         rs.getString("phone_number") ,
                         rs.getBigDecimal("balance")));
     }
+
 
 
     // Найти клиента по ID public

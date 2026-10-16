@@ -55,7 +55,7 @@ public class ItemCartRepository {
 
             return new ItemCart(
                     rs.getInt("id"),
-                    cart,
+                    rs.getInt("cart_id"),
                     rs.getInt("prod_id"),
                     rs.getInt("quantity")
             );
@@ -84,7 +84,7 @@ public class ItemCartRepository {
 
             return Optional.of(new ItemCart(
                     rs.getInt("id"),
-                    cart,
+                    rs.getInt("cart_id"),
                     rs.getInt("prod_id"),
                     rs.getInt("quantity")
             ));
@@ -133,7 +133,7 @@ public class ItemCartRepository {
 
             return new ItemCart(
                     rs.getInt("id"),
-                    cart,
+                    rs.getInt("cart_id"),
                     rs.getInt("prod_id"),
                     rs.getInt("quantity")
             );
