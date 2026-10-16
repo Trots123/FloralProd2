@@ -62,11 +62,6 @@ public class ClientRepository {
 
 
 
-
-
-
-
-
     // Получить всех клиентов
     public List<ClientFlorr> getAllClient() {
         String sql = """ 
@@ -103,21 +98,22 @@ public class ClientRepository {
         return clients.stream().findFirst();
     }
 
-
-    // создание клиента
     public int addClient(ClientFlorr client) {
+
         String sql = """
-            INSERT INTO client_florr (name,  phone_number , balance)
-            VALUES (?, ?, ?)
+            INSERT INTO client_florr
+            (name, phone_number, balance, password_hash)
+            VALUES (?, ?, ?, ?)
             """;
+
         return jdbcTemplate.update(
                 sql,
                 client.getName(),
                 client.getPhoneNumber(),
-                client.getBalance()
+                client.getBalance(),
+                client.getPasswordHash()
         );
     }
-
 
     // Изменение клиента
     public int updateClient(int id, ClientFlorr client) {

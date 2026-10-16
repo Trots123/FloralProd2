@@ -3,3 +3,6 @@ spring:
     url: jdbc:postgresql://localhost:6432/test_floralprod
     username: user
     password: password2
+logging:
+      level:
+        org.springframework.security: DEBUG
