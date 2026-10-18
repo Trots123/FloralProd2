@@ -1,6 +1,11 @@
 package com.flora.controller;
+
+import com.flora.FlorDTO.ClientResponseDTO;
 import com.flora.FlorDTO.LoginRequest;
 import com.flora.FlorDTO.RegisterRequest;
+
+import com.flora.entity.ClientFlorr;
+import com.flora.repository.ClientRepository;
 import com.flora.services.AuthService;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -14,8 +19,10 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.security.web.csrf.CsrfToken;
@@ -23,90 +30,76 @@ import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
 
     private final AuthService authService;
     private final AuthenticationManager authenticationManager;
+    private final ClientRepository clientRepository;
 
-    private final HttpSessionSecurityContextRepository securityContextRepository =
-            new HttpSessionSecurityContextRepository();
-
-    public AuthController(AuthService authService,
-                          AuthenticationManager authenticationManager) {
+    // Конструктор
+    public AuthController(
+            AuthService authService,
+            AuthenticationManager authenticationManager,
+            ClientRepository clientRepository) {
 
         this.authService = authService;
         this.authenticationManager = authenticationManager;
+        this.clientRepository = clientRepository;
     }
 
-    @GetMapping("/me")
-    public ResponseEntity<String> me(
-            @AuthenticationPrincipal UserDetails user) {
-
-        return ResponseEntity.ok(
-                "Вы авторизованы. Телефон: " + user.getUsername()
-        );
-    }
-
+    // 1. Получение CSRF-токена
     @GetMapping("/csrf")
-    public CsrfToken csrf(CsrfToken csrfToken) {
+    public CsrfToken csrf(
+            CsrfToken csrfToken,
+            HttpServletResponse response) {
 
-        csrfToken.getToken();
+        String token = csrfToken.getToken();
+
+        response.addHeader(
+                "Set-Cookie",
+                "XSRF-TOKEN=" + token + "; Path=/; SameSite=Lax"
+        );
 
         return csrfToken;
     }
 
+    // 2. Регистрация клиента
     @PostMapping("/register")
     public ResponseEntity<String> register(
             @RequestBody RegisterRequest request) {
 
-        try {
-            authService.register(request);
+        authService.register(request);
 
-            return ResponseEntity.ok(
-                    "Регистрация успешна! Теперь войдите в аккаунт."
-            );
-
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+        return ResponseEntity.ok(
+                "Регистрация успешна! Теперь войдите в аккаунт."
+        );
     }
 
+    // 3. Вход в аккаунт
     @PostMapping("/login")
     public ResponseEntity<String> login(
             @RequestBody LoginRequest request,
             HttpServletRequest httpRequest,
             HttpServletResponse httpResponse) {
 
-        if (request == null
-                || request.getPhoneNumber() == null
-                || request.getPhoneNumber().isBlank()
-                || request.getPassword() == null) {
-
-            throw new ResponseStatusException(
-                    HttpStatus.BAD_REQUEST,
-                    "Укажите телефон и пароль"
-            );
-        }
-
         try {
             Authentication authentication =
                     authenticationManager.authenticate(
                             new UsernamePasswordAuthenticationToken(
-                                    request.getPhoneNumber().trim(),
+                                    request.getPhoneNumber(),
                                     request.getPassword()
                             )
                     );
 
-            // Создаём сессию, если её ещё нет.
+            // Создаём сессию
             httpRequest.getSession();
 
-            // Меняем идентификатор сессии после входа.
+            // Меняем ID сессии для защиты
             httpRequest.changeSessionId();
 
+            // Создаём SecurityContext
             SecurityContext context =
                     SecurityContextHolder.createEmptyContext();
 
@@ -114,19 +107,52 @@ public class AuthController {
 
             SecurityContextHolder.setContext(context);
 
-            securityContextRepository.saveContext(
+            // Сохраняем авторизацию в HTTP-сессии
+            HttpSessionSecurityContextRepository repository =
+                    new HttpSessionSecurityContextRepository();
+
+            repository.saveContext(
                     context,
                     httpRequest,
                     httpResponse
             );
 
-            return ResponseEntity.ok("Вход выполнен успешно!");
+            return ResponseEntity.ok(
+                    "Вход выполнен успешно!"
+            );
 
         } catch (BadCredentialsException e) {
-            throw new ResponseStatusException(
-                    HttpStatus.UNAUTHORIZED,
-                    "Неверный телефон или пароль"
-            );
+
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body("Неверный номер телефона или пароль");
         }
+    }
+
+    // 4. Получение данных авторизованного клиента
+    @GetMapping("/me")
+    public ResponseEntity<ClientResponseDTO> me(
+            @AuthenticationPrincipal UserDetails user) {
+
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        ClientFlorr client = clientRepository
+                .findByPhoneNumber(user.getUsername())
+                .orElseThrow(() ->
+                        new ResponseStatusException(
+                                HttpStatus.NOT_FOUND,
+                                "Клиент не найден"
+                        )
+                );
+
+        ClientResponseDTO dto = new ClientResponseDTO(
+                client.getId(),
+                client.getName(),
+                client.getPhoneNumber(),
+                client.getBalance()
+        );
+
+        return ResponseEntity.ok(dto);
     }
 }
