@@ -1,4 +1,15 @@
 package com.flora.controller;
+
+
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+@RequestMapping("/item-carts")
+public class ItemCartController {
+
+}
+/*
 import com.flora.entity.ItemCart;
 import com.flora.services.ItemCartService;
 import org.springframework.web.bind.annotation.*;
@@ -55,4 +66,5 @@ public class ItemCartController {
     public int deleteItemCart(@PathVariable int id) {
         return itemCartService.deleteItemCart(id);
     }
-}
+    }
+ */

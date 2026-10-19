@@ -157,5 +157,107 @@ public class ItemCartRepository {
                 excludeItemId
         );
     }
+    // Найти товар в конкретной корзине
+    public Optional<ItemCart> getItemByCartIdAndProdId(
+            int cartId,
+            int prodId) {
 
+        String sql = """
+            SELECT id, cart_id, prod_id, quantity
+            FROM item_cart
+            WHERE cart_id = ?
+              AND prod_id = ?
+            LIMIT 1
+            """;
+
+        return jdbcTemplate.query(
+                sql,
+                rs -> {
+                    if (!rs.next()) {
+                        return Optional.empty();
+                    }
+
+                    ItemCart itemCart = new ItemCart(
+                            rs.getInt("id"),
+                            rs.getInt("cart_id"),
+                            rs.getInt("prod_id"),
+                            rs.getInt("quantity")
+                    );
+
+                    return Optional.of(itemCart);
+                },
+                cartId,
+                prodId
+        );
+    }
+
+    public int deleteMyItem(int itemId, int clientId) {
+
+        String sql = """
+            DELETE FROM item_cart ic
+            USING cart c
+            WHERE ic.cart_id = c.id
+              AND ic.id = ?
+              AND c.user_id = ?
+              AND c.dral_ststus = false
+            """;
+
+        return jdbcTemplate.update(sql, itemId, clientId);
+    }
+    public int updateMyItemQuantity(
+            int itemId,
+            int clientId,
+            int quantity
+    ) {
+
+        String sql = """
+            UPDATE item_cart ic
+            SET quantity = ?
+            FROM cart c
+            WHERE ic.cart_id = c.id
+              AND ic.id = ?
+              AND c.user_id = ?
+              AND c.dral_ststus = false
+            """;
+
+        return jdbcTemplate.update(
+                sql,
+                quantity,
+                itemId,
+                clientId
+        );
+    }
+
+    public Optional<ItemCart> getMyItemById(
+            int itemId,
+            int clientId
+    ) {
+
+        String sql = """
+            SELECT ic.id, ic.cart_id, ic.prod_id, ic.quantity
+            FROM item_cart ic
+            JOIN cart c ON ic.cart_id = c.id
+            WHERE ic.id = ?
+              AND c.user_id = ?
+              AND c.dral_ststus = false
+            """;
+
+        return jdbcTemplate.query(
+                sql,
+                rs -> {
+                    if (!rs.next()) {
+                        return Optional.empty();
+                    }
+
+                    return Optional.of(new ItemCart(
+                            rs.getInt("id"),
+                            rs.getInt("cart_id"),
+                            rs.getInt("prod_id"),
+                            rs.getInt("quantity")
+                    ));
+                },
+                itemId,
+                clientId
+        );
+    }
 }

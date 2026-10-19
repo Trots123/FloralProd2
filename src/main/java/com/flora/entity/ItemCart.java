@@ -2,9 +2,7 @@ package com.flora.entity;
 
 public class ItemCart {
 
-
     private int id;
-
     private int cartId;
     private int prodId;
     private int quantity;
@@ -12,13 +10,12 @@ public class ItemCart {
     public ItemCart() {
     }
 
-    public ItemCart(int id, int cart, int prodId, int quantity) {
+    public ItemCart(int id, int cartId, int prodId, int quantity) {
         this.id = id;
         this.cartId = cartId;
         this.prodId = prodId;
         this.quantity = quantity;
     }
-
 
     public int getId() {
         return id;

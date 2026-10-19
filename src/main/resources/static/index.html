@@ -3,32 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Flora — магазин цветов</title>
+    <title>Flor — Магазин цветов</title>
 
     <style>
         :root {
-            --green: #285943;
-            --dark-green: #183e2e;
-            --light-green: #e8f0e8;
-            --cream: #f8f8f1;
-            --white: #ffffff;
-            --text: #26372c;
-            --muted: #7b897d;
-            --border: #e1e8df;
-            --danger: #b44242;
+            --green: #254c3c;
+            --green-light: #426a56;
+            --pink: #f4dfdf;
+            --cream: #faf8f3;
+            --text: #283b31;
+            --gray: #7b847e;
+            --border: #e9e9e3;
         }
 
         * {
             box-sizing: border-box;
-            margin: 0;
-            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
         }
 
         body {
+            margin: 0;
             font-family: Arial, sans-serif;
             background: var(--cream);
             color: var(--text);
-            line-height: 1.5;
         }
 
         button, input {
@@ -39,172 +39,243 @@
             cursor: pointer;
         }
 
+        button:disabled {
+            cursor: not-allowed;
+            opacity: 0.5;
+        }
+
+        [hidden] {
+            display: none !important;
+        }
+
+        /* HEADER */
+
         header {
             position: sticky;
             top: 0;
             z-index: 10;
             background: white;
             border-bottom: 1px solid var(--border);
-            padding: 16px 6%;
+        }
+
+        nav {
+            max-width: 1200px;
+            margin: auto;
+            padding: 18px 24px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: 20px;
-            flex-wrap: wrap;
+            gap: 15px;
         }
 
         .logo {
+            font-family: Georgia, serif;
+            font-size: 38px;
+            font-weight: bold;
             color: var(--green);
-            font-size: 30px;
-            font-weight: 800;
-            cursor: pointer;
-            letter-spacing: -1px;
+            text-decoration: none;
         }
 
         .logo span {
-            color: #92a77e;
+            color: #d59da7;
         }
 
-        .header-actions {
+        .actions {
             display: flex;
             gap: 10px;
-            align-items: center;
             flex-wrap: wrap;
         }
 
         .btn {
-            border: 1px solid var(--green);
-            border-radius: 8px;
-            padding: 11px 17px;
-            background: var(--green);
-            color: white;
-            transition: .2s;
-        }
-
-        .btn:hover {
-            background: var(--dark-green);
-        }
-
-        .btn:disabled {
-            opacity: .6;
-            cursor: wait;
-        }
-
-        .btn-outline {
             background: white;
             color: var(--green);
+            border: 1px solid var(--green);
+            padding: 11px 17px;
+            border-radius: 10px;
+            font-weight: bold;
+            transition: 0.2s;
         }
 
-        .btn-outline:hover {
+        .btn:hover:not(:disabled) {
+            opacity: 0.8;
+        }
+
+        .primary {
+            background: var(--green);
             color: white;
         }
 
-        main {
-            width: min(1180px, 90%);
-            margin: 35px auto 70px;
+        .danger {
+            color: #b44343;
+            border-color: #b44343;
         }
 
+        .full {
+            width: 100%;
+        }
+
+        /* HERO */
+
         .hero {
-            background: var(--light-green);
-            border-radius: 18px;
-            padding: 48px;
-            margin-bottom: 35px;
+            background: linear-gradient(110deg, #f5e1e1, #f7f2e6);
+            padding: 90px 25px;
+        }
+
+        .hero-inner {
+            max-width: 1200px;
+            margin: auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
         .hero h1 {
-            font-size: clamp(30px, 4vw, 48px);
-            line-height: 1.15;
-            color: var(--dark-green);
+            font-family: Georgia, serif;
+            font-size: 64px;
+            font-weight: normal;
+            color: var(--green);
             max-width: 650px;
-            margin-bottom: 15px;
+            margin: 15px 0;
         }
 
         .hero p {
-            max-width: 600px;
-            color: #536b59;
-            margin-bottom: 22px;
+            max-width: 500px;
+            line-height: 1.7;
+            color: #69776e;
+            font-size: 18px;
+        }
+
+        .flower-art {
+            font-size: 160px;
+            padding: 20px;
+        }
+
+        /* CATALOG */
+
+        .container {
+            max-width: 1200px;
+            margin: auto;
+            padding: 50px 24px;
         }
 
         h2 {
-            font-size: 28px;
-            margin-bottom: 22px;
-            color: var(--dark-green);
-        }
-
-        h3 {
-            margin-bottom: 8px;
+            font-family: Georgia, serif;
+            font-size: 36px;
+            color: var(--green);
         }
 
         .products {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(235px, 1fr));
-            gap: 22px;
+            grid-template-columns: repeat(
+                auto-fill,
+                minmax(240px, 1fr)
+            );
+            gap: 24px;
         }
 
-        .product-card {
+        .product {
             background: white;
-            border: 1px solid var(--border);
-            border-radius: 14px;
-            padding: 22px;
-            display: flex;
-            flex-direction: column;
-            min-width: 0;
-            transition: transform .2s, box-shadow .2s;
+            border: 1px solid #eee;
+            border-radius: 18px;
+            overflow: hidden;
         }
 
-        .product-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px #183e2e12;
-        }
-
-        .flower-icon {
-            height: 120px;
-            border-radius: 10px;
-            background: var(--light-green);
+        .product-image {
+            height: 185px;
             display: grid;
             place-items: center;
-            font-size: 55px;
-            margin-bottom: 18px;
+            background: linear-gradient(
+                    140deg,
+                    #f3dddd,
+                    #f4f0e7
+            );
+            font-size: 85px;
         }
 
-        .product-description {
-            color: var(--muted);
-            margin: 6px 0 20px;
-            white-space: pre-wrap;
-            overflow-wrap: anywhere;
+        .product-body {
+            padding: 20px;
         }
 
-        .product-bottom {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            margin-top: auto;
+        .product h3 {
+            margin: 0 0 12px;
         }
 
-        .product-price {
-            color: var(--green);
+        .product p {
+            color: var(--gray);
+            min-height: 40px;
+            line-height: 1.5;
+        }
+
+        .price {
             font-size: 23px;
             font-weight: bold;
+            margin: 14px 0;
+            color: var(--green);
         }
 
-        .section {
-            display: none;
+        .stock {
+            font-size: 13px;
+            color: var(--gray);
+            margin-bottom: 15px;
         }
 
-        .section.active {
-            display: block;
+        /* MODALS */
+
+        .overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.45);
+            z-index: 20;
         }
 
         .panel {
+            position: fixed;
+            top: 0;
+            right: 0;
+            z-index: 21;
+            height: 100vh;
+            width: min(460px, 100%);
+            overflow-y: auto;
             background: white;
-            border: 1px solid var(--border);
-            border-radius: 14px;
-            padding: 28px;
-            margin-bottom: 22px;
+            padding: 27px;
+            box-shadow: -10px 0 30px #0002;
         }
 
-        .form {
-            max-width: 500px;
+        .modal {
+            position: fixed;
+            z-index: 21;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: min(430px, calc(100% - 30px));
+            max-height: 90vh;
+            overflow-y: auto;
+            background: white;
+            border-radius: 18px;
+            padding: 28px;
+        }
+
+        .panel-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .close {
+            background: none;
+            border: none;
+            font-size: 32px;
+            color: #888;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .tabs .btn {
+            flex: 1;
         }
 
         .field {
@@ -213,161 +284,115 @@
 
         .field label {
             display: block;
-            margin-bottom: 6px;
             font-weight: bold;
+            margin-bottom: 7px;
         }
 
         .field input {
             width: 100%;
-            border: 1px solid #cbd7ca;
-            border-radius: 8px;
-            padding: 12px;
-            background: white;
-            color: var(--text);
+            padding: 13px;
+            border: 1px solid #ddd;
+            border-radius: 9px;
         }
 
-        .field input:focus {
-            outline: 2px solid #9bbba3;
-            border-color: var(--green);
+        /* CART */
+
+        .cart-item {
+            padding: 19px 0;
+            border-bottom: 1px solid #eee;
         }
 
-        .message {
-            margin: 15px 0;
-            padding: 12px;
-            border-radius: 8px;
-            overflow-wrap: anywhere;
-        }
-
-        .message:empty {
-            display: none;
-        }
-
-        .message.error {
-            color: #8e2929;
-            background: #ffeded;
-        }
-
-        .message.success {
-            color: #205d36;
-            background: #e9f7eb;
-        }
-
-        .muted {
-            color: var(--muted);
-        }
-
-        .account-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 15px;
-        }
-
-        .account-item {
-            background: var(--cream);
-            padding: 17px;
-            border-radius: 10px;
-            overflow-wrap: anywhere;
-        }
-
-        .account-item span {
-            display: block;
-            color: var(--muted);
-            font-size: 14px;
-            margin-bottom: 5px;
-        }
-
-        .account-item strong {
-            font-size: 18px;
-        }
-
-        .cart-row, .order-row {
+        .cart-controls {
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            gap: 20px;
-            padding: 18px 0;
-            border-bottom: 1px solid var(--border);
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 12px;
         }
 
-        .cart-row:last-child, .order-row:last-child {
-            border-bottom: none;
-        }
-
-        .cart-row p, .order-row p {
-            color: var(--muted);
-            margin-top: 4px;
-        }
-
-        .cart-row strong, .order-row strong {
-            white-space: nowrap;
+        .cart-controls button {
+            padding: 7px 12px;
         }
 
         .cart-total {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            gap: 18px;
-            border-top: 1px solid var(--border);
-            margin-top: 15px;
-            padding-top: 22px;
+            font-size: 24px;
+            font-weight: bold;
+            margin: 25px 0;
         }
 
-        .cart-total strong {
-            font-size: 26px;
-            color: var(--green);
+        /* PROFILE */
+
+        .profile-box {
+            background: var(--cream);
+            padding: 20px;
+            border-radius: 12px;
+            line-height: 2;
         }
 
-        .empty {
-            padding: 25px 0;
-            color: var(--muted);
+        .order {
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 12px;
         }
 
-        .loading {
-            padding: 25px 0;
-            color: var(--muted);
+        .muted {
+            color: var(--gray);
+        }
+
+        .error {
+            color: #b44343;
+        }
+
+        .success {
+            color: #267449;
+        }
+
+        .toast {
+            position: fixed;
+            z-index: 30;
+            bottom: 25px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--green);
+            color: white;
+            padding: 15px 23px;
+            border-radius: 12px;
+            text-align: center;
+            max-width: 90%;
         }
 
         footer {
-            padding: 30px 5%;
+            background: var(--green);
+            color: white;
             text-align: center;
-            background: white;
-            border-top: 1px solid var(--border);
-            color: var(--muted);
+            padding: 30px;
         }
 
-        @media (max-width: 600px) {
-            header {
-                padding: 14px 5%;
-            }
-
-            .logo {
-                font-size: 26px;
-            }
-
-            .header-actions {
-                width: 100%;
-            }
-
-            .header-actions button {
-                flex: 1;
-            }
-
-            main {
-                width: 92%;
-                margin-top: 22px;
+        @media (max-width: 700px) {
+            nav {
+                flex-wrap: wrap;
             }
 
             .hero {
-                padding: 28px 22px;
+                padding: 50px 20px;
             }
 
-            .panel {
-                padding: 20px;
+            .hero h1 {
+                font-size: 43px;
             }
 
-            .cart-row, .order-row {
-                align-items: flex-start;
+            .flower-art {
+                display: none;
+            }
+
+            .container {
+                padding: 35px 18px;
+            }
+
+            .actions .btn {
+                padding: 9px;
+                font-size: 13px;
             }
         }
     </style>
@@ -375,887 +400,894 @@
 
 <body>
 
+<!-- HEADER -->
+
 <header>
-    <div class="logo" onclick="showPage('home')">
-        Flora<span>.</span>
-    </div>
+    <nav>
+        <a href="/" class="logo" id="homeBtn">
+            ✿ Flor<span>.</span>
+        </a>
 
-    <nav class="header-actions">
-        <button class="btn btn-outline" onclick="showPage('home')">
-            Каталог
-        </button>
+        <div class="actions">
+            <button class="btn" id="loginBtn">
+                Войти / Регистрация
+            </button>
 
-        <button class="btn" id="registerButton"
-                onclick="showPage('register')">
-            Регистрация
-        </button>
+            <button class="btn" id="profileBtn" hidden>
+                👤 Личный кабинет
+            </button>
 
-        <button class="btn btn-outline" id="accountButton"
-                hidden onclick="openAccount()">
-            Личный кабинет
-        </button>
-
-        <button class="btn btn-outline" id="cartButton"
-                hidden onclick="openCart()">
-            Корзина
-        </button>
+            <button class="btn" id="cartBtn">
+                🛍 Корзина
+            </button>
+        </div>
     </nav>
 </header>
 
+<!-- MAIN -->
+
 <main>
+    <section class="hero">
+        <div class="hero-inner">
+            <div>
+                <p>✦ ЦВЕТЫ ДЛЯ ОСОБЕННЫХ МОМЕНТОВ</p>
 
-    <!-- ГЛАВНЫЙ ЭКРАН -->
+                <h1>
+                    Цветы, которые говорят за вас
+                </h1>
 
-    <section id="home" class="section active">
-        <div class="hero">
-            <h1>Цветы, которые говорят за вас</h1>
-            <p>
-                Выбирайте цветы для особенных моментов.
-                Каталог загружается непосредственно из вашего бэкенда.
-            </p>
-            <button class="btn" onclick="loadProducts()">
-                Обновить каталог
-            </button>
+                <p>
+                    Свежие цветы и красивые букеты
+                    для самых важных моментов.
+                </p>
+
+                <button class="btn primary" id="catalogBtn">
+                    Смотреть каталог →
+                </button>
+            </div>
+
+            <div class="flower-art">🌸</div>
         </div>
+    </section>
 
+    <section class="container" id="catalog">
         <h2>Наши цветы</h2>
 
-        <div id="products" class="products">
-            <p class="loading">Загрузка товаров...</p>
-        </div>
+        <p class="muted">
+            Выберите свой идеальный букет.
+        </p>
 
-        <div id="productsMessage" class="message"></div>
-    </section>
-
-
-    <!-- РЕГИСТРАЦИЯ -->
-
-    <section id="register" class="section">
-        <div class="panel">
-            <h2>Регистрация клиента</h2>
-
-            <p class="muted">
-                Заполните данные, чтобы пользоваться личным кабинетом
-                и корзиной.
-            </p>
-
-            <form id="registerForm" class="form">
-                <div class="field">
-                    <label for="clientName">Имя</label>
-                    <input id="clientName" name="name"
-                           type="text" required maxlength="100"
-                           placeholder="Введите имя">
-                </div>
-
-                <div class="field">
-                    <label for="clientPhone">Номер телефона</label>
-                    <input id="clientPhone" name="phoneNumber"
-                           type="tel" required maxlength="30"
-                           placeholder="+380991234567">
-                </div>
-
-                <div class="field">
-                    <label for="clientBalance">Баланс</label>
-                    <input id="clientBalance" name="balance"
-                           type="number" required min="0" step="0.01"
-                           value="0">
-                    <p class="muted">
-                        Поле соответствует текущей модели клиента.
-                        Это не пополнение реальными деньгами.
-                    </p>
-                </div>
-
-                <button class="btn" id="registerSubmit" type="submit">
-                    Зарегистрироваться
-                </button>
-            </form>
-
-            <div id="registerMessage" class="message"></div>
+        <div class="products" id="products">
+            Загрузка товаров...
         </div>
     </section>
-
-
-    <!-- ЛИЧНЫЙ КАБИНЕТ -->
-
-    <section id="account" class="section">
-        <h2>Личный кабинет</h2>
-
-        <div class="panel">
-            <h3>Данные клиента</h3>
-
-            <div class="account-grid">
-                <div class="account-item">
-                    <span>ID клиента</span>
-                    <strong id="accountId">—</strong>
-                </div>
-
-                <div class="account-item">
-                    <span>Имя</span>
-                    <strong id="accountName">—</strong>
-                </div>
-
-                <div class="account-item">
-                    <span>Телефон</span>
-                    <strong id="accountPhone">—</strong>
-                </div>
-
-                <div class="account-item">
-                    <span>Баланс</span>
-                    <strong id="accountBalance">—</strong>
-                </div>
-            </div>
-
-            <div id="accountMessage" class="message"></div>
-
-            <button class="btn btn-outline" onclick="openAccount()">
-                Обновить данные
-            </button>
-        </div>
-
-        <div class="panel">
-            <h3>История заказов</h3>
-
-            <p class="muted">
-                Заказы загружаются из API /orders и связываются
-                с клиентом через его корзины.
-            </p>
-
-            <div id="orderHistory">
-                <p class="loading">Загрузка истории...</p>
-            </div>
-
-            <div id="historyMessage" class="message"></div>
-        </div>
-    </section>
-
-
-    <!-- КОРЗИНА -->
-
-    <section id="cart" class="section">
-        <h2>Корзина</h2>
-
-        <div class="panel">
-            <div id="cartContainer">
-                <p class="loading">Загрузка корзины...</p>
-            </div>
-
-            <div id="cartMessage" class="message"></div>
-
-            <div id="cartTotalBlock" class="cart-total" hidden>
-                <div>
-                    <p class="muted">Итого</p>
-                    <strong id="cartTotal">0</strong>
-                </div>
-
-                <button class="btn" onclick="openPayment()">
-                    Перейти к оплате
-                </button>
-            </div>
-        </div>
-    </section>
-
-
-    <!-- ЭКРАН ОПЛАТЫ -->
-
-    <section id="payment" class="section">
-        <h2>Оформление заказа</h2>
-
-        <div class="panel">
-            <h3>Ваш заказ</h3>
-
-            <div id="paymentSummary">
-                <p class="loading">Загрузка данных...</p>
-            </div>
-
-            <div class="cart-total">
-                <div>
-                    <p class="muted">Сумма заказа</p>
-                    <strong id="paymentTotal">0</strong>
-                </div>
-
-                <button class="btn" id="confirmPayment"
-                        onclick="confirmPayment()">
-                    Подтвердить
-                </button>
-            </div>
-
-            <div id="paymentMessage" class="message"></div>
-
-            <p class="muted">
-                Текущий API сохраняет заказ и запись о платеже.
-                Он не подключён к банковской системе и не проводит
-                реальное списание денег.
-            </p>
-
-            <button class="btn btn-outline"
-                    onclick="openCart()">
-                Вернуться в корзину
-            </button>
-        </div>
-    </section>
-
 </main>
 
 <footer>
-    Flora — цветочный магазин
+    ✿ Flor — с любовью к цветам © 2026
 </footer>
 
+<!-- OVERLAY -->
+
+<div class="overlay" id="overlay" hidden></div>
+
+<!-- LOGIN / REGISTER -->
+
+<div class="modal" id="authModal" hidden>
+    <div class="panel-head">
+        <h2 id="authTitle">Вход</h2>
+        <button class="close" data-close>×</button>
+    </div>
+
+    <div class="tabs">
+        <button class="btn primary" id="loginTab">
+            Вход
+        </button>
+
+        <button class="btn" id="registerTab">
+            Регистрация
+        </button>
+    </div>
+
+    <form id="authForm">
+        <div class="field" id="nameField" hidden>
+            <label for="authName">Имя</label>
+
+            <input
+                    id="authName"
+                    placeholder="Анна"
+            >
+        </div>
+
+        <div class="field">
+            <label for="authPhone">Телефон</label>
+
+            <input
+                    id="authPhone"
+                    placeholder="+380991234567"
+                    required
+            >
+        </div>
+
+        <div class="field">
+            <label for="authPassword">Пароль</label>
+
+            <input
+                    id="authPassword"
+                    type="password"
+                    required
+            >
+        </div>
+
+        <button
+                class="btn primary full"
+                type="submit"
+                id="authSubmit"
+        >
+            Войти
+        </button>
+
+        <p id="authMessage"></p>
+    </form>
+</div>
+
+<!-- CART -->
+
+<aside class="panel" id="cartPanel" hidden>
+    <div class="panel-head">
+        <h2>Корзина</h2>
+        <button class="close" data-close>×</button>
+    </div>
+
+    <div id="cartItems"></div>
+
+    <div class="cart-total" id="cartTotal">
+        Итого: 0
+    </div>
+
+    <button class="btn primary full" id="checkoutBtn">
+        Оформить заказ
+    </button>
+</aside>
+
+<!-- PROFILE -->
+
+<aside class="panel" id="profilePanel" hidden>
+    <div class="panel-head">
+        <h2>Личный кабинет</h2>
+        <button class="close" data-close>×</button>
+    </div>
+
+    <div id="profileInfo"></div>
+
+    <h3>История заказов</h3>
+
+    <div id="orderHistory"></div>
+
+    <button
+            class="btn danger full"
+            id="logoutBtn"
+            style="margin-top:30px"
+    >
+        Выйти из аккаунта
+    </button>
+</aside>
+
+<!-- NOTIFICATIONS -->
+
+<div class="toast" id="toast" hidden></div>
 
 <script>
-    // URL соответствуют контроллерам из проекта FloralProd2.
-    const API = {
-        products: "/product",
-        clients: "/clients",
-        carts: "/carts",
-        cartItems: "/item-carts",
-        cartDTO: clientId => `/cartsDTO/${clientId}/cart`,
-        orders: "/orders",
-        payments: "/payments"
-    };
+    const $ = id => document.getElementById(id);
 
-    // Данные активного клиента хранятся в текущем сеансе страницы.
-    let currentClient = null;
-    let currentCartId = null;
-    let cartItems = [];
-    let cartTotal = 0;
+    let currentUser = null;
+    let cart = [];
+    let authMode = "login";
+    let csrfToken = null;
 
-    const money = value => {
-        const number = Number(value);
+    // УТИЛИТЫ
 
-        if (!Number.isFinite(number)) {
-            return "—";
-        }
-
-        return new Intl.NumberFormat("ru-RU", {
-            style: "currency",
-            currency: "EUR"
-        }).format(number);
-    };
-
-    function showMessage(id, message, type = "") {
-        const element = document.getElementById(id);
-        element.textContent = message || "";
-        element.className = "message" + (type ? " " + type : "");
+    function money(value) {
+        return Number(value || 0).toLocaleString("ru-RU", {
+            maximumFractionDigits: 2
+        });
     }
 
-    function showPage(pageId) {
-        document.querySelectorAll(".section").forEach(section => {
-            section.classList.remove("active");
+    function escapeHtml(value) {
+        return String(value ?? "").replace(
+            /[&<>"']/g,
+            ch => ({
+                "&": "&amp;",
+                "<": "&lt;",
+                ">": "&gt;",
+                '"': "&quot;",
+                "'": "&#39;"
+            })[ch]
+        );
+    }
+
+    function notify(message) {
+        const toast = $("toast");
+
+        toast.textContent = message;
+        toast.hidden = false;
+
+        clearTimeout(notify.timer);
+
+        notify.timer = setTimeout(() => {
+            toast.hidden = true;
+        }, 4000);
+    }
+
+    function closePanels() {
+        $("overlay").hidden = true;
+        $("authModal").hidden = true;
+        $("cartPanel").hidden = true;
+        $("profilePanel").hidden = true;
+    }
+
+    function openPanel(id) {
+        closePanels();
+
+        $(id).hidden = false;
+        $("overlay").hidden = false;
+    }
+
+    // CSRF
+
+    async function getCsrf() {
+        const response = await fetch("/auth/csrf", {
+            method: "GET",
+            credentials: "same-origin",
+            cache: "no-store"
         });
 
-        const page = document.getElementById(pageId);
-
-        if (page) {
-            page.classList.add("active");
+        if (!response.ok) {
+            throw new Error(
+                "Не удалось получить CSRF-токен"
+            );
         }
 
-        window.scrollTo({ top: 0, behavior: "smooth" });
+        const data = await response.json();
+
+        csrfToken = data.token;
+
+        return csrfToken;
     }
 
-    function updateHeader() {
-        const registered = Boolean(currentClient);
+    // HTTP REQUESTS
 
-        document.getElementById("registerButton").hidden = registered;
-        document.getElementById("accountButton").hidden = !registered;
-        document.getElementById("cartButton").hidden = !registered;
-    }
+    async function request(path, options = {}) {
+        const method = (
+            options.method || "GET"
+        ).toUpperCase();
 
-    // Общая функция HTTP-запросов к Spring Boot.
-    async function request(url, options = {}) {
-        const response = await fetch(url, {
+        const headers = {
+            ...(options.headers || {})
+        };
+
+        if (options.body !== undefined) {
+            headers["Content-Type"] = "application/json";
+        }
+
+        if (!["GET", "HEAD", "OPTIONS"].includes(method)) {
+            const token = await getCsrf();
+
+            headers["X-XSRF-TOKEN"] = token;
+        }
+
+        const response = await fetch(path, {
             ...options,
-            headers: {
-                ...(options.body
-                    ? { "Content-Type": "application/json" }
-                    : {}),
-                ...(options.headers || {})
-            }
+            method,
+            headers,
+            credentials: "same-origin"
         });
 
         const text = await response.text();
 
-        if (!response.ok) {
-            throw new Error(
-                text || `Ошибка сервера: HTTP ${response.status}`
-            );
-        }
-
-        if (!text) {
-            return null;
-        }
+        let data;
 
         try {
-            return JSON.parse(text);
+            data = text ? JSON.parse(text) : null;
         } catch {
-            return text;
+            data = text;
         }
+
+        if (!response.ok) {
+            let message = typeof data === "string"
+                ? data
+                : data?.message ||
+                data?.detail ||
+                data?.error ||
+                "Ошибка запроса";
+
+            if (response.status === 401) {
+                message = "Необходимо войти в аккаунт";
+            }
+
+            if (response.status === 403) {
+                message = "Доступ запрещён или ошибка CSRF";
+            }
+
+            throw new Error(message);
+        }
+
+        return data;
     }
 
-    function requireClient() {
-        if (currentClient) {
-            return true;
+    // AUTH
+
+    function updateNavigation() {
+        $("loginBtn").hidden = Boolean(currentUser);
+        $("profileBtn").hidden = !currentUser;
+    }
+
+    async function loadCurrentUser() {
+        try {
+            currentUser = await request("/auth/me");
+        } catch {
+            currentUser = null;
         }
 
-        showPage("register");
-        showMessage(
-            "registerMessage",
-            "Сначала зарегистрируйте клиента.",
-            "error"
+        updateNavigation();
+    }
+
+    function setAuthMode(mode) {
+        authMode = mode;
+
+        const register = mode === "register";
+
+        $("authTitle").textContent = register
+            ? "Регистрация"
+            : "Вход";
+
+        $("nameField").hidden = !register;
+        $("authName").required = register;
+
+        $("authSubmit").textContent = register
+            ? "Зарегистрироваться"
+            : "Войти";
+
+        $("loginTab").classList.toggle(
+            "primary",
+            !register
         );
 
-        return false;
+        $("registerTab").classList.toggle(
+            "primary",
+            register
+        );
+
+        $("authMessage").textContent = "";
     }
 
+    $("loginBtn").onclick = () => {
+        setAuthMode("login");
+        openPanel("authModal");
+    };
 
-    // -----------------------------
-    // КАТАЛОГ: GET /product
-    // -----------------------------
+    $("loginTab").onclick = () => {
+        setAuthMode("login");
+    };
 
-    async function loadProducts() {
-        const container = document.getElementById("products");
+    $("registerTab").onclick = () => {
+        setAuthMode("register");
+    };
 
-        container.innerHTML =
-            '<p class="loading">Загрузка товаров...</p>';
+    $("authForm").onsubmit = async event => {
+        event.preventDefault();
 
-        showMessage("productsMessage", "");
+        const name = $("authName").value.trim();
+        const phoneNumber = $("authPhone").value.trim();
+        const password = $("authPassword").value;
+
+        const button = $("authSubmit");
+
+        button.disabled = true;
 
         try {
-            const products = await request(API.products);
-
-            if (!Array.isArray(products)) {
-                throw new Error("Сервер не вернул список товаров.");
-            }
-
-            container.innerHTML = "";
-
-            if (products.length === 0) {
-                container.innerHTML =
-                    '<p class="empty">В каталоге пока нет товаров.</p>';
-                return;
-            }
-
-            products.forEach(product => {
-                const card = document.createElement("article");
-                card.className = "product-card";
-
-                const icon = document.createElement("div");
-                icon.className = "flower-icon";
-                icon.textContent = "🌷";
-
-                const name = document.createElement("h3");
-                name.textContent = product.name ?? "Без названия";
-
-                const description = document.createElement("p");
-                description.className = "product-description";
-                description.textContent =
-                    product.description ?? "Описание не указано.";
-
-                const bottom = document.createElement("div");
-                bottom.className = "product-bottom";
-
-                const price = document.createElement("div");
-                price.className = "product-price";
-                price.textContent = money(product.price);
-
-                const button = document.createElement("button");
-                button.className = "btn";
-                button.textContent = "Добавить в корзину";
-                button.onclick = () => addProductToCart(product);
-
-                bottom.append(price, button);
-                card.append(icon, name, description, bottom);
-                container.appendChild(card);
-            });
-
-        } catch (error) {
-            container.innerHTML = "";
-            showMessage(
-                "productsMessage",
-                "Не удалось загрузить товары: " + error.message,
-                "error"
-            );
-        }
-    }
-
-
-    // -----------------------------
-    // РЕГИСТРАЦИЯ: POST /clients
-    // -----------------------------
-
-    document.getElementById("registerForm").addEventListener(
-        "submit",
-        async event => {
-            event.preventDefault();
-
-            const button = document.getElementById("registerSubmit");
-            button.disabled = true;
-            showMessage("registerMessage", "");
-
-            const client = {
-                name: document.getElementById("clientName").value.trim(),
-                phoneNumber: document.getElementById("clientPhone").value.trim(),
-                balance: Number(
-                    document.getElementById("clientBalance").value
-                )
-            };
-
-            try {
-                // В ClientFlorr Java-свойство называется phoneNumber.
-                await request(API.clients, {
+            if (authMode === "register") {
+                await request("/auth/register", {
                     method: "POST",
-                    body: JSON.stringify(client)
+                    body: JSON.stringify({
+                        name,
+                        phoneNumber,
+                        password
+                    })
                 });
 
-                // POST /clients возвращает void, поэтому получаем
-                // созданного клиента из списка.
-                const clients = await request(API.clients);
+                setAuthMode("login");
 
-                if (!Array.isArray(clients)) {
-                    throw new Error("Не удалось получить список клиентов.");
-                }
+                $("authMessage").className = "success";
 
-                const savedClient = clients.find(item =>
-                    String(item.phoneNumber ?? item.phone_number ?? "") ===
-                    client.phoneNumber
-                );
+                $("authMessage").textContent =
+                    "Регистрация успешна. Теперь войдите.";
 
-                if (!savedClient) {
+            } else {
+                await request("/auth/login", {
+                    method: "POST",
+                    body: JSON.stringify({
+                        phoneNumber,
+                        password
+                    })
+                });
+
+                await loadCurrentUser();
+
+                if (!currentUser) {
                     throw new Error(
-                        "Клиент отправлен, но не найден в ответе API. " +
-                        "Проверьте сериализацию ClientFlorr и наличие getId()."
+                        "Не удалось загрузить профиль"
                     );
                 }
 
-                if (!savedClient.id) {
-                    throw new Error(
-                        "Бэкенд не вернул ID клиента. " +
-                        "Добавьте getId() в ClientFlorr и повторите регистрацию."
-                    );
-                }
+                closePanels();
 
-                currentClient = savedClient;
+                $("authPassword").value = "";
 
-                // POST /carts?clientId=ID
-                const cartId = await request(
-                    `${API.carts}?clientId=${encodeURIComponent(currentClient.id)}`,
-                    { method: "POST" }
-                );
-
-                currentCartId = Number(cartId);
-
-                if (!Number.isInteger(currentCartId) || currentCartId <= 0) {
-                    throw new Error(
-                        "Не удалось получить ID новой корзины."
-                    );
-                }
-
-                updateHeader();
-                renderAccount();
-                document.getElementById("registerForm").reset();
-
-                showMessage(
-                    "registerMessage",
-                    "Регистрация завершена.",
-                    "success"
-                );
-
-                showPage("home");
-
-            } catch (error) {
-                showMessage(
-                    "registerMessage",
-                    error.message,
-                    "error"
-                );
-            } finally {
-                button.disabled = false;
+                notify("Добро пожаловать в Flor!");
             }
-        }
-    );
-
-
-    // -----------------------------
-    // ЛИЧНЫЙ КАБИНЕТ
-    // GET /clients/{id}
-    // -----------------------------
-
-    function renderAccount() {
-        if (!currentClient) return;
-
-        document.getElementById("accountId").textContent =
-            currentClient.id ?? "—";
-
-        document.getElementById("accountName").textContent =
-            currentClient.name ?? "—";
-
-        document.getElementById("accountPhone").textContent =
-            currentClient.phoneNumber ??
-            currentClient.phone_number ?? "—";
-
-        document.getElementById("accountBalance").textContent =
-            money(currentClient.balance);
-    }
-
-    async function openAccount() {
-        if (!requireClient()) return;
-
-        showPage("account");
-        showMessage("accountMessage", "");
-
-        try {
-            const client = await request(
-                `${API.clients}/${currentClient.id}`
-            );
-
-            if (client) {
-                currentClient = client;
-                renderAccount();
-            }
-
-            await loadOrderHistory();
 
         } catch (error) {
-            showMessage(
-                "accountMessage",
-                "Не удалось обновить данные: " + error.message,
-                "error"
-            );
+            $("authMessage").className = "error";
+            $("authMessage").textContent = error.message;
+
+        } finally {
+            button.disabled = false;
         }
-    }
+    };
 
+    // PRODUCTS
 
-    // -----------------------------
-    // ИСТОРИЯ ЗАКАЗОВ
-    // GET /carts и GET /orders
-    // -----------------------------
-
-    async function loadOrderHistory() {
-        const container = document.getElementById("orderHistory");
-
-        container.innerHTML =
-            '<p class="loading">Загрузка истории заказов...</p>';
-
-        showMessage("historyMessage", "");
+    async function loadProducts() {
+        const container = $("products");
 
         try {
-            const [carts, orders] = await Promise.all([
-                request(API.carts),
-                request(API.orders)
-            ]);
+            const products = await request("/product");
 
-            if (!Array.isArray(carts) || !Array.isArray(orders)) {
-                throw new Error("API не вернул список корзин или заказов.");
-            }
-
-            const clientCartIds = new Set(
-                carts
-                    .filter(cart =>
-                        Number(cart.userId ?? cart.user_id) ===
-                        Number(currentClient.id)
-                    )
-                    .map(cart => Number(cart.id))
-            );
-
-            const clientOrders = orders.filter(order =>
-                clientCartIds.has(Number(order.cartId ?? order.cart_id))
-            );
-
-            container.innerHTML = "";
-
-            if (clientOrders.length === 0) {
-                container.innerHTML =
-                    '<p class="empty">Заказов пока нет.</p>';
+            if (!Array.isArray(products) || !products.length) {
+                container.textContent = "Товаров пока нет";
                 return;
             }
 
-            clientOrders.forEach(order => {
-                const row = document.createElement("div");
-                row.className = "order-row";
-
-                const info = document.createElement("div");
-
-                const title = document.createElement("h3");
-                title.textContent = `Заказ №${order.id}`;
-
-                const details = document.createElement("p");
-                details.textContent =
-                    `Корзина №${order.cartId ?? order.cart_id}`;
-
-                const amount = document.createElement("strong");
-                amount.textContent = money(
-                    order.totalPrice ?? order.total_price
+            container.innerHTML = products.map(product => {
+                const stock = Number(
+                    product.stockQuantity ?? 0
                 );
 
-                info.append(title, details);
-                row.append(info, amount);
-                container.appendChild(row);
-            });
+                return `
+                    <div class="product">
+                        <div class="product-image">🌷</div>
+
+                        <div class="product-body">
+                            <h3>${escapeHtml(product.name)}</h3>
+
+                            <p>
+                                ${escapeHtml(product.description || "")}
+                            </p>
+
+                            <div class="price">
+                                ${money(product.price)}
+                            </div>
+
+                            <div class="stock">
+                                ${
+                    stock > 0
+                        ? "В наличии: " + stock
+                        : "Нет в наличии"
+                }
+                            </div>
+
+                            <button
+                                class="btn primary full"
+                                data-add="${Number(product.id)}"
+                                ${stock <= 0 ? "disabled" : ""}
+                            >
+                                Добавить в корзину
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join("");
 
         } catch (error) {
-            container.innerHTML = "";
-            showMessage(
-                "historyMessage",
-                "Не удалось загрузить историю: " + error.message,
-                "error"
-            );
+            container.textContent =
+                "Ошибка загрузки товаров: " + error.message;
         }
     }
 
+    $("products").addEventListener("click", event => {
+        const button = event.target.closest("[data-add]");
 
-    // -----------------------------
-    // ДОБАВЛЕНИЕ ТОВАРА
-    // POST /item-carts
-    // -----------------------------
+        if (button) {
+            addToCart(Number(button.dataset.add));
+        }
+    });
 
-    async function addProductToCart(product) {
-        if (!requireClient()) return;
+    // CART
 
-        if (!currentCartId) {
-            showMessage(
-                "productsMessage",
-                "Не найден ID корзины. Проверьте создание корзины.",
-                "error"
-            );
+    async function addToCart(prodId) {
+        if (!currentUser) {
+            setAuthMode("login");
+            openPanel("authModal");
+
+            notify("Сначала войдите в аккаунт");
             return;
         }
 
         try {
-            await request(API.cartItems, {
+            await request("/carts/my-items", {
                 method: "POST",
                 body: JSON.stringify({
-                    cartId: currentCartId,
-                    prodId: product.id,
+                    prodId,
                     quantity: 1
                 })
             });
 
-            showMessage(
-                "productsMessage",
-                "Товар добавлен в корзину.",
-                "success"
-            );
+            notify("Товар добавлен в корзину");
 
         } catch (error) {
-            showMessage(
-                "productsMessage",
-                "Не удалось добавить товар: " + error.message,
-                "error"
-            );
+            notify(error.message);
         }
     }
 
-
-    // -----------------------------
-    // КОРЗИНА: GET /cartsDTO/{clientId}/cart
-    // -----------------------------
-
-    async function openCart() {
-        if (!requireClient()) return;
-
-        showPage("cart");
-
-        const container = document.getElementById("cartContainer");
-        container.innerHTML =
-            '<p class="loading">Загрузка корзины...</p>';
-
-        document.getElementById("cartTotalBlock").hidden = true;
-        showMessage("cartMessage", "");
+    async function loadCart() {
+        $("cartItems").textContent =
+            "Загрузка корзины...";
 
         try {
-            const data = await request(
-                API.cartDTO(currentClient.id)
-            );
+            cart = await request("/cartsDTO/my-cart");
 
-            if (!Array.isArray(data)) {
-                throw new Error("Сервер не вернул список товаров корзины.");
+            if (!Array.isArray(cart)) {
+                cart = [];
             }
 
-            cartItems = data;
             renderCart();
 
         } catch (error) {
-            container.innerHTML = "";
-            showMessage(
-                "cartMessage",
-                "Не удалось загрузить корзину: " + error.message,
-                "error"
-            );
+            cart = [];
+
+            $("cartItems").textContent = error.message;
+
+            $("checkoutBtn").disabled = true;
         }
     }
 
     function renderCart() {
-        const container = document.getElementById("cartContainer");
-        const totalBlock = document.getElementById("cartTotalBlock");
+        if (!cart.length) {
+            $("cartItems").innerHTML =
+                '<p class="muted">Корзина пуста 🌷</p>';
 
-        container.innerHTML = "";
-        showMessage("cartMessage", "");
+            $("cartTotal").textContent = "Итого: 0";
 
-        if (cartItems.length === 0) {
-            container.innerHTML =
-                '<p class="empty">В корзине пока нет товаров.</p>';
-
-            totalBlock.hidden = true;
+            $("checkoutBtn").disabled = true;
             return;
         }
 
-        cartItems.forEach(item => {
-            const row = document.createElement("div");
-            row.className = "cart-row";
+        let total = 0;
 
-            const info = document.createElement("div");
+        $("cartItems").innerHTML = cart.map(item => {
+            total += Number(item.total || 0);
 
-            const title = document.createElement("h3");
-            title.textContent = item.prodName ?? "Товар";
+            return `
+                <div class="cart-item">
+                    <h3>${escapeHtml(item.prodName)}</h3>
 
-            const quantity = document.createElement("p");
-            quantity.textContent =
-                "Количество: " + (item.quantity ?? "—");
+                    <p>Цена: ${money(item.price)}</p>
 
-            const price = document.createElement("p");
-            price.textContent = "Цена: " + money(item.price);
+                    <p>Сумма: ${money(item.total)}</p>
 
-            const total = document.createElement("strong");
-            total.textContent = money(item.total);
+                    <div class="cart-controls">
+                        <button
+                            class="btn"
+                            data-change="${item.itemId}"
+                            data-quantity="${item.quantity - 1}"
+                        >
+                            −
+                        </button>
 
-            info.append(title, quantity, price);
-            row.append(info, total);
-            container.appendChild(row);
-        });
+                        <strong>${item.quantity}</strong>
 
-        // Суммируем итоги строк, которые вернул CartDTO.
-        // Цены и суммы отдельных позиций получены с бэкенда.
-        cartTotal = cartItems.reduce(
-            (sum, item) => sum + (Number(item.total) || 0),
-            0
-        );
+                        <button
+                            class="btn"
+                            data-change="${item.itemId}"
+                            data-quantity="${item.quantity + 1}"
+                        >
+                            +
+                        </button>
 
-        document.getElementById("cartTotal").textContent =
-            money(cartTotal);
+                        <button
+                            class="btn danger"
+                            data-delete="${item.itemId}"
+                        >
+                            Удалить
+                        </button>
+                    </div>
+                </div>
+            `;
+        }).join("");
 
-        totalBlock.hidden = false;
+        $("cartTotal").textContent =
+            "Итого: " + money(total);
+
+        $("checkoutBtn").disabled = false;
     }
 
-
-    // -----------------------------
-    // ОФОРМЛЕНИЕ: POST /orders
-    // -----------------------------
-
-    async function openPayment() {
-        if (!requireClient()) return;
-
-        if (!currentCartId) {
-            showMessage(
-                "cartMessage",
-                "Не найден ID корзины.",
-                "error"
-            );
+    async function changeQuantity(itemId, quantity) {
+        if (quantity < 1) {
+            await deleteCartItem(itemId);
             return;
         }
-
-        if (cartItems.length === 0 || cartTotal <= 0) {
-            showMessage(
-                "cartMessage",
-                "Нельзя оформить пустую корзину.",
-                "error"
-            );
-            return;
-        }
-
-        showPage("payment");
-
-        const summary = document.getElementById("paymentSummary");
-        summary.innerHTML = "";
-
-        cartItems.forEach(item => {
-            const row = document.createElement("div");
-            row.className = "cart-row";
-
-            const name = document.createElement("span");
-            name.textContent =
-                `${item.prodName ?? "Товар"} × ${item.quantity}`;
-
-            const total = document.createElement("strong");
-            total.textContent = money(item.total);
-
-            row.append(name, total);
-            summary.appendChild(row);
-        });
-
-        document.getElementById("paymentTotal").textContent =
-            money(cartTotal);
-
-        showMessage("paymentMessage", "");
-    }
-
-    async function confirmPayment() {
-        if (!requireClient()) return;
-
-        const button = document.getElementById("confirmPayment");
-        button.disabled = true;
-        showMessage("paymentMessage", "");
 
         try {
-            if (!currentCartId || cartTotal <= 0) {
-                throw new Error("Корзина пуста или не найдена.");
-            }
-
-            // Создаём заказ через существующий OrderController.
-            const orderId = await request(API.orders, {
-                method: "POST",
+            await request(`/carts/my-items/${itemId}`, {
+                method: "PUT",
                 body: JSON.stringify({
-                    cartId: currentCartId,
-                    totalPrice: cartTotal
+                    quantity
                 })
             });
 
-            const parsedOrderId = Number(orderId);
+            await loadCart();
 
-            if (!Number.isInteger(parsedOrderId) || parsedOrderId <= 0) {
+        } catch (error) {
+            notify(error.message);
+        }
+    }
+
+    async function deleteCartItem(itemId) {
+        try {
+            await request(`/carts/my-items/${itemId}`, {
+                method: "DELETE"
+            });
+
+            await loadCart();
+
+            notify("Товар удалён");
+
+        } catch (error) {
+            notify(error.message);
+        }
+    }
+
+    $("cartItems").addEventListener("click", async event => {
+        const change = event.target.closest("[data-change]");
+        const remove = event.target.closest("[data-delete]");
+
+        if (change) {
+            await changeQuantity(
+                Number(change.dataset.change),
+                Number(change.dataset.quantity)
+            );
+        }
+
+        if (remove) {
+            await deleteCartItem(
+                Number(remove.dataset.delete)
+            );
+        }
+    });
+
+    $("cartBtn").onclick = async () => {
+        if (!currentUser) {
+            setAuthMode("login");
+            openPanel("authModal");
+            return;
+        }
+
+        openPanel("cartPanel");
+
+        await loadCart();
+    };
+
+    // CHECKOUT
+
+    $("checkoutBtn").onclick = async () => {
+        if (!cart.length) {
+            return;
+        }
+
+        const button = $("checkoutBtn");
+
+        button.disabled = true;
+
+        try {
+            await request("/orders/checkout", {
+                method: "POST"
+            });
+
+            notify("Заказ успешно оформлен!");
+
+            await loadCart();
+
+        } catch (error) {
+            notify(error.message);
+
+        } finally {
+            if (cart.length) {
+                button.disabled = false;
+            }
+        }
+    };
+
+    // PROFILE
+
+    async function loadProfile() {
+        $("profileInfo").textContent = "Загрузка...";
+
+        $("orderHistory").textContent =
+            "Загрузка истории...";
+
+        try {
+            currentUser = await request("/auth/me");
+
+            updateNavigation();
+
+            $("profileInfo").innerHTML = `
+                <div class="profile-box">
+                    <strong>
+                        ${escapeHtml(currentUser.name)}
+                    </strong>
+
+                    <div>
+                        Телефон:
+                        ${escapeHtml(currentUser.phoneNumber)}
+                    </div>
+
+                    <div>
+                        Баланс:
+                        <strong>
+                            ${money(currentUser.balance)}
+                        </strong>
+                    </div>
+                </div>
+            `;
+
+        } catch (error) {
+            $("profileInfo").textContent = error.message;
+        }
+
+        try {
+            const orders = await request("/orders/my-orders");
+
+            if (!Array.isArray(orders) || !orders.length) {
+                $("orderHistory").innerHTML =
+                    '<p class="muted">Заказов пока нет</p>';
+                return;
+            }
+
+            $("orderHistory").innerHTML = orders.map(order => `
+                <div class="order">
+                    <strong>
+                        Заказ №${escapeHtml(
+                order.id ?? order.orderId ?? "—"
+            )}
+                    </strong>
+
+                    <p>
+                        Сумма:
+                        ${money(
+                order.totalPrice ?? order.total
+            )}
+                    </p>
+
+                    <p class="muted">
+                        ${escapeHtml(order.createdAt || "")}
+                    </p>
+                </div>
+            `).join("");
+
+        } catch (error) {
+            $("orderHistory").textContent = error.message;
+        }
+    }
+
+    $("profileBtn").onclick = async () => {
+        openPanel("profilePanel");
+
+        await loadProfile();
+    };
+
+    // LOGOUT
+
+    $("logoutBtn").onclick = async () => {
+        const button = $("logoutBtn");
+
+        button.disabled = true;
+
+        try {
+            const token = await getCsrf();
+
+            const response = await fetch("/logout", {
+                method: "POST",
+                credentials: "same-origin",
+                redirect: "manual",
+                headers: {
+                    "X-XSRF-TOKEN": token
+                }
+            });
+
+            if (
+                !response.ok &&
+                response.status !== 302 &&
+                response.type !== "opaqueredirect"
+            ) {
                 throw new Error(
-                    "Сервер не вернул корректный ID заказа."
+                    "Ошибка выхода. HTTP " + response.status
                 );
             }
 
-            // Сохраняем запись платежа через PaymentController.
-            // Это НЕ является реальным банковским списанием.
-            await request(API.payments, {
-                method: "POST",
-                body: JSON.stringify({
-                    fullCost: cartTotal,
-                    paid: true,
-                    orderId: parsedOrderId
-                })
+            // Проверяем, что сессия завершена
+
+            const meResponse = await fetch("/auth/me", {
+                method: "GET",
+                credentials: "same-origin",
+                cache: "no-store"
             });
 
-            showMessage(
-                "paymentMessage",
-                `Заказ №${parsedOrderId} создан, запись о платеже сохранена. ` +
-                "Реальная оплата не проводилась.",
-                "success"
-            );
+            if (meResponse.ok) {
+                throw new Error(
+                    "Сессия осталась активной"
+                );
+            }
 
-            // Обновляем историю через API.
-            await loadOrderHistory();
+            currentUser = null;
+            cart = [];
+            csrfToken = null;
+
+            window.location.replace("/");
 
         } catch (error) {
-            showMessage(
-                "paymentMessage",
-                "Не удалось оформить заказ: " + error.message,
-                "error"
+            console.error("Ошибка выхода:", error);
+
+            notify(
+                "Не удалось выйти: " + error.message
             );
-        } finally {
+
             button.disabled = false;
         }
+    };
+
+    // NAVIGATION
+
+    $("homeBtn").onclick = event => {
+        event.preventDefault();
+
+        closePanels();
+
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        });
+    };
+
+    $("catalogBtn").onclick = () => {
+        $("catalog").scrollIntoView({
+            behavior: "smooth"
+        });
+    };
+
+    $("overlay").onclick = closePanels;
+
+    document.querySelectorAll("[data-close]").forEach(button => {
+        button.onclick = closePanels;
+    });
+
+    document.addEventListener("keydown", event => {
+        if (event.key === "Escape") {
+            closePanels();
+        }
+    });
+
+    // INITIALIZATION
+
+    async function init() {
+        await Promise.all([
+            loadCurrentUser(),
+            loadProducts()
+        ]);
     }
 
-
-    // -----------------------------
-    // СТАРТ СТРАНИЦЫ
-    // -----------------------------
-
-    updateHeader();
-    loadProducts();
+    init();
 </script>
 
 </body>
-</html>l>
+</html>

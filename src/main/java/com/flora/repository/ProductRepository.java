@@ -35,7 +35,8 @@ public class ProductRepository {
                         rs.getInt("id"),
                         rs.getString("name"),
                         rs.getBigDecimal("price"),
-                        rs.getString("description")
+                        rs.getString("description"),
+                        rs.getInt("stock_quantity")
                 )
         );
     }
@@ -59,9 +60,9 @@ public class ProductRepository {
     // поиск продукта по ID
     public Optional<ProductFlor> getById(int id) {
         String sql = """
-            SELECT id, name, price, description
-            FROM product_flor
-            WHERE id = ?
+                SELECT id, name, price, description, stock_quantity
+                FROM product_flor
+                WHERE id = ?
             """;
         List<ProductFlor> products = jdbcTemplate.query(
                 sql,
@@ -69,7 +70,8 @@ public class ProductRepository {
                         rs.getInt("id"),
                         rs.getString("name"),
                         rs.getBigDecimal("price"),
-                        rs.getString("description")
+                        rs.getString("description"),
+                        rs.getInt("stock_quantity")
                 ),
                 id
         );

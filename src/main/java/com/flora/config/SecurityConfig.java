@@ -20,7 +20,7 @@ import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
 @Configuration
 public class SecurityConfig {
 
-    // 1. Настройка безопасности HTTP-запросов
+    // 1. Настройка безопасности приложения
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http)
             throws Exception {
@@ -36,17 +36,28 @@ public class SecurityConfig {
                         )
                 )
 
-                // Настройка доступа к API
+                // Настройка доступа к endpoints
                 .authorizeHttpRequests(auth -> auth
 
-                        // Просмотр товаров доступен всем
+                        // Главная страница магазина
+                        .requestMatchers(
+                                "/",
+                                "/index.html",
+                                "/favicon.ico",
+                                "/css/**",
+                                "/js/**",
+                                "/images/**",
+                                "/error"
+                        ).permitAll()
+
+                        // Каталог цветов доступен всем
                         .requestMatchers(
                                 HttpMethod.GET,
                                 "/product",
                                 "/product/**"
                         ).permitAll()
 
-                        // Регистрация, вход и получение CSRF-токена
+                        // Регистрация, вход и CSRF-токен
                         .requestMatchers(
                                 "/auth/register",
                                 "/auth/login",
@@ -59,21 +70,27 @@ public class SecurityConfig {
 
                 // Выход из аккаунта
                 .logout(logout -> logout
+
+                        // Адрес выхода
                         .logoutUrl("/auth/logout")
 
+                        // Ответ при успешном выходе
                         .logoutSuccessHandler(
                                 (request, response, authentication) -> {
+
                                     response.setStatus(200);
+
                                     response.setContentType(
                                             "text/plain;charset=UTF-8"
                                     );
+
                                     response.getWriter().write(
                                             "Вы успешно вышли из аккаунта!"
                                     );
                                 }
                         )
 
-                        // Удаляем сессию, а не аккаунт
+                        // Завершаем сессию
                         .invalidateHttpSession(true)
 
                         // Очищаем авторизацию
@@ -86,9 +103,10 @@ public class SecurityConfig {
         return http.build();
     }
 
-    // 2. Шифрование (хеширование) паролей
+    // 2. Хеширование паролей BCrypt
     @Bean
     public PasswordEncoder passwordEncoder() {
+
         return new BCryptPasswordEncoder();
     }
 

@@ -3,6 +3,7 @@ package com.flora.FlorDTO;
 import java.math.BigDecimal;
 
 public class CartDTO {
+    private int itemId;
     private int clientId;
     private int prodId;
     private String prodName;
@@ -17,6 +18,13 @@ public class CartDTO {
         this.quantity = quantity;
         this.price = price;
         this.total = total;
+    }
+    public int getItemId() {
+        return itemId;
+    }
+
+    public void setItemId(int itemId) {
+        this.itemId = itemId;
     }
 
     public BigDecimal getTotal() {

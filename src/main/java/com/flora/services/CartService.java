@@ -31,6 +31,18 @@ public class CartService {
         return cartRepository.createCart(clientId);
     }
 
+    public int getOrCreateCart(int clientId) {
+
+        Optional<Cart> cart =
+                cartRepository.getCartByClientId(clientId);
+
+        if (cart.isPresent()) {
+            return cart.get().getId();
+        }
+
+        return cartRepository.createCart(clientId);
+    }
+
     // обновить корзину
     public boolean updateCart(Cart cart) {
         return cartRepository.updateCart(cart) > 0;

@@ -24,12 +24,12 @@ public class CartRepository {
 
     public Optional<Cart> getCartByClientId(int clientId) {
         String sql = """
-                SELECT id, user_id, dral_ststus
-                FROM cart
-                WHERE user_id = ?
-                  AND dral_ststus = true
-                LIMIT 1
-                """;
+            SELECT id, user_id, dral_ststus
+            FROM cart
+            WHERE user_id = ?
+              AND dral_ststus = false
+            LIMIT 1
+            """;
 
         return jdbcTemplate.query(
                 sql,
@@ -47,10 +47,10 @@ public class CartRepository {
     // создание корзины
     public int createCart(int clientId) {
         String sql = """
-                INSERT INTO cart (user_id, dral_ststus)
-                VALUES (?, false)
-                RETURNING id
-                """;
+            INSERT INTO cart (user_id, dral_ststus)
+            VALUES (?, false)
+            RETURNING id
+            """;
 
         return jdbcTemplate.queryForObject(
                 sql,

@@ -1,55 +1,103 @@
 package com.flora.controller;
 
-import com.flora.entity.Cart;
-import com.flora.services.CartService;
-import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.Optional;
+import com.flora.FlorDTO.AddToCartRequestDTO;
+import com.flora.FlorDTO.UpdateCartQuantityDTO;
+import com.flora.entity.ClientFlorr;
+import com.flora.repository.ClientRepository;
+import com.flora.services.ItemCartService;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @RequestMapping("/carts")
 public class CartController {
 
-    private final CartService cartService;
+    private final ItemCartService itemCartService;
+    private final ClientRepository clientRepository;
 
-    public CartController(CartService cartService) {
-        this.cartService = cartService;
+    public CartController(
+            ItemCartService itemCartService,
+            ClientRepository clientRepository
+    ) {
+        this.itemCartService = itemCartService;
+        this.clientRepository = clientRepository;
     }
 
+    // Получить авторизованного клиента
+    private ClientFlorr getCurrentClient(UserDetails user) {
 
-    // READ: получить все корзины
-    @GetMapping
-    public List<Cart> getAllCarts() {
-        return cartService.getAllCarts();
+        if (user == null) {
+            throw new ResponseStatusException(
+                    HttpStatus.UNAUTHORIZED,
+                    "Необходима авторизация"
+            );
+        }
+
+        return clientRepository
+                .findByPhoneNumber(user.getUsername())
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.UNAUTHORIZED,
+                        "Клиент не найден"
+                ));
     }
 
+    // Добавить товар в свою корзину
+    @PostMapping("/my-items")
+    public ResponseEntity<String> addProductToMyCart(
+            @RequestBody AddToCartRequestDTO request,
+            @AuthenticationPrincipal UserDetails user
+    ) {
 
-    // READ: получить корзину по ID
-    @GetMapping("/{id}")
-    public Optional<Cart> getCartById(@PathVariable("id") int id) {
-        return cartService.getCartById(id);
+        ClientFlorr client = getCurrentClient(user);
+
+        itemCartService.addProductToCart(
+                client.getId(),
+                request.getProdId(),
+                request.getQuantity()
+        );
+
+        return ResponseEntity.ok("Товар добавлен в корзину");
     }
 
-    // CREATE: создать корзину
-    @PostMapping
-    public int createCart(@RequestParam("clientId") int clientId) {
-        return cartService.createCart(clientId);
+    // Изменить количество товара в своей корзине
+    @PutMapping("/my-items/{itemId}")
+    public ResponseEntity<String> updateMyCartItem(
+            @PathVariable("itemId") int itemId,
+            @RequestBody UpdateCartQuantityDTO request,
+            @AuthenticationPrincipal UserDetails user
+    ) {
+
+        ClientFlorr client = getCurrentClient(user);
+
+        itemCartService.updateMyItemQuantity(
+                client.getId(),
+                itemId,
+                request.quantity()
+        );
+
+        return ResponseEntity.ok("Количество товара обновлено");
     }
 
-    // UPDATE: обновить корзину
-    @PutMapping("/{id}")
-    public boolean updateCart(
-            @PathVariable int id,
-            @RequestBody Cart cart) {
+    // Удалить товар из своей корзины
+    @DeleteMapping("/my-items/{itemId}")
+    public ResponseEntity<Void> deleteMyCartItem(
+            @PathVariable("itemId") int itemId,
+            @AuthenticationPrincipal UserDetails user
+    ) {
 
-        cart.setId(id);
-        return cartService.updateCart(cart);
-    }
+        ClientFlorr client = getCurrentClient(user);
 
-    // DELETE: удалить корзину
-    @DeleteMapping("/{id}")
-    public boolean deleteCart(@PathVariable int id) {
-        return cartService.deleteCart(id);
+        itemCartService.deleteMyItem(
+                client.getId(),
+                itemId
+        );
+
+        return ResponseEntity.noContent().build();
     }
 }
