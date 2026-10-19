@@ -4,32 +4,35 @@ import com.flora.FlorDTO.CheckoutRequestDTO;
 import com.flora.FlorDTO.CheckoutResponseDTO;
 import com.flora.FlorDTO.OrderHistoryDTO;
 import com.flora.entity.OrderItem;
+import com.flora.repository.CheckoutRepository;
 import com.flora.repository.OrderItemRepository;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.math.BigDecimal;
-import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class CheckoutService {
 
-    private final JdbcTemplate jdbcTemplate;
+    private final CheckoutRepository checkoutRepository;
     private final OrderItemRepository orderItemRepository;
 
     public CheckoutService(
-            JdbcTemplate jdbcTemplate,
+            CheckoutRepository checkoutRepository,
             OrderItemRepository orderItemRepository
     ) {
-        this.jdbcTemplate = jdbcTemplate;
+        this.checkoutRepository = checkoutRepository;
         this.orderItemRepository = orderItemRepository;
     }
+
+    // =========================================
+    // ОФОРМЛЕНИЕ ЗАКАЗА
+    // =========================================
 
     @Transactional
     public CheckoutResponseDTO checkout(
@@ -37,7 +40,7 @@ public class CheckoutService {
             CheckoutRequestDTO request
     ) {
 
-        // Проверяем адрес доставки
+        // 1. Проверяем адрес доставки
         if (request == null
                 || request.deliveryAddress() == null
                 || request.deliveryAddress().isBlank()) {
@@ -51,19 +54,11 @@ public class CheckoutService {
         String deliveryAddress =
                 request.deliveryAddress().trim();
 
-        // 1. Находим и блокируем клиента
-        Long clientId = jdbcTemplate.query(
-                """
-                SELECT id
-                FROM client_florr
-                WHERE phone_number = ?
-                FOR UPDATE
-                """,
-                rs -> rs.next()
-                        ? rs.getLong("id")
-                        : null,
-                phoneNumber
-        );
+        // 2. Находим клиента
+        Long clientId =
+                checkoutRepository.findClientIdForUpdate(
+                        phoneNumber
+                );
 
         if (clientId == null) {
             throw new ResponseStatusException(
@@ -72,22 +67,11 @@ public class CheckoutService {
             );
         }
 
-        // 2. Находим открытую корзину
-        Long cartId = jdbcTemplate.query(
-                """
-                SELECT id
-                FROM cart
-                WHERE user_id = ?
-                  AND dral_ststus = false
-                ORDER BY id
-                LIMIT 1
-                FOR UPDATE
-                """,
-                rs -> rs.next()
-                        ? rs.getLong("id")
-                        : null,
-                clientId
-        );
+        // 3. Находим открытую корзину
+        Long cartId =
+                checkoutRepository.findOpenCartForUpdate(
+                        clientId
+                );
 
         if (cartId == null) {
             throw new ResponseStatusException(
@@ -96,23 +80,9 @@ public class CheckoutService {
             );
         }
 
-        // 3. Получаем товары корзины
-        List<CartProduct> products = jdbcTemplate.query(
-                """
-                SELECT
-                    prod_id,
-                    SUM(quantity) AS quantity
-                FROM item_cart
-                WHERE cart_id = ?
-                GROUP BY prod_id
-                ORDER BY prod_id
-                """,
-                (rs, rowNum) -> new CartProduct(
-                        rs.getLong("prod_id"),
-                        rs.getLong("quantity")
-                ),
-                cartId
-        );
+        // 4. Получаем товары корзины
+        List<CheckoutRepository.CartProduct> products =
+                checkoutRepository.getCartProducts(cartId);
 
         if (products.isEmpty()) {
             throw new ResponseStatusException(
@@ -125,8 +95,8 @@ public class CheckoutService {
 
         BigDecimal totalPrice = BigDecimal.ZERO;
 
-        // 4. Проверяем товары и остатки
-        for (CartProduct product : products) {
+        // 5. Проверяем каждый товар
+        for (CheckoutRepository.CartProduct product : products) {
 
             if (product.quantity() <= 0) {
                 throw new ResponseStatusException(
@@ -135,25 +105,10 @@ public class CheckoutService {
                 );
             }
 
-            ProductData data = jdbcTemplate.query(
-                    """
-                    SELECT
-                        name,
-                        price,
-                        stock_quantity
-                    FROM product_flor
-                    WHERE id = ?
-                    FOR UPDATE
-                    """,
-                    rs -> rs.next()
-                            ? new ProductData(
-                            rs.getString("name"),
-                            rs.getBigDecimal("price"),
-                            rs.getInt("stock_quantity")
-                    )
-                            : null,
-                    product.prodId()
-            );
+            CheckoutRepository.ProductData data =
+                    checkoutRepository.findProductForUpdate(
+                            product.prodId()
+                    );
 
             if (data == null) {
                 throw new ResponseStatusException(
@@ -179,6 +134,7 @@ public class CheckoutService {
                 );
             }
 
+            // Создаём позицию будущего заказа
             OrderItem item = new OrderItem(
                     0,
                     0,
@@ -190,6 +146,7 @@ public class CheckoutService {
 
             orderItems.add(item);
 
+            // Считаем стоимость позиции
             BigDecimal itemTotal = data.price().multiply(
                     BigDecimal.valueOf(product.quantity())
             );
@@ -197,18 +154,12 @@ public class CheckoutService {
             totalPrice = totalPrice.add(itemTotal);
         }
 
-        // 5. Списываем деньги клиента
-        int updatedClient = jdbcTemplate.update(
-                """
-                UPDATE client_florr
-                SET balance = balance - ?
-                WHERE id = ?
-                  AND balance >= ?
-                """,
-                totalPrice,
-                clientId,
-                totalPrice
-        );
+        // 6. Списываем деньги клиента
+        int updatedClient =
+                checkoutRepository.withdrawClientBalance(
+                        clientId,
+                        totalPrice
+                );
 
         if (updatedClient != 1) {
             throw new ResponseStatusException(
@@ -217,20 +168,14 @@ public class CheckoutService {
             );
         }
 
-        // 6. Уменьшаем остатки товаров
+        // 7. Уменьшаем остатки товаров
         for (OrderItem item : orderItems) {
 
-            int updatedProduct = jdbcTemplate.update(
-                    """
-                    UPDATE product_flor
-                    SET stock_quantity = stock_quantity - ?
-                    WHERE id = ?
-                      AND stock_quantity >= ?
-                    """,
-                    item.getQuantity(),
-                    item.getProdId(),
-                    item.getQuantity()
-            );
+            int updatedProduct =
+                    checkoutRepository.decreaseProductStock(
+                            item.getProdId(),
+                            item.getQuantity()
+                    );
 
             if (updatedProduct != 1) {
                 throw new ResponseStatusException(
@@ -241,24 +186,20 @@ public class CheckoutService {
             }
         }
 
-        // 7. Создаём заказ с адресом доставки
-        Long orderId = jdbcTemplate.queryForObject(
-                """
-                INSERT INTO "order" (
-                    cart_id,
-                    total_price,
-                    delivery_address
-                )
-                VALUES (?, ?, ?)
-                RETURNING id
-                """,
-                Long.class,
+        // 8. Создаём заказ
+        Long orderId = checkoutRepository.createOrder(
                 cartId,
                 totalPrice,
                 deliveryAddress
         );
 
-        // 8. Сохраняем товары заказа
+        if (orderId == null) {
+            throw new IllegalStateException(
+                    "Не удалось создать заказ"
+            );
+        }
+
+        // 9. Сохраняем товары заказа
         for (OrderItem item : orderItems) {
 
             item.setOrderId(orderId);
@@ -266,45 +207,14 @@ public class CheckoutService {
             orderItemRepository.saveOrderItem(item);
         }
 
-        // 9. Сохраняем оплату
-        jdbcTemplate.update(
-                """
-                INSERT INTO payment (
-                    order_id,
-                    full_cost,
-                    paid
-                )
-                VALUES (?, ?, true)
-                """,
+        // 10. Сохраняем оплату
+        checkoutRepository.savePayment(
                 orderId,
                 totalPrice
         );
 
-        // 10. Переводим деньги на счёт магазина
-        int updatedShop = jdbcTemplate.update(
-                """
-                UPDATE shop_account
-                SET balance = balance + ?
-                WHERE id = 1
-                """,
-                totalPrice
-        );
-
-        if (updatedShop != 1) {
-            throw new IllegalStateException(
-                    "Счёт магазина не найден"
-            );
-        }
-
         // 11. Закрываем корзину
-        int closed = jdbcTemplate.update(
-                """
-                UPDATE cart
-                SET dral_ststus = true
-                WHERE id = ?
-                  AND user_id = ?
-                  AND dral_ststus = false
-                """,
+        int closed = checkoutRepository.closeCart(
                 cartId,
                 clientId
         );
@@ -315,6 +225,7 @@ public class CheckoutService {
             );
         }
 
+        // 12. Возвращаем результат
         return new CheckoutResponseDTO(
                 orderId,
                 cartId,
@@ -332,17 +243,11 @@ public class CheckoutService {
             String phoneNumber
     ) {
 
-        Long clientId = jdbcTemplate.query(
-                """
-                SELECT id
-                FROM client_florr
-                WHERE phone_number = ?
-                """,
-                rs -> rs.next()
-                        ? rs.getLong("id")
-                        : null,
-                phoneNumber
-        );
+        // 1. Находим клиента
+        Long clientId =
+                checkoutRepository.findClientId(
+                        phoneNumber
+                );
 
         if (clientId == null) {
             throw new ResponseStatusException(
@@ -351,73 +256,49 @@ public class CheckoutService {
             );
         }
 
-        return jdbcTemplate.query(
-                """
-                SELECT
-                    o.id,
-                    o.cart_id,
-                    o.total_price,
-                    o.created_at,
-                    o.delivery_address,
-                    p.paid
-                FROM "order" o
-                JOIN cart c
-                    ON c.id = o.cart_id
-                JOIN payment p
-                    ON p.order_id = o.id
-                WHERE c.user_id = ?
-                ORDER BY o.id DESC
-                """,
-                (rs, rowNum) -> {
+        // 2. Получаем заказы клиента
+        List<CheckoutRepository.OrderData> orders =
+                checkoutRepository.getClientOrders(
+                        clientId
+                );
 
-                    long orderId = rs.getLong("id");
+        List<OrderHistoryDTO> history = new ArrayList<>();
 
-                    List<OrderHistoryDTO.OrderItemDTO> items =
-                            orderItemRepository
-                                    .getItemsByOrderId(orderId)
-                                    .stream()
-                                    .map(item ->
-                                            new OrderHistoryDTO.OrderItemDTO(
-                                                    item.getProdId(),
-                                                    item.getProdName(),
-                                                    item.getQuantity(),
-                                                    item.getPrice(),
-                                                    item.getPrice().multiply(
-                                                            BigDecimal.valueOf(
-                                                                    item.getQuantity()
-                                                            )
+        // 3. Формируем историю с товарами
+        for (CheckoutRepository.OrderData order : orders) {
+
+            List<OrderHistoryDTO.OrderItemDTO> items =
+                    orderItemRepository
+                            .getItemsByOrderId(order.orderId())
+                            .stream()
+                            .map(item ->
+                                    new OrderHistoryDTO.OrderItemDTO(
+                                            item.getProdId(),
+                                            item.getProdName(),
+                                            item.getQuantity(),
+                                            item.getPrice(),
+                                            item.getPrice().multiply(
+                                                    BigDecimal.valueOf(
+                                                            item.getQuantity()
                                                     )
                                             )
                                     )
-                                    .toList();
+                            )
+                            .toList();
 
-                    return new OrderHistoryDTO(
-                            orderId,
-                            rs.getLong("cart_id"),
-                            rs.getBigDecimal("total_price"),
-                            rs.getBoolean("paid"),
-                            rs.getObject(
-                                    "created_at",
-                                    OffsetDateTime.class
-                            ),
-                            rs.getString("delivery_address"),
-                            items
-                    );
-                },
-                clientId
-        );
-    }
+            OrderHistoryDTO dto = new OrderHistoryDTO(
+                    order.orderId(),
+                    order.cartId(),
+                    order.totalPrice(),
+                    order.paid(),
+                    order.createdAt(),
+                    order.deliveryAddress(),
+                    items
+            );
 
-    private record CartProduct(
-            long prodId,
-            long quantity
-    ) {
-    }
+            history.add(dto);
+        }
 
-    private record ProductData(
-            String name,
-            BigDecimal price,
-            int stockQuantity
-    ) {
+        return history;
     }
 }
