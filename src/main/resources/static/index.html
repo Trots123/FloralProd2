@@ -3,1291 +3,587 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Flor — Магазин цветов</title>
-
+    <title>Flora — Магазин цветов</title>
     <style>
-        :root {
-            --green: #254c3c;
-            --green-light: #426a56;
-            --pink: #f4dfdf;
-            --cream: #faf8f3;
-            --text: #283b31;
-            --gray: #7b847e;
-            --border: #e9e9e3;
-        }
-
-        * {
-            box-sizing: border-box;
-        }
-
-        html {
-            scroll-behavior: smooth;
-        }
-
+        * { box-sizing: border-box; }
         body {
             margin: 0;
             font-family: Arial, sans-serif;
-            background: var(--cream);
-            color: var(--text);
+            background: #f8f7f5;
+            color: #292929;
         }
-
-        button, input {
-            font: inherit;
-        }
-
-        button {
-            cursor: pointer;
-        }
-
-        button:disabled {
-            cursor: not-allowed;
-            opacity: 0.5;
-        }
-
-        [hidden] {
-            display: none !important;
-        }
-
-        /* HEADER */
-
         header {
-            position: sticky;
-            top: 0;
-            z-index: 10;
             background: white;
-            border-bottom: 1px solid var(--border);
-        }
-
-        nav {
-            max-width: 1200px;
-            margin: auto;
-            padding: 18px 24px;
+            padding: 20px 6%;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: 15px;
+            gap: 20px;
+            box-shadow: 0 2px 12px #00000010;
+            position: sticky;
+            top: 0;
+            z-index: 10;
         }
-
         .logo {
-            font-family: Georgia, serif;
-            font-size: 38px;
+            font-size: 28px;
             font-weight: bold;
-            color: var(--green);
-            text-decoration: none;
+            color: #b34e75;
         }
-
-        .logo span {
-            color: #d59da7;
+        button {
+            cursor: pointer;
+            border: 0;
+            border-radius: 9px;
+            padding: 12px 17px;
+            font-size: 14px;
+            font-weight: bold;
+            background: #b34e75;
+            color: white;
         }
-
+        button:hover { background: #94395d; }
+        button:disabled {
+            opacity: .5;
+            cursor: not-allowed;
+        }
+        .secondary {
+            background: #f5e7ed;
+            color: #9c3b60;
+        }
+        .secondary:hover { background: #eed4df; }
         .actions {
             display: flex;
             gap: 10px;
             flex-wrap: wrap;
         }
-
-        .btn {
-            background: white;
-            color: var(--green);
-            border: 1px solid var(--green);
-            padding: 11px 17px;
-            border-radius: 10px;
-            font-weight: bold;
-            transition: 0.2s;
-        }
-
-        .btn:hover:not(:disabled) {
-            opacity: 0.8;
-        }
-
-        .primary {
-            background: var(--green);
-            color: white;
-        }
-
-        .danger {
-            color: #b44343;
-            border-color: #b44343;
-        }
-
-        .full {
-            width: 100%;
-        }
-
-        /* HERO */
-
+        main { max-width: 1200px; margin: auto; padding: 35px 20px; }
+        h1 { font-size: 34px; }
+        h2 { margin-top: 30px; }
         .hero {
-            background: linear-gradient(110deg, #f5e1e1, #f7f2e6);
-            padding: 90px 25px;
+            padding: 35px;
+            background: #f4dce5;
+            border-radius: 18px;
+            margin-bottom: 35px;
         }
-
-        .hero-inner {
-            max-width: 1200px;
-            margin: auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .hero h1 {
-            font-family: Georgia, serif;
-            font-size: 64px;
-            font-weight: normal;
-            color: var(--green);
-            max-width: 650px;
-            margin: 15px 0;
-        }
-
-        .hero p {
-            max-width: 500px;
-            line-height: 1.7;
-            color: #69776e;
-            font-size: 18px;
-        }
-
-        .flower-art {
-            font-size: 160px;
-            padding: 20px;
-        }
-
-        /* CATALOG */
-
-        .container {
-            max-width: 1200px;
-            margin: auto;
-            padding: 50px 24px;
-        }
-
-        h2 {
-            font-family: Georgia, serif;
-            font-size: 36px;
-            color: var(--green);
-        }
-
-        .products {
+        .hero p { color: #704a59; }
+        .grid {
             display: grid;
-            grid-template-columns: repeat(
-                auto-fill,
-                minmax(240px, 1fr)
-            );
-            gap: 24px;
+            grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+            gap: 20px;
         }
-
         .product {
             background: white;
-            border: 1px solid #eee;
-            border-radius: 18px;
-            overflow: hidden;
-        }
-
-        .product-image {
-            height: 185px;
-            display: grid;
-            place-items: center;
-            background: linear-gradient(
-                    140deg,
-                    #f3dddd,
-                    #f4f0e7
-            );
-            font-size: 85px;
-        }
-
-        .product-body {
             padding: 20px;
+            border-radius: 14px;
+            box-shadow: 0 3px 15px #00000009;
         }
-
-        .product h3 {
-            margin: 0 0 12px;
-        }
-
-        .product p {
-            color: var(--gray);
-            min-height: 40px;
-            line-height: 1.5;
-        }
-
-        .price {
-            font-size: 23px;
-            font-weight: bold;
-            margin: 14px 0;
-            color: var(--green);
-        }
-
-        .stock {
-            font-size: 13px;
-            color: var(--gray);
-            margin-bottom: 15px;
-        }
-
-        /* MODALS */
-
-        .overlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.45);
-            z-index: 20;
-        }
-
-        .panel {
-            position: fixed;
-            top: 0;
-            right: 0;
-            z-index: 21;
-            height: 100vh;
-            width: min(460px, 100%);
-            overflow-y: auto;
-            background: white;
-            padding: 27px;
-            box-shadow: -10px 0 30px #0002;
-        }
-
-        .modal {
-            position: fixed;
-            z-index: 21;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: min(430px, calc(100% - 30px));
-            max-height: 90vh;
-            overflow-y: auto;
-            background: white;
-            border-radius: 18px;
-            padding: 28px;
-        }
-
-        .panel-head {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .close {
-            background: none;
-            border: none;
-            font-size: 32px;
-            color: #888;
-        }
-
-        .tabs {
-            display: flex;
-            gap: 10px;
-            margin: 20px 0;
-        }
-
-        .tabs .btn {
-            flex: 1;
-        }
-
-        .field {
-            margin-bottom: 17px;
-        }
-
-        .field label {
-            display: block;
-            font-weight: bold;
-            margin-bottom: 7px;
-        }
-
-        .field input {
-            width: 100%;
-            padding: 13px;
-            border: 1px solid #ddd;
-            border-radius: 9px;
-        }
-
-        /* CART */
-
-        .cart-item {
-            padding: 19px 0;
-            border-bottom: 1px solid #eee;
-        }
-
-        .cart-controls {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            flex-wrap: wrap;
-            margin-top: 12px;
-        }
-
-        .cart-controls button {
-            padding: 7px 12px;
-        }
-
-        .cart-total {
-            font-size: 24px;
-            font-weight: bold;
-            margin: 25px 0;
-        }
-
-        /* PROFILE */
-
-        .profile-box {
-            background: var(--cream);
-            padding: 20px;
-            border-radius: 12px;
-            line-height: 2;
-        }
-
-        .order {
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 15px;
-            margin-bottom: 12px;
-        }
-
-        .muted {
-            color: var(--gray);
-        }
-
-        .error {
-            color: #b44343;
-        }
-
-        .success {
-            color: #267449;
-        }
-
-        .toast {
-            position: fixed;
-            z-index: 30;
-            bottom: 25px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: var(--green);
-            color: white;
-            padding: 15px 23px;
-            border-radius: 12px;
+        .flower-icon {
+            font-size: 65px;
             text-align: center;
-            max-width: 90%;
-        }
-
-        footer {
-            background: var(--green);
-            color: white;
-            text-align: center;
+            background: #fbf0f4;
+            border-radius: 12px;
             padding: 30px;
         }
-
-        @media (max-width: 700px) {
-            nav {
-                flex-wrap: wrap;
-            }
-
-            .hero {
-                padding: 50px 20px;
-            }
-
-            .hero h1 {
-                font-size: 43px;
-            }
-
-            .flower-art {
-                display: none;
-            }
-
-            .container {
-                padding: 35px 18px;
-            }
-
-            .actions .btn {
-                padding: 9px;
-                font-size: 13px;
-            }
+        .product h3 { margin-bottom: 8px; }
+        .price {
+            font-size: 22px;
+            color: #b34e75;
+            font-weight: bold;
+        }
+        .muted { color: #777; font-size: 14px; }
+        .product button { width: 100%; margin-top: 12px; }
+        .panel {
+            background: white;
+            padding: 25px;
+            border-radius: 14px;
+            margin-bottom: 20px;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            margin: 7px 0 14px;
+            font: inherit;
+        }
+        .hidden { display: none !important; }
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid #eee;
+            gap: 15px;
+        }
+        .modal {
+            position: fixed;
+            inset: 0;
+            background: #0008;
+            z-index: 20;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 15px;
+        }
+        .modal-content {
+            background: white;
+            width: 100%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 25px;
+            border-radius: 16px;
+        }
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .close {
+            background: #eee;
+            color: #333;
+        }
+        .message {
+            padding: 13px;
+            margin: 15px 0;
+            border-radius: 8px;
+            background: #f5e7ed;
+        }
+        .total {
+            text-align: right;
+            font-size: 23px;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+        @media(max-width: 600px) {
+            header { padding: 15px; flex-wrap: wrap; }
+            h1 { font-size: 27px; }
+            .hero { padding: 23px; }
         }
     </style>
 </head>
-
 <body>
 
-<!-- HEADER -->
-
 <header>
-    <nav>
-        <a href="/" class="logo" id="homeBtn">
-            ✿ Flor<span>.</span>
-        </a>
-
-        <div class="actions">
-            <button class="btn" id="loginBtn">
-                Войти / Регистрация
-            </button>
-
-            <button class="btn" id="profileBtn" hidden>
-                👤 Личный кабинет
-            </button>
-
-            <button class="btn" id="cartBtn">
-                🛍 Корзина
-            </button>
-        </div>
-    </nav>
+    <div class="logo" onclick="showPage('catalog')" style="cursor:pointer">
+        🌸 Flora
+    </div>
+    <div class="actions">
+        <button class="secondary" onclick="showPage('catalog')">
+            Каталог
+        </button>
+        <button id="registerButton" onclick="openModal('registerModal')">
+            Регистрация
+        </button>
+        <button id="profileButton" class="secondary hidden"
+                onclick="showPage('profile')">
+            Личный кабинет
+        </button>
+        <button id="cartButton" class="secondary hidden"
+                onclick="showPage('cart')">
+            🛒 Корзина
+        </button>
+    </div>
 </header>
 
-<!-- MAIN -->
-
 <main>
-    <section class="hero">
-        <div class="hero-inner">
-            <div>
-                <p>✦ ЦВЕТЫ ДЛЯ ОСОБЕННЫХ МОМЕНТОВ</p>
+    <div id="notification" class="message hidden"></div>
 
-                <h1>
-                    Цветы, которые говорят за вас
-                </h1>
-
-                <p>
-                    Свежие цветы и красивые букеты
-                    для самых важных моментов.
-                </p>
-
-                <button class="btn primary" id="catalogBtn">
-                    Смотреть каталог →
-                </button>
-            </div>
-
-            <div class="flower-art">🌸</div>
+    <section id="catalogPage">
+        <div class="hero">
+            <h1>Цветы для особенных моментов 🌷</h1>
+            <p>Выберите любимые цветы и оформите заказ.</p>
         </div>
-    </section>
-
-    <section class="container" id="catalog">
         <h2>Наши цветы</h2>
-
-        <p class="muted">
-            Выберите свой идеальный букет.
-        </p>
-
-        <div class="products" id="products">
+        <div id="products" class="grid">
             Загрузка товаров...
         </div>
     </section>
+
+    <section id="cartPage" class="hidden">
+        <h1>Моя корзина</h1>
+        <div class="panel">
+            <div id="cartItems">Загрузка корзины...</div>
+            <div id="cartTotal" class="total"></div>
+            <button id="checkoutButton" onclick="openCheckout()">
+                Оформить заказ
+            </button>
+        </div>
+    </section>
+
+    <section id="profilePage" class="hidden">
+        <h1>Личный кабинет</h1>
+        <div class="panel" id="profileInfo"></div>
+        <h2>История заказов</h2>
+        <div class="panel" id="orderHistory"></div>
+    </section>
 </main>
 
-<footer>
-    ✿ Flor — с любовью к цветам © 2026
-</footer>
+<div id="registerModal" class="modal hidden">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>Регистрация</h2>
+            <button class="close" onclick="closeModal('registerModal')">✕</button>
+        </div>
+        <form id="registerForm">
+            <label>Ваше имя</label>
+            <input id="clientName" required placeholder="Введите имя">
 
-<!-- OVERLAY -->
+            <label>Номер телефона</label>
+            <input id="clientPhone" required placeholder="+380...">
 
-<div class="overlay" id="overlay" hidden></div>
-
-<!-- LOGIN / REGISTER -->
-
-<div class="modal" id="authModal" hidden>
-    <div class="panel-head">
-        <h2 id="authTitle">Вход</h2>
-        <button class="close" data-close>×</button>
+            <button type="submit">Зарегистрироваться</button>
+        </form>
     </div>
-
-    <div class="tabs">
-        <button class="btn primary" id="loginTab">
-            Вход
-        </button>
-
-        <button class="btn" id="registerTab">
-            Регистрация
-        </button>
-    </div>
-
-    <form id="authForm">
-        <div class="field" id="nameField" hidden>
-            <label for="authName">Имя</label>
-
-            <input
-                    id="authName"
-                    placeholder="Анна"
-            >
-        </div>
-
-        <div class="field">
-            <label for="authPhone">Телефон</label>
-
-            <input
-                    id="authPhone"
-                    placeholder="+380991234567"
-                    required
-            >
-        </div>
-
-        <div class="field">
-            <label for="authPassword">Пароль</label>
-
-            <input
-                    id="authPassword"
-                    type="password"
-                    required
-            >
-        </div>
-
-        <button
-                class="btn primary full"
-                type="submit"
-                id="authSubmit"
-        >
-            Войти
-        </button>
-
-        <p id="authMessage"></p>
-    </form>
 </div>
 
-<!-- CART -->
+<div id="checkoutModal" class="modal hidden">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>Оформление заказа</h2>
+            <button class="close" onclick="closeModal('checkoutModal')">✕</button>
+        </div>
+        <form id="checkoutForm">
+            <label>Город</label>
+            <input id="city" required>
 
-<aside class="panel" id="cartPanel" hidden>
-    <div class="panel-head">
-        <h2>Корзина</h2>
-        <button class="close" data-close>×</button>
+            <label>Улица</label>
+            <input id="street" required>
+
+            <label>Дом</label>
+            <input id="house" required>
+
+            <label>Квартира (необязательно)</label>
+            <input id="apartment">
+
+            <label>Комментарий</label>
+            <textarea id="comment"></textarea>
+
+            <button type="submit">Подтвердить заказ</button>
+        </form>
     </div>
-
-    <div id="cartItems"></div>
-
-    <div class="cart-total" id="cartTotal">
-        Итого: 0
-    </div>
-
-    <button class="btn primary full" id="checkoutBtn">
-        Оформить заказ
-    </button>
-</aside>
-
-<!-- PROFILE -->
-
-<aside class="panel" id="profilePanel" hidden>
-    <div class="panel-head">
-        <h2>Личный кабинет</h2>
-        <button class="close" data-close>×</button>
-    </div>
-
-    <div id="profileInfo"></div>
-
-    <h3>История заказов</h3>
-
-    <div id="orderHistory"></div>
-
-    <button
-            class="btn danger full"
-            id="logoutBtn"
-            style="margin-top:30px"
-    >
-        Выйти из аккаунта
-    </button>
-</aside>
-
-<!-- NOTIFICATIONS -->
-
-<div class="toast" id="toast" hidden></div>
+</div>
 
 <script>
-    const $ = id => document.getElementById(id);
-
-    let currentUser = null;
-    let cart = [];
-    let authMode = "login";
-    let csrfToken = null;
-
-    // УТИЛИТЫ
-
-    function money(value) {
-        return Number(value || 0).toLocaleString("ru-RU", {
-            maximumFractionDigits: 2
-        });
-    }
-
-    function escapeHtml(value) {
-        return String(value ?? "").replace(
-            /[&<>"']/g,
-            ch => ({
-                "&": "&amp;",
-                "<": "&lt;",
-                ">": "&gt;",
-                '"': "&quot;",
-                "'": "&#39;"
-            })[ch]
-        );
-    }
+    const API = window.location.origin;
+    let clientId = localStorage.getItem("floraClientId");
 
     function notify(message) {
-        const toast = $("toast");
-
-        toast.textContent = message;
-        toast.hidden = false;
-
-        clearTimeout(notify.timer);
-
-        notify.timer = setTimeout(() => {
-            toast.hidden = true;
-        }, 4000);
+        const element = document.getElementById("notification");
+        element.textContent = message;
+        element.classList.remove("hidden");
     }
 
-    function closePanels() {
-        $("overlay").hidden = true;
-        $("authModal").hidden = true;
-        $("cartPanel").hidden = true;
-        $("profilePanel").hidden = true;
+    function openModal(id) {
+        document.getElementById(id).classList.remove("hidden");
     }
 
-    function openPanel(id) {
-        closePanels();
-
-        $(id).hidden = false;
-        $("overlay").hidden = false;
+    function closeModal(id) {
+        document.getElementById(id).classList.add("hidden");
     }
 
-    // CSRF
-
-    async function getCsrf() {
-        const response = await fetch("/auth/csrf", {
-            method: "GET",
-            credentials: "same-origin",
-            cache: "no-store"
+    async function api(path, options = {}) {
+        const response = await fetch(API + path, {
+            ...options,
+            headers: {
+                "Content-Type": "application/json",
+                ...options.headers
+            }
         });
 
         if (!response.ok) {
-            throw new Error(
-                "Не удалось получить CSRF-токен"
-            );
+            const error = await response.text();
+            throw new Error(error || "HTTP " + response.status);
         }
-
-        const data = await response.json();
-
-        csrfToken = data.token;
-
-        return csrfToken;
-    }
-
-    // HTTP REQUESTS
-
-    async function request(path, options = {}) {
-        const method = (
-            options.method || "GET"
-        ).toUpperCase();
-
-        const headers = {
-            ...(options.headers || {})
-        };
-
-        if (options.body !== undefined) {
-            headers["Content-Type"] = "application/json";
-        }
-
-        if (!["GET", "HEAD", "OPTIONS"].includes(method)) {
-            const token = await getCsrf();
-
-            headers["X-XSRF-TOKEN"] = token;
-        }
-
-        const response = await fetch(path, {
-            ...options,
-            method,
-            headers,
-            credentials: "same-origin"
-        });
 
         const text = await response.text();
 
-        let data;
+        if (!text) return null;
 
         try {
-            data = text ? JSON.parse(text) : null;
+            return JSON.parse(text);
         } catch {
-            data = text;
+            return text;
         }
-
-        if (!response.ok) {
-            let message = typeof data === "string"
-                ? data
-                : data?.message ||
-                data?.detail ||
-                data?.error ||
-                "Ошибка запроса";
-
-            if (response.status === 401) {
-                message = "Необходимо войти в аккаунт";
-            }
-
-            if (response.status === 403) {
-                message = "Доступ запрещён или ошибка CSRF";
-            }
-
-            throw new Error(message);
-        }
-
-        return data;
     }
 
-    // AUTH
+    function updateHeader() {
+        document.getElementById("registerButton")
+            .classList.toggle("hidden", !!clientId);
 
-    function updateNavigation() {
-        $("loginBtn").hidden = Boolean(currentUser);
-        $("profileBtn").hidden = !currentUser;
+        document.getElementById("profileButton")
+            .classList.toggle("hidden", !clientId);
+
+        document.getElementById("cartButton")
+            .classList.toggle("hidden", !clientId);
     }
 
-    async function loadCurrentUser() {
-        try {
-            currentUser = await request("/auth/me");
-        } catch {
-            currentUser = null;
-        }
+    async function showPage(page) {
+        ["catalog", "cart", "profile"].forEach(name => {
+            document.getElementById(name + "Page")
+                .classList.toggle("hidden", name !== page);
+        });
 
-        updateNavigation();
+        if (page === "cart") await loadCart();
+        if (page === "profile") await loadProfile();
     }
 
-    function setAuthMode(mode) {
-        authMode = mode;
-
-        const register = mode === "register";
-
-        $("authTitle").textContent = register
-            ? "Регистрация"
-            : "Вход";
-
-        $("nameField").hidden = !register;
-        $("authName").required = register;
-
-        $("authSubmit").textContent = register
-            ? "Зарегистрироваться"
-            : "Войти";
-
-        $("loginTab").classList.toggle(
-            "primary",
-            !register
-        );
-
-        $("registerTab").classList.toggle(
-            "primary",
-            register
-        );
-
-        $("authMessage").textContent = "";
+    function createElement(tag, text, className) {
+        const element = document.createElement(tag);
+        if (text !== undefined) element.textContent = text;
+        if (className) element.className = className;
+        return element;
     }
-
-    $("loginBtn").onclick = () => {
-        setAuthMode("login");
-        openPanel("authModal");
-    };
-
-    $("loginTab").onclick = () => {
-        setAuthMode("login");
-    };
-
-    $("registerTab").onclick = () => {
-        setAuthMode("register");
-    };
-
-    $("authForm").onsubmit = async event => {
-        event.preventDefault();
-
-        const name = $("authName").value.trim();
-        const phoneNumber = $("authPhone").value.trim();
-        const password = $("authPassword").value;
-
-        const button = $("authSubmit");
-
-        button.disabled = true;
-
-        try {
-            if (authMode === "register") {
-                await request("/auth/register", {
-                    method: "POST",
-                    body: JSON.stringify({
-                        name,
-                        phoneNumber,
-                        password
-                    })
-                });
-
-                setAuthMode("login");
-
-                $("authMessage").className = "success";
-
-                $("authMessage").textContent =
-                    "Регистрация успешна. Теперь войдите.";
-
-            } else {
-                await request("/auth/login", {
-                    method: "POST",
-                    body: JSON.stringify({
-                        phoneNumber,
-                        password
-                    })
-                });
-
-                await loadCurrentUser();
-
-                if (!currentUser) {
-                    throw new Error(
-                        "Не удалось загрузить профиль"
-                    );
-                }
-
-                closePanels();
-
-                $("authPassword").value = "";
-
-                notify("Добро пожаловать в Flor!");
-            }
-
-        } catch (error) {
-            $("authMessage").className = "error";
-            $("authMessage").textContent = error.message;
-
-        } finally {
-            button.disabled = false;
-        }
-    };
-
-    // PRODUCTS
 
     async function loadProducts() {
-        const container = $("products");
+        const container = document.getElementById("products");
+        container.textContent = "Загрузка товаров...";
 
         try {
-            const products = await request("/product");
+            const products = await api("/products");
+            container.replaceChildren();
 
-            if (!Array.isArray(products) || !products.length) {
-                container.textContent = "Товаров пока нет";
+            if (!Array.isArray(products) || products.length === 0) {
+                container.textContent = "Товары пока отсутствуют.";
                 return;
             }
 
-            container.innerHTML = products.map(product => {
-                const stock = Number(
-                    product.stockQuantity ?? 0
+            products.forEach(product => {
+                const card = createElement("div", undefined, "product");
+                const icon = createElement("div", "🌹", "flower-icon");
+                const name = createElement("h3", product.name ?? "Без названия");
+                const description = createElement(
+                    "p", product.description ?? "", "muted"
                 );
+                const price = createElement(
+                    "div", String(product.price ?? "—"), "price"
+                );
+                const stock = createElement(
+                    "p",
+                    "В наличии: " + (product.stockQuantity ?? "не указано"),
+                    "muted"
+                );
+                const button = createElement("button", "Добавить в корзину");
 
-                return `
-                    <div class="product">
-                        <div class="product-image">🌷</div>
+                button.disabled = !product.id ||
+                    product.stockQuantity === 0;
 
-                        <div class="product-body">
-                            <h3>${escapeHtml(product.name)}</h3>
+                button.onclick = () => addToCart(product.id);
 
-                            <p>
-                                ${escapeHtml(product.description || "")}
-                            </p>
-
-                            <div class="price">
-                                ${money(product.price)}
-                            </div>
-
-                            <div class="stock">
-                                ${
-                    stock > 0
-                        ? "В наличии: " + stock
-                        : "Нет в наличии"
-                }
-                            </div>
-
-                            <button
-                                class="btn primary full"
-                                data-add="${Number(product.id)}"
-                                ${stock <= 0 ? "disabled" : ""}
-                            >
-                                Добавить в корзину
-                            </button>
-                        </div>
-                    </div>
-                `;
-            }).join("");
-
+                card.append(icon, name, description, price, stock, button);
+                container.appendChild(card);
+            });
         } catch (error) {
-            container.textContent =
-                "Ошибка загрузки товаров: " + error.message;
+            container.textContent = "Не удалось загрузить товары.";
+            notify(error.message);
         }
     }
 
-    $("products").addEventListener("click", event => {
-        const button = event.target.closest("[data-add]");
-
-        if (button) {
-            addToCart(Number(button.dataset.add));
-        }
-    });
-
-    // CART
-
-    async function addToCart(prodId) {
-        if (!currentUser) {
-            setAuthMode("login");
-            openPanel("authModal");
-
-            notify("Сначала войдите в аккаунт");
+    async function addToCart(productId) {
+        if (!clientId) {
+            openModal("registerModal");
+            notify("Сначала зарегистрируйтесь.");
             return;
         }
 
         try {
-            await request("/carts/my-items", {
+            await api("/carts/add", {
                 method: "POST",
                 body: JSON.stringify({
-                    prodId,
+                    clientId: Number(clientId),
+                    productId: Number(productId),
                     quantity: 1
                 })
             });
 
-            notify("Товар добавлен в корзину");
-
+            notify("Товар добавлен в корзину!");
         } catch (error) {
-            notify(error.message);
+            notify("Ошибка добавления: " + error.message);
         }
     }
+
+    document.getElementById("registerForm")
+        .addEventListener("submit", async event => {
+            event.preventDefault();
+
+            const name = document.getElementById("clientName").value.trim();
+            const phone = document.getElementById("clientPhone").value.trim();
+
+            try {
+                const client = await api("/clients", {
+                    method: "POST",
+                    body: JSON.stringify({
+                        name: name,
+                        phoneNumber: phone,
+                        balance: 0
+                    })
+                });
+
+                // POST /clients должен возвращать созданного клиента
+                // с полем id.
+                if (!client || !client.id) {
+                    throw new Error(
+                        "Бэкенд не вернул ID созданного клиента."
+                    );
+                }
+
+                clientId = String(client.id);
+                localStorage.setItem("floraClientId", clientId);
+                updateHeader();
+                closeModal("registerModal");
+                notify("Регистрация прошла успешно!");
+            } catch (error) {
+                notify("Ошибка регистрации: " + error.message);
+            }
+        });
 
     async function loadCart() {
-        $("cartItems").textContent =
-            "Загрузка корзины...";
+        const container = document.getElementById("cartItems");
+        const totalElement = document.getElementById("cartTotal");
+        const checkoutButton = document.getElementById("checkoutButton");
 
-        try {
-            cart = await request("/cartsDTO/my-cart");
+        container.textContent = "Загрузка...";
+        totalElement.textContent = "";
+        checkoutButton.disabled = true;
 
-            if (!Array.isArray(cart)) {
-                cart = [];
-            }
-
-            renderCart();
-
-        } catch (error) {
-            cart = [];
-
-            $("cartItems").textContent = error.message;
-
-            $("checkoutBtn").disabled = true;
-        }
-    }
-
-    function renderCart() {
-        if (!cart.length) {
-            $("cartItems").innerHTML =
-                '<p class="muted">Корзина пуста 🌷</p>';
-
-            $("cartTotal").textContent = "Итого: 0";
-
-            $("checkoutBtn").disabled = true;
-            return;
-        }
-
-        let total = 0;
-
-        $("cartItems").innerHTML = cart.map(item => {
-            total += Number(item.total || 0);
-
-            return `
-                <div class="cart-item">
-                    <h3>${escapeHtml(item.prodName)}</h3>
-
-                    <p>Цена: ${money(item.price)}</p>
-
-                    <p>Сумма: ${money(item.total)}</p>
-
-                    <div class="cart-controls">
-                        <button
-                            class="btn"
-                            data-change="${item.itemId}"
-                            data-quantity="${item.quantity - 1}"
-                        >
-                            −
-                        </button>
-
-                        <strong>${item.quantity}</strong>
-
-                        <button
-                            class="btn"
-                            data-change="${item.itemId}"
-                            data-quantity="${item.quantity + 1}"
-                        >
-                            +
-                        </button>
-
-                        <button
-                            class="btn danger"
-                            data-delete="${item.itemId}"
-                        >
-                            Удалить
-                        </button>
-                    </div>
-                </div>
-            `;
-        }).join("");
-
-        $("cartTotal").textContent =
-            "Итого: " + money(total);
-
-        $("checkoutBtn").disabled = false;
-    }
-
-    async function changeQuantity(itemId, quantity) {
-        if (quantity < 1) {
-            await deleteCartItem(itemId);
+        if (!clientId) {
+            container.textContent = "Сначала зарегистрируйтесь.";
             return;
         }
 
         try {
-            await request(`/carts/my-items/${itemId}`, {
-                method: "PUT",
-                body: JSON.stringify({
-                    quantity
-                })
-            });
-
-            await loadCart();
-
-        } catch (error) {
-            notify(error.message);
-        }
-    }
-
-    async function deleteCartItem(itemId) {
-        try {
-            await request(`/carts/my-items/${itemId}`, {
-                method: "DELETE"
-            });
-
-            await loadCart();
-
-            notify("Товар удалён");
-
-        } catch (error) {
-            notify(error.message);
-        }
-    }
-
-    $("cartItems").addEventListener("click", async event => {
-        const change = event.target.closest("[data-change]");
-        const remove = event.target.closest("[data-delete]");
-
-        if (change) {
-            await changeQuantity(
-                Number(change.dataset.change),
-                Number(change.dataset.quantity)
+            const items = await api(
+                "/cartsDTO/" + encodeURIComponent(clientId) + "/cart"
             );
-        }
 
-        if (remove) {
-            await deleteCartItem(
-                Number(remove.dataset.delete)
-            );
-        }
-    });
+            container.replaceChildren();
 
-    $("cartBtn").onclick = async () => {
-        if (!currentUser) {
-            setAuthMode("login");
-            openPanel("authModal");
-            return;
-        }
-
-        openPanel("cartPanel");
-
-        await loadCart();
-    };
-
-    // CHECKOUT
-
-    $("checkoutBtn").onclick = async () => {
-        if (!cart.length) {
-            return;
-        }
-
-        const button = $("checkoutBtn");
-
-        button.disabled = true;
-
-        try {
-            await request("/orders/checkout", {
-                method: "POST"
-            });
-
-            notify("Заказ успешно оформлен!");
-
-            await loadCart();
-
-        } catch (error) {
-            notify(error.message);
-
-        } finally {
-            if (cart.length) {
-                button.disabled = false;
-            }
-        }
-    };
-
-    // PROFILE
-
-    async function loadProfile() {
-        $("profileInfo").textContent = "Загрузка...";
-
-        $("orderHistory").textContent =
-            "Загрузка истории...";
-
-        try {
-            currentUser = await request("/auth/me");
-
-            updateNavigation();
-
-            $("profileInfo").innerHTML = `
-                <div class="profile-box">
-                    <strong>
-                        ${escapeHtml(currentUser.name)}
-                    </strong>
-
-                    <div>
-                        Телефон:
-                        ${escapeHtml(currentUser.phoneNumber)}
-                    </div>
-
-                    <div>
-                        Баланс:
-                        <strong>
-                            ${money(currentUser.balance)}
-                        </strong>
-                    </div>
-                </div>
-            `;
-
-        } catch (error) {
-            $("profileInfo").textContent = error.message;
-        }
-
-        try {
-            const orders = await request("/orders/my-orders");
-
-            if (!Array.isArray(orders) || !orders.length) {
-                $("orderHistory").innerHTML =
-                    '<p class="muted">Заказов пока нет</p>';
+            if (!Array.isArray(items) || items.length === 0 ||
+                items.every(item => item.prodId == null)) {
+                container.textContent = "Корзина пуста.";
                 return;
             }
 
-            $("orderHistory").innerHTML = orders.map(order => `
-                <div class="order">
-                    <strong>
-                        Заказ №${escapeHtml(
-                order.id ?? order.orderId ?? "—"
-            )}
-                    </strong>
+            let total = 0;
 
-                    <p>
-                        Сумма:
-                        ${money(
-                order.totalPrice ?? order.total
-            )}
-                    </p>
+            items.filter(item => item.prodId != null).forEach(item => {
+                const row = createElement("div", undefined, "cart-item");
+                const info = createElement(
+                    "div",
+                    (item.prodName ?? "Товар") +
+                    " × " + item.quantity
+                );
+                const amount = createElement(
+                    "strong", String(item.total ?? "—")
+                );
 
-                    <p class="muted">
-                        ${escapeHtml(order.createdAt || "")}
-                    </p>
-                </div>
-            `).join("");
+                row.append(info, amount);
+                container.appendChild(row);
 
+                total += Number(item.total ?? 0);
+            });
+
+            totalElement.textContent = "Итого: " + total.toFixed(2);
+            checkoutButton.disabled = false;
         } catch (error) {
-            $("orderHistory").textContent = error.message;
+            container.textContent = "Не удалось загрузить корзину.";
+            notify(error.message);
         }
     }
 
-    $("profileBtn").onclick = async () => {
-        openPanel("profilePanel");
+    async function loadProfile() {
+        const profile = document.getElementById("profileInfo");
+        const history = document.getElementById("orderHistory");
 
-        await loadProfile();
-    };
-
-    // LOGOUT
-
-    $("logoutBtn").onclick = async () => {
-        const button = $("logoutBtn");
-
-        button.disabled = true;
+        profile.textContent = "Загрузка...";
+        history.textContent = "Загрузка...";
 
         try {
-            const token = await getCsrf();
+            const client = await api("/clients/" + clientId);
+            profile.replaceChildren();
 
-            const response = await fetch("/logout", {
-                method: "POST",
-                credentials: "same-origin",
-                redirect: "manual",
-                headers: {
-                    "X-XSRF-TOKEN": token
-                }
-            });
-
-            if (
-                !response.ok &&
-                response.status !== 302 &&
-                response.type !== "opaqueredirect"
-            ) {
-                throw new Error(
-                    "Ошибка выхода. HTTP " + response.status
-                );
-            }
-
-            // Проверяем, что сессия завершена
-
-            const meResponse = await fetch("/auth/me", {
-                method: "GET",
-                credentials: "same-origin",
-                cache: "no-store"
-            });
-
-            if (meResponse.ok) {
-                throw new Error(
-                    "Сессия осталась активной"
-                );
-            }
-
-            currentUser = null;
-            cart = [];
-            csrfToken = null;
-
-            window.location.replace("/");
-
-        } catch (error) {
-            console.error("Ошибка выхода:", error);
-
-            notify(
-                "Не удалось выйти: " + error.message
+            profile.append(
+                createElement("h3", client.name ?? "Клиент"),
+                createElement("p", "Телефон: " +
+                    (client.phoneNumber ?? client.phone_number ?? "—")),
+                createElement("p", "Баланс: " +
+                    (client.balance ?? "—"))
             );
-
-            button.disabled = false;
+        } catch (error) {
+            profile.textContent = "Ошибка загрузки профиля: " + error.message;
         }
-    };
 
-    // NAVIGATION
+        try {
+            const orders = await api("/orders");
 
-    $("homeBtn").onclick = event => {
-        event.preventDefault();
+            history.replaceChildren();
 
-        closePanels();
+            if (!Array.isArray(orders)) {
+                history.textContent = "История заказов недоступна.";
+                return;
+            }
 
-        window.scrollTo({
-            top: 0,
-            behavior: "smooth"
-        });
-    };
-
-    $("catalogBtn").onclick = () => {
-        $("catalog").scrollIntoView({
-            behavior: "smooth"
-        });
-    };
-
-    $("overlay").onclick = closePanels;
-
-    document.querySelectorAll("[data-close]").forEach(button => {
-        button.onclick = closePanels;
-    });
-
-    document.addEventListener("keydown", event => {
-        if (event.key === "Escape") {
-            closePanels();
+            // Для правильной истории нужен endpoint,
+            // возвращающий заказы конкретного клиента.
+            history.textContent =
+                "Для отображения истории клиента нужен " +
+                "GET /orders/client/" + clientId +
+                " или аналогичный endpoint на бэкенде.";
+        } catch (error) {
+            history.textContent =
+                "Не удалось загрузить историю заказов: " + error.message;
         }
-    });
-
-    // INITIALIZATION
-
-    async function init() {
-        await Promise.all([
-            loadCurrentUser(),
-            loadProducts()
-        ]);
     }
 
-    init();
+    function openCheckout() {
+        if (!clientId) {
+            openModal("registerModal");
+            return;
+        }
+        openModal("checkoutModal");
+    }
+
+    document.getElementById("checkoutForm")
+        .addEventListener("submit", async event => {
+            event.preventDefault();
+
+            const deliveryAddress = {
+                city: document.getElementById("city").value.trim(),
+                street: document.getElementById("street").value.trim(),
+                house: document.getElementById("house").value.trim(),
+                apartment: document.getElementById("apartment").value.trim(),
+                comment: document.getElementById("comment").value.trim()
+            };
+
+            // Нужно согласовать тело запроса с CheckoutController.
+            // Здесь адрес отправляется одним полем.
+            const request = {
+                clientId: Number(clientId),
+                deliveryAddress:
+                    [
+                        deliveryAddress.city,
+                        deliveryAddress.street,
+                        deliveryAddress.house,
+                        deliveryAddress.apartment
+                    ].filter(Boolean).join(", "),
+                deliveryComment: deliveryAddress.comment
+            };
+
+            try {
+                await api("/checkout", {
+                    method: "POST",
+                    body: JSON.stringify(request)
+                });
+
+                closeModal("checkoutModal");
+                notify("Заказ успешно оформлен!");
+                await loadCart();
+            } catch (error) {
+                notify("Ошибка оформления заказа: " + error.message);
+            }
+        });
+
+    updateHeader();
+    loadProducts();
 </script>
 
 </body>
-</html>
+</html>ml>

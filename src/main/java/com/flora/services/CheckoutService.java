@@ -1,11 +1,11 @@
 package com.flora.services;
 
-
-
+import com.flora.FlorDTO.CheckoutRequestDTO;
 import com.flora.FlorDTO.CheckoutResponseDTO;
 import com.flora.FlorDTO.OrderHistoryDTO;
 import com.flora.entity.OrderItem;
 import com.flora.repository.OrderItemRepository;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
@@ -32,9 +32,26 @@ public class CheckoutService {
     }
 
     @Transactional
-    public CheckoutResponseDTO checkout(String phoneNumber) {
+    public CheckoutResponseDTO checkout(
+            String phoneNumber,
+            CheckoutRequestDTO request
+    ) {
 
-        // 1. Блокируем клиента
+        // Проверяем адрес доставки
+        if (request == null
+                || request.deliveryAddress() == null
+                || request.deliveryAddress().isBlank()) {
+
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "Укажите адрес доставки"
+            );
+        }
+
+        String deliveryAddress =
+                request.deliveryAddress().trim();
+
+        // 1. Находим и блокируем клиента
         Long clientId = jdbcTemplate.query(
                 """
                 SELECT id
@@ -42,7 +59,9 @@ public class CheckoutService {
                 WHERE phone_number = ?
                 FOR UPDATE
                 """,
-                rs -> rs.next() ? rs.getLong("id") : null,
+                rs -> rs.next()
+                        ? rs.getLong("id")
+                        : null,
                 phoneNumber
         );
 
@@ -64,7 +83,9 @@ public class CheckoutService {
                 LIMIT 1
                 FOR UPDATE
                 """,
-                rs -> rs.next() ? rs.getLong("id") : null,
+                rs -> rs.next()
+                        ? rs.getLong("id")
+                        : null,
                 clientId
         );
 
@@ -75,8 +96,7 @@ public class CheckoutService {
             );
         }
 
-        // 3. Получаем товары из корзины
-        // Одинаковые товары объединяем
+        // 3. Получаем товары корзины
         List<CartProduct> products = jdbcTemplate.query(
                 """
                 SELECT
@@ -102,9 +122,10 @@ public class CheckoutService {
         }
 
         List<OrderItem> orderItems = new ArrayList<>();
+
         BigDecimal totalPrice = BigDecimal.ZERO;
 
-        // 4. Проверяем товары и запоминаем цены
+        // 4. Проверяем товары и остатки
         for (CartProduct product : products) {
 
             if (product.quantity() <= 0) {
@@ -116,7 +137,10 @@ public class CheckoutService {
 
             ProductData data = jdbcTemplate.query(
                     """
-                    SELECT name, price, stock_quantity
+                    SELECT
+                        name,
+                        price,
+                        stock_quantity
                     FROM product_flor
                     WHERE id = ?
                     FOR UPDATE
@@ -140,6 +164,7 @@ public class CheckoutService {
 
             if (data.price() == null
                     || data.price().signum() < 0) {
+
                 throw new ResponseStatusException(
                         HttpStatus.BAD_REQUEST,
                         "Некорректная цена товара"
@@ -165,15 +190,14 @@ public class CheckoutService {
 
             orderItems.add(item);
 
-            BigDecimal itemTotal = data.price()
-                    .multiply(
-                            BigDecimal.valueOf(product.quantity())
-                    );
+            BigDecimal itemTotal = data.price().multiply(
+                    BigDecimal.valueOf(product.quantity())
+            );
 
             totalPrice = totalPrice.add(itemTotal);
         }
 
-        // 5. Списываем деньги
+        // 5. Списываем деньги клиента
         int updatedClient = jdbcTemplate.update(
                 """
                 UPDATE client_florr
@@ -217,36 +241,62 @@ public class CheckoutService {
             }
         }
 
-        // 7. Создаём заказ
+        // 7. Создаём заказ с адресом доставки
         Long orderId = jdbcTemplate.queryForObject(
                 """
-                INSERT INTO "order" (cart_id, total_price)
-                VALUES (?, ?)
+                INSERT INTO "order" (
+                    cart_id,
+                    total_price,
+                    delivery_address
+                )
+                VALUES (?, ?, ?)
                 RETURNING id
                 """,
                 Long.class,
                 cartId,
-                totalPrice
+                totalPrice,
+                deliveryAddress
         );
 
-        // 8. Сохраняем позиции заказа
-        // Здесь используются цены на момент покупки
+        // 8. Сохраняем товары заказа
         for (OrderItem item : orderItems) {
+
             item.setOrderId(orderId);
+
             orderItemRepository.saveOrderItem(item);
         }
 
         // 9. Сохраняем оплату
         jdbcTemplate.update(
                 """
-                INSERT INTO payment (order_id, full_cost, paid)
+                INSERT INTO payment (
+                    order_id,
+                    full_cost,
+                    paid
+                )
                 VALUES (?, ?, true)
                 """,
                 orderId,
                 totalPrice
         );
 
-        // 10. Закрываем корзину
+        // 10. Переводим деньги на счёт магазина
+        int updatedShop = jdbcTemplate.update(
+                """
+                UPDATE shop_account
+                SET balance = balance + ?
+                WHERE id = 1
+                """,
+                totalPrice
+        );
+
+        if (updatedShop != 1) {
+            throw new IllegalStateException(
+                    "Счёт магазина не найден"
+            );
+        }
+
+        // 11. Закрываем корзину
         int closed = jdbcTemplate.update(
                 """
                 UPDATE cart
@@ -273,8 +323,14 @@ public class CheckoutService {
         );
     }
 
+    // =========================================
+    // ИСТОРИЯ ЗАКАЗОВ КЛИЕНТА
+    // =========================================
+
     @Transactional(readOnly = true)
-    public List<OrderHistoryDTO> getMyOrders(String phoneNumber) {
+    public List<OrderHistoryDTO> getMyOrders(
+            String phoneNumber
+    ) {
 
         Long clientId = jdbcTemplate.query(
                 """
@@ -282,7 +338,9 @@ public class CheckoutService {
                 FROM client_florr
                 WHERE phone_number = ?
                 """,
-                rs -> rs.next() ? rs.getLong("id") : null,
+                rs -> rs.next()
+                        ? rs.getLong("id")
+                        : null,
                 phoneNumber
         );
 
@@ -295,16 +353,18 @@ public class CheckoutService {
 
         return jdbcTemplate.query(
                 """
-               
-                        SELECT
-                              o.id,
-                              o.cart_id,
-                              o.total_price,
-                              o.created_at,
-                              p.paid
+                SELECT
+                    o.id,
+                    o.cart_id,
+                    o.total_price,
+                    o.created_at,
+                    o.delivery_address,
+                    p.paid
                 FROM "order" o
-                JOIN cart c ON c.id = o.cart_id
-                JOIN payment p ON p.order_id = o.id
+                JOIN cart c
+                    ON c.id = o.cart_id
+                JOIN payment p
+                    ON p.order_id = o.id
                 WHERE c.user_id = ?
                 ORDER BY o.id DESC
                 """,
@@ -336,7 +396,11 @@ public class CheckoutService {
                             rs.getLong("cart_id"),
                             rs.getBigDecimal("total_price"),
                             rs.getBoolean("paid"),
-                            rs.getObject("created_at", OffsetDateTime.class),
+                            rs.getObject(
+                                    "created_at",
+                                    OffsetDateTime.class
+                            ),
+                            rs.getString("delivery_address"),
                             items
                     );
                 },

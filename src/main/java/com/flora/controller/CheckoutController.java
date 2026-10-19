@@ -1,8 +1,10 @@
 package com.flora.controller;
 
+import com.flora.FlorDTO.CheckoutRequestDTO;
 import com.flora.FlorDTO.CheckoutResponseDTO;
 import com.flora.FlorDTO.OrderHistoryDTO;
 import com.flora.services.CheckoutService;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -21,31 +23,47 @@ public class CheckoutController {
         this.checkoutService = checkoutService;
     }
 
+    // =====================================
+    // ОФОРМЛЕНИЕ И ОПЛАТА ЗАКАЗА
+    // =====================================
+
     @PostMapping("/checkout")
     public CheckoutResponseDTO checkout(
-            @AuthenticationPrincipal UserDetails user
+            @AuthenticationPrincipal UserDetails user,
+            @RequestBody CheckoutRequestDTO request
     ) {
+
         if (user == null) {
             throw new ResponseStatusException(
                     HttpStatus.UNAUTHORIZED,
-                    "Необходима авторизация"
+                    "Необходимо войти в аккаунт"
             );
         }
 
-        return checkoutService.checkout(user.getUsername());
+        return checkoutService.checkout(
+                user.getUsername(),
+                request
+        );
     }
+
+    // =====================================
+    // ИСТОРИЯ ЗАКАЗОВ КЛИЕНТА
+    // =====================================
 
     @GetMapping("/my-orders")
     public List<OrderHistoryDTO> getMyOrders(
             @AuthenticationPrincipal UserDetails user
     ) {
+
         if (user == null) {
             throw new ResponseStatusException(
                     HttpStatus.UNAUTHORIZED,
-                    "Необходима авторизация"
+                    "Необходимо войти в аккаунт"
             );
         }
 
-        return checkoutService.getMyOrders(user.getUsername());
+        return checkoutService.getMyOrders(
+                user.getUsername()
+        );
     }
 }
