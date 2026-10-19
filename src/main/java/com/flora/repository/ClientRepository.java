@@ -58,37 +58,6 @@ public class ClientRepository {
         ).stream().findFirst();
     }
 
-    public List<ClientFlorr> getAllClient() {
-        return jdbcTemplate.query(
-                """
-                SELECT id, name, phone_number, balance
-                FROM client_florr
-                """,
-                (rs, rowNum) -> new ClientFlorr(
-                        rs.getInt("id"),
-                        rs.getString("name"),
-                        rs.getString("phone_number"),
-                        rs.getBigDecimal("balance")
-                )
-        );
-    }
-
-    public Optional<ClientFlorr> getByIdClient(int id) {
-        return jdbcTemplate.query(
-                """
-                SELECT id, name, phone_number, balance
-                FROM client_florr
-                WHERE id = ?
-                """,
-                (rs, rowNum) -> new ClientFlorr(
-                        rs.getInt("id"),
-                        rs.getString("name"),
-                        rs.getString("phone_number"),
-                        rs.getBigDecimal("balance")
-                ),
-                id
-        ).stream().findFirst();
-    }
 
     public int addClient(ClientFlorr client) {
         return jdbcTemplate.update(
@@ -102,30 +71,6 @@ public class ClientRepository {
                 client.getPhoneNumber(),
                 client.getBalance(),
                 client.getPasswordHash()
-        );
-    }
-
-    public int updateClient(int id, ClientFlorr client) {
-        return jdbcTemplate.update(
-                """
-                UPDATE client_florr
-                SET name = ?, phone_number = ?, balance = ?
-                WHERE id = ?
-                """,
-                client.getName(),
-                client.getPhoneNumber(),
-                client.getBalance(),
-                id
-        );
-    }
-
-    public int deleteClient(int id) {
-        return jdbcTemplate.update(
-                """
-                DELETE FROM client_florr
-                WHERE id = ?
-                """,
-                id
         );
     }
 
@@ -168,3 +113,80 @@ public class ClientRepository {
         );
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+
+    public int updateClient(int id, ClientFlorr client) {
+        return jdbcTemplate.update(
+                """
+                UPDATE client_florr
+                SET name = ?, phone_number = ?, balance = ?
+                WHERE id = ?
+                """,
+                client.getName(),
+                client.getPhoneNumber(),
+                client.getBalance(),
+                id
+        );
+    }
+
+    public int deleteClient(int id) {
+        return jdbcTemplate.update(
+                """
+                DELETE FROM client_florr
+                WHERE id = ?
+                """,
+                id
+        );
+    }
+    public List<ClientFlorr> getAllClient() {
+        return jdbcTemplate.query(
+                """
+                SELECT id, name, phone_number, balance
+                FROM client_florr
+                """,
+                (rs, rowNum) -> new ClientFlorr(
+                        rs.getInt("id"),
+                        rs.getString("name"),
+                        rs.getString("phone_number"),
+                        rs.getBigDecimal("balance")
+                )
+        );
+    }
+
+    public Optional<ClientFlorr> getByIdClient(int id) {
+        return jdbcTemplate.query(
+                """
+                SELECT id, name, phone_number, balance
+                FROM client_florr
+                WHERE id = ?
+                """,
+                (rs, rowNum) -> new ClientFlorr(
+                        rs.getInt("id"),
+                        rs.getString("name"),
+                        rs.getString("phone_number"),
+                        rs.getBigDecimal("balance")
+                ),
+                id
+        ).stream().findFirst();
+    }
+ */

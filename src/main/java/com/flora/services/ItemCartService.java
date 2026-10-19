@@ -30,42 +30,6 @@ public class ItemCartService {
         this.productRepository = productRepository;
     }
 
-    // Получить все позиции корзины
-    public List<ItemCart> getAllItemCarts() {
-        return itemCartRepository.getAllItemCarts();
-    }
-
-    // Получить позицию по ID
-    public Optional<ItemCart> getItemCartById(int id) {
-        return itemCartRepository.getItemCartById(id);
-    }
-
-    // Создать позицию корзины
-    public int createItemCart(ItemCart itemCart) {
-        if (itemCart.getQuantity() <= 0) {
-            throw new IllegalArgumentException(
-                    "Количество товара должно быть больше нуля"
-            );
-        }
-
-        return itemCartRepository.createItemCart(itemCart);
-    }
-
-    // Обновить позицию
-    public int updateItemCart(ItemCart itemCart) {
-        if (itemCart.getQuantity() <= 0) {
-            throw new IllegalArgumentException(
-                    "Количество товара должно быть больше нуля"
-            );
-        }
-
-        return itemCartRepository.updateItemCart(itemCart);
-    }
-
-    // Удалить позицию
-    public int deleteItemCart(int id) {
-        return itemCartRepository.deleteItemCart(id);
-    }
 
     // Добавить товар в корзину клиента
     @Transactional
@@ -227,3 +191,44 @@ public class ItemCartService {
         }
     }
 }
+
+
+/*
+
+    // Получить все позиции корзины
+    public List<ItemCart> getAllItemCarts() {
+        return itemCartRepository.getAllItemCarts();
+    }
+
+    // Получить позицию по ID
+    public Optional<ItemCart> getItemCartById(int id) {
+        return itemCartRepository.getItemCartById(id);
+    }
+
+    // Создать позицию корзины
+    public int createItemCart(ItemCart itemCart) {
+        if (itemCart.getQuantity() <= 0) {
+            throw new IllegalArgumentException(
+                    "Количество товара должно быть больше нуля"
+            );
+        }
+
+        return itemCartRepository.createItemCart(itemCart);
+    }
+
+    // Обновить позицию
+    public int updateItemCart(ItemCart itemCart) {
+        if (itemCart.getQuantity() <= 0) {
+            throw new IllegalArgumentException(
+                    "Количество товара должно быть больше нуля"
+            );
+        }
+
+        return itemCartRepository.updateItemCart(itemCart);
+    }
+
+    // Удалить позицию
+    public int deleteItemCart(int id) {
+        return itemCartRepository.deleteItemCart(id);
+    }
+ */

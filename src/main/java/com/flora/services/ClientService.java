@@ -21,26 +21,6 @@ public class ClientService {
         this.clientRepository = clientRepository;
     }
 
-    public Optional<ClientFlorr> getClientById(int id) {
-        return clientRepository.getByIdClient(id);
-    }
-
-    public List<ClientFlorr> getAllClients() {
-        return clientRepository.getAllClient();
-    }
-
-    public void addClient(ClientFlorr client) {
-        clientRepository.addClient(client);
-    }
-
-    public boolean updateClient(int id, ClientFlorr client) {
-        return clientRepository.updateClient(id, client) > 0;
-    }
-
-    public boolean deleteClient(int id) {
-        return clientRepository.deleteClient(id) > 0;
-    }
-
     @Transactional
     public BigDecimal topUpBalance(
             String phoneNumber,
@@ -75,3 +55,27 @@ public class ClientService {
         return newBalance;
     }
 }
+
+
+/*
+
+    public Optional<ClientFlorr> getClientById(int id) {
+        return clientRepository.getByIdClient(id);
+    }
+
+    public List<ClientFlorr> getAllClients() {
+        return clientRepository.getAllClient();
+    }
+
+    public void addClient(ClientFlorr client) {
+        clientRepository.addClient(client);
+    }
+
+    public boolean updateClient(int id, ClientFlorr client) {
+        return clientRepository.updateClient(id, client) > 0;
+    }
+
+    public boolean deleteClient(int id) {
+        return clientRepository.deleteClient(id) > 0;
+    }
+ */

@@ -16,6 +16,36 @@ public class CartService {
         this.cartRepository = cartRepository;
     }
 
+
+    public int getOrCreateCart(int clientId) {
+
+        Optional<Cart> cart =
+                cartRepository.getCartByClientId(clientId);
+
+        if (cart.isPresent()) {
+            return cart.get().getId();
+        }
+
+        return cartRepository.createCart(clientId);
+    }
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
     //  получить все корзины
     public List<Cart> getAllCarts() {
         return cartRepository.getAllCarts();
@@ -30,19 +60,6 @@ public class CartService {
     public int createCart(int clientId) {
         return cartRepository.createCart(clientId);
     }
-
-    public int getOrCreateCart(int clientId) {
-
-        Optional<Cart> cart =
-                cartRepository.getCartByClientId(clientId);
-
-        if (cart.isPresent()) {
-            return cart.get().getId();
-        }
-
-        return cartRepository.createCart(clientId);
-    }
-
     // обновить корзину
     public boolean updateCart(Cart cart) {
         return cartRepository.updateCart(cart) > 0;
@@ -53,3 +70,5 @@ public class CartService {
         return cartRepository.deleteCart(id) > 0;
     }
 }
+
+ */

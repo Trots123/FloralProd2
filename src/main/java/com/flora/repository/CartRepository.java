@@ -24,7 +24,8 @@ public class CartRepository {
 
     public Optional<Cart> getCartByClientId(int clientId) {
         String sql = """
-            SELECT id, user_id, dral_ststus
+            
+                SELECT id, user_id, dral_ststus
             FROM cart
             WHERE user_id = ?
               AND dral_ststus = false
@@ -46,32 +47,18 @@ public class CartRepository {
 
     // создание корзины
     public int createCart(int clientId) {
-        String sql = """
-            INSERT INTO cart (user_id, dral_ststus)
-            VALUES (?, false)
-            RETURNING id
+        String sql =
+                """
+            INSERT INTO cart (user_id,
+                dral_
+                       VALUES (?, false)
+                            RETURNING id
             """;
 
         return jdbcTemplate.queryForObject(
                 sql,
                 Integer.class,
                 clientId
-        );
-    }
-
-    //  Получить все корзины
-    public List<Cart> getAllCarts() {
-        String sql = """
-                SELECT id, user_id, dral_ststus
-                FROM cart
-                """;
-
-        return jdbcTemplate.query(sql, (rs, rowNum) ->
-                new Cart(
-                        rs.getInt("id"),
-                        rs.getInt("user_id"),
-                        rs.getBoolean("dral_ststus")
-                )
         );
     }
 
@@ -95,7 +82,32 @@ public class CartRepository {
                 id
         );
     }
+}
 
+
+
+
+
+
+
+
+
+
+/*
+    //  Получить все корзины
+    public List<Cart> getAllCarts() {
+        String sql = """
+                SELECT id, user_id, dral_ststus
+                FROM cart
+                """;
+        return jdbcTemplate.query(sql, (rs, rowNum) ->
+                new Cart(
+                        rs.getInt("id"),
+                        rs.getInt("user_id"),
+                        rs.getBoolean("dral_ststus")
+                )
+        );
+    }
     // Обновить корзину
     public int updateCart(Cart cart) {
         String sql = """
@@ -103,7 +115,6 @@ public class CartRepository {
                 SET user_id = ?, dral_ststus = ?
                 WHERE id = ?
                 """;
-
         return jdbcTemplate.update(
                 sql,
                 cart.getUserId(),
@@ -111,7 +122,6 @@ public class CartRepository {
                 cart.getId()
         );
     }
-
     //  Удалить корзину
     public int deleteCart(int id) {
         String sql = """
@@ -120,4 +130,4 @@ public class CartRepository {
                 """;
         return jdbcTemplate.update(sql, id);
     }
-}
+ */
