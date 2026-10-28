@@ -1,86 +1,33 @@
 package com.flora.entity;
 
 
-import java.math.BigDecimal;
+import jakarta.persistence.Column;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+import java.math.BigDecimal;
+@Setter
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
+@Table(name = "payment")
 public class Payment {
 
     private BigDecimal fullCost;
+
+    @Column(name = "paid", nullable = false)
     private boolean paid = false;
-    private int orderId;
 
-    public Payment() {
-
-    }
-
-    public Payment(BigDecimal fullCost, boolean paid, int orderId) {
-        this.fullCost = fullCost;
-        this.paid = paid;
-        this.orderId = orderId;
-    }
-
-    public static Payment.Builder builder() {
-        return new Payment.Builder();
-    }
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "order_id", nullable = false)
+    private Order order;
 
 
-    public static class Builder {
 
-        private BigDecimal fullCost;
-        private boolean paid = false;
-        private int orderId;
-
-
-        public Payment.Builder fullCost(BigDecimal fullCost) {
-            this.fullCost = fullCost;
-            return this;
-        }
-
-
-        public Payment.Builder paid(boolean paid) {
-            this.paid = paid;
-            return this;
-        }
-
-        public Payment.Builder orderId(int orderId) {
-            this.orderId = orderId;
-            return this;
-        }
-
-
-        public Payment build() {
-
-            Payment payment = new Payment();
-
-            payment.fullCost = this.fullCost;
-            payment.paid = this.paid;
-            payment.orderId = this.orderId;
-
-            return payment;
-        }
-    }
-
-    public BigDecimal getFullCost() {
-        return fullCost;
-    }
-
-    public void setFullCost(BigDecimal fullCost) {
-        this.fullCost = fullCost;
-    }
-
-    public boolean isPaid() {
-        return paid;
-    }
-
-    public void setPaid(boolean paid) {
-        this.paid = paid;
-    }
-
-    public int getOrderId() {
-        return orderId;
-    }
-
-    public void setOrderId(int order_id) {
-        this.orderId = orderId;
-    }
 }

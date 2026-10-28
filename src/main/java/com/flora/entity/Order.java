@@ -1,47 +1,39 @@
 package com.flora.entity;
 
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import java.math.BigDecimal;
 
-
+@Setter
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor
+@Table (name = "order")
 public class Order {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    private int cartId;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "cart_id", nullable = false)
+    private Cart cart;
+
     private BigDecimal totalPrice;
 
-    public Order() {
+
 
     }
-
-    public Order(int id, int cartId, BigDecimal totalPrice) {
-        this.id = id;
-        this.cartId = cartId;
-        this.totalPrice = totalPrice;
-
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public int getCartId() {
-        return cartId;
-    }
-
-    public void setCartId(int cartId) {
-        this.cartId = cartId;
-    }
-
-    public BigDecimal getTotalPrice() {
-        return totalPrice;
-    }
-
-    public void setTotalPrice(BigDecimal totalPrice) {
-        this.totalPrice = totalPrice;
-    }
-}

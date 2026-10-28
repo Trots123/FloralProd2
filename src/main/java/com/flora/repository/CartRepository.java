@@ -1,6 +1,7 @@
 package com.flora.repository;
 
 import com.flora.entity.Cart;
+import com.flora.entity.ClientFlorr;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -37,7 +38,7 @@ public class CartRepository {
                 rs -> rs.next()
                         ? Optional.of(new Cart(
                         rs.getInt("id"),
-                        rs.getInt("user_id"),
+                        rs.getInt(""),
                         rs.getBoolean("dral_ststus")
                 ))
                         : Optional.empty(),
@@ -70,12 +71,13 @@ public class CartRepository {
                 WHERE id = ?
                 """;
 
+
         return jdbcTemplate.query(
                 sql,
                 rs -> rs.next()
                         ? Optional.of(new Cart(
                         rs.getInt("id"),
-                        rs.getInt("user_id"),
+                        client,
                         rs.getBoolean("dral_ststus")
                 ))
                         : Optional.empty(),

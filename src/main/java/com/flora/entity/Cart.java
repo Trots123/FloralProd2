@@ -1,44 +1,40 @@
 package com.flora.entity;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@Data
+@Entity
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Table(name = "cart")
 public class Cart {
 
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    private int userId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private ClientFlorr client;
+
+    @Column(name = "dral_ststus", nullable = false)
     private boolean dralStstus = false;
 
-    public Cart() {
-    }
-
-    public Cart(int id, int userId, boolean dralStstus) {
-        this.id = id;
-        this.userId = userId;
-        this.dralStstus = dralStstus;
-    }
-
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public int getUserId() {
-        return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
-
-    public boolean isDralStstus() {
-        return dralStstus;
-    }
-
-    public void setDralStstus(boolean dralStstus) {
-        this.dralStstus = dralStstus;
-    }
 }
