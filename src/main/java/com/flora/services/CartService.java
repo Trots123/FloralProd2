@@ -15,28 +15,19 @@ public class CartService {
     private final CartRepository cartRepository;
     private final EntityManager entityManager;
 
-    public CartService(
-            CartRepository cartRepository,
-            EntityManager entityManager
-    ) {
+    public CartService(CartRepository cartRepository, EntityManager entityManager) {
         this.cartRepository = cartRepository;
         this.entityManager = entityManager;
     }
 
     @Transactional
     public int getOrCreateCart(int clientId) {
-
-        Optional<Cart> cart =
-                cartRepository.getCartByClientId(clientId);
-
+        Optional<Cart> cart = cartRepository.getCartByClientId(clientId);
         if (cart.isPresent()) {
             return cart.get().getId();
         }
 
-        ClientFlorr client =
-                entityManager.getReference(
-                        ClientFlorr.class, clientId
-                );
+        ClientFlorr client = entityManager.getReference(ClientFlorr.class, clientId);
 
         Cart newCart = new Cart();
         newCart.setClient(client);

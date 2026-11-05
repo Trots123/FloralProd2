@@ -1,8 +1,11 @@
 package com.flora.services;
 
+import com.flora.entity.Order;
 import com.flora.entity.Payment;
+import com.flora.entity.ProductFlor;
 import com.flora.repository.PaymentRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -19,71 +22,36 @@ public class PaymentService {
 
     // Получить все платежи
     public List<Payment> getAllPayments() {
-        return paymentRepository.getAllPayments();
+        return paymentRepository.findAll();
     }
 
     // Получить платёж по ID заказа
-    public Optional<Payment> getPaymentByOrderId(int orderId) {
-        if (orderId <= 0) {
-            throw new IllegalArgumentException(
-                    "ID заказа должен быть больше нуля"
-            );
-        }
-
-        return paymentRepository.getPaymentByOrderId(orderId);
+    public Payment getPaymentByOrderId(int orderId) {
+        return paymentRepository.getReferenceById(orderId);
     }
 
     // Добавить платёж
-    public int addPayment(Payment payment) {
-        validatePayment(payment);
-
-        return paymentRepository.addPayment(payment);
+    public void addPayment(Payment payment) {
+        paymentRepository.saveAndFlush(payment);
     }
 
     // Изменить платёж
-    public int updatePaymentByOrderId(int orderId, Payment payment) {
-        if (orderId <= 0) {
-            throw new IllegalArgumentException(
-                    "ID заказа должен быть больше нуля"
-            );
-        }
+    @Transactional
+    public boolean updatePaymentByOrderId(int orderId, Payment payment) {
 
-        validatePayment(payment);
-
-        return paymentRepository.updatePaymentByOrderId(orderId, payment);
+        return paymentRepository.findById(orderId)
+                .map(existing -> {
+                    existing.setFullCost(payment.getFullCost());
+                    existing.setPaid(payment.isPaid());
+                    return true;
+                })
+                .orElse(false);
     }
+
 
     // Удалить платёж
-    public int deletePaymentByOrderId(int orderId) {
-        if (orderId <= 0) {
-            throw new IllegalArgumentException(
-                    "ID заказа должен быть больше нуля"
-            );
-        }
-
-        return paymentRepository.deletePaymentByOrderId(orderId);
+    public boolean deletePaymentByOrderId(int orderId) {
+        return paymentRepository.deletePayment(orderId) > 0;
     }
 
-    // Проверка данных платежа
-    private void validatePayment(Payment payment) {
-        if (payment == null) {
-            throw new IllegalArgumentException(
-                    "Платёж не должен быть null"
-            );
-        }
-
-        if (payment.getOrderId() <= 0) {
-            throw new IllegalArgumentException(
-                    "ID заказа должен быть больше нуля"
-            );
-        }
-
-        BigDecimal fullCost = payment.getFullCost();
-
-        if (fullCost == null || fullCost.compareTo(BigDecimal.ZERO) <= 0) {
-            throw new IllegalArgumentException(
-                    "Сумма платежа должна быть больше нуля"
-            );
-        }
-    }
 }

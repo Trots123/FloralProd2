@@ -1,17 +1,34 @@
 package com.flora.repository;
 
 import com.flora.entity.Cart;
+import jakarta.persistence.LockModeType;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
 public interface CartRepository extends JpaRepository<Cart, Integer> {
+
+
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    @Query("""
+    SELECT c FROM Cart c
+    WHERE c.client.id = :clientId
+      AND c.dralStstus = false
+    ORDER BY c.id
+    """)
+    List<Cart> findOpenCartsForUpdate(
+            @Param("clientId") int clientId,
+            Pageable pageable
+    );
 
     @EntityGraph(attributePaths = {"client"})
     @Query("""

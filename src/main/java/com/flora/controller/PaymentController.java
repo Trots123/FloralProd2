@@ -25,28 +25,25 @@ public class PaymentController {
 
     // Получить платёж по ID заказа
     @GetMapping("/{orderId}")
-    public Optional<Payment> getPaymentByOrderId(
-            @PathVariable int orderId) {
+    public Payment getPaymentByOrderId(@PathVariable int orderId) {
         return paymentService.getPaymentByOrderId(orderId);
     }
 
     // Добавить платёж
     @PostMapping
-    public int addPayment(@RequestBody Payment payment) {
-        return paymentService.addPayment(payment);
+    public void addPayment(@RequestBody Payment payment) {
+         paymentService.addPayment(payment);
     }
 
     // Изменить платёж по ID заказа
     @PutMapping("/{orderId}")
-    public int updatePayment(
-            @PathVariable int orderId,
-            @RequestBody Payment payment) {
+    public boolean updatePayment(@PathVariable int orderId, @RequestBody Payment payment) {
         return paymentService.updatePaymentByOrderId(orderId, payment);
     }
 
     // Удалить платёж по ID заказа
     @DeleteMapping("/{orderId}")
-    public int deletePayment(@PathVariable int orderId) {
+    public boolean deletePayment(@PathVariable int orderId) {
         return paymentService.deletePaymentByOrderId(orderId);
     }
 }

@@ -1,6 +1,11 @@
 package com.flora.services;
+
+import com.flora.entity.Cart;
 import com.flora.entity.Order;
+import com.flora.entity.ProductFlor;
 import com.flora.repository.OrderRepository;
+import jakarta.transaction.Transactional;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -18,64 +23,33 @@ public class OrderService {
 
     // Получить все заказы
     public List<Order> getAllOrders() {
-        return orderRepository.getAllOrders();
+        return orderRepository.findAll();
     }
 
     // Получить заказ по ID
-    public Optional<Order> getOrderById(int id) {
-        return orderRepository.getOrderById(id);
+    public Order getOrderById(int id) {
+        return orderRepository.getReferenceById(id);
     }
 
     // Создать заказ
-    public int createOrder(Order order) {
-        if (order.getCartId() <= 0) {
-            throw new IllegalArgumentException(
-                    "ID корзины должен быть больше нуля"
-            );
-        }
-
-        if (order.getTotalPrice() == null
-                || order.getTotalPrice().compareTo(BigDecimal.ZERO) <= 0) {
-            throw new IllegalArgumentException(
-                    "Стоимость заказа должна быть больше нуля"
-            );
-        }
-
-        return orderRepository.createOrder(order);
+    public void createOrder(Order order) {
+        orderRepository.saveAndFlush(order);
     }
 
-    // Обновить заказ
-    public int updateOrder(Order order) {
-        if (order.getId() <= 0) {
-            throw new IllegalArgumentException(
-                    "ID заказа должен быть больше нуля"
-            );
-        }
 
-        if (order.getCartId() <= 0) {
-            throw new IllegalArgumentException(
-                    "ID корзины должен быть больше нуля"
-            );
-        }
-
-        if (order.getTotalPrice() == null
-                || order.getTotalPrice().compareTo(BigDecimal.ZERO) <= 0) {
-            throw new IllegalArgumentException(
-                    "Стоимость заказа должна быть больше нуля"
-            );
-        }
-
-        return orderRepository.updateOrder(order);
+    // Обновление заказа
+    public boolean updateOrder(int id, Order order) {
+        return orderRepository.updateOrder(
+                id,
+                order.getCart(),
+                order.getTotalPrice(),
+                order.getDeliveryAddress()
+        ) > 0;
     }
 
     // Удалить заказ
-    public int deleteOrder(int id) {
-        if (id <= 0) {
-            throw new IllegalArgumentException(
-                    "ID заказа должен быть больше нуля"
-            );
-        }
-
-        return orderRepository.deleteOrder(id);
+    public boolean deleteOrder(int id) {
+        return orderRepository.deleteOrder(id) > 0;
     }
+
 }

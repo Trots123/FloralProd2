@@ -1,6 +1,7 @@
 package com.flora.controller;
 
 import com.flora.entity.Order;
+import com.flora.entity.ProductFlor;
 import com.flora.services.OrderService;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,29 +26,26 @@ public class OrderController {
 
     // Получить заказ по ID
     @GetMapping("/{id}")
-    public Optional<Order> getOrderById(@PathVariable int id) {
+    public Order getOrderById(@PathVariable int id) {
         return orderService.getOrderById(id);
     }
 
     // Создать заказ
     @PostMapping
-    public int createOrder(@RequestBody Order order) {
-        return orderService.createOrder(order);
+    public void createOrder(@RequestBody Order order) {
+        orderService.createOrder(order);
     }
 
     // Обновить заказ
     @PutMapping("/{id}")
-    public int updateOrder(
-            @PathVariable int id,
-            @RequestBody Order order) {
-
+    public boolean updateOrder(@PathVariable ("id") int id, @RequestBody Order order) {
         order.setId(id);
-        return orderService.updateOrder(order);
+       return orderService.updateOrder(id , order);
     }
 
     // Удалить заказ
     @DeleteMapping("/{id}")
-    public int deleteOrder(@PathVariable int id) {
+    public boolean deleteOrder(@PathVariable int id) {
         return orderService.deleteOrder(id);
     }
 }

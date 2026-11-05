@@ -23,7 +23,6 @@ public class AuthService {
     }
 
     public void register(RegisterRequest request) {
-
         if (request == null
                 || request.getName() == null
                 || request.getName().isBlank()
@@ -31,22 +30,16 @@ public class AuthService {
                 || request.getPhoneNumber().isBlank()
                 || request.getPassword() == null
                 || request.getPassword().length() < 8) {
-
-            throw new IllegalArgumentException(
-                    "Укажите имя, телефон и пароль не короче 8 символов"
-            );
+            throw new IllegalArgumentException("Укажите имя, телефон и пароль не короче 8 символов");
         }
 
         String phoneNumber = request.getPhoneNumber().trim();
 
         if (clientRepository.findByPhoneNumber(phoneNumber).isPresent()) {
-            throw new IllegalArgumentException(
-                    "Клиент с таким номером уже зарегистрирован"
-            );
+            throw new IllegalArgumentException("Клиент с таким номером уже зарегистрирован");
         }
 
-        String passwordHash =
-                passwordEncoder.encode(request.getPassword());
+        String passwordHash = passwordEncoder.encode(request.getPassword());
 
         ClientFlorr client = new ClientFlorr();
 
@@ -55,6 +48,6 @@ public class AuthService {
         client.setBalance(BigDecimal.ZERO);
         client.setPasswordHash(passwordHash);
 
-        clientRepository.addClient(client);
+        clientRepository.saveAndFlush(client);
     }
 }

@@ -2,6 +2,7 @@ package com.flora.services;
 
 import com.flora.entity.ProductFlor;
 import com.flora.repository.ProductRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,25 +18,32 @@ public class ProductService {
 
     //поиск всех продуктов
     public List<ProductFlor> getAllProduct() {
-        return productRepository.getAll();
+        return productRepository.findAll();
     }
 
     //добавление, создание продукта
     public void addProduct(ProductFlor product) {
-        productRepository.getInsert(product);
+        productRepository.saveAndFlush(product);
     }
 
     // поиск продукта по ID
-    public Optional<ProductFlor> getProductById(int id) {
-        return productRepository.getById(id);
+    public ProductFlor getProductById(int id) {
+        return productRepository.getReferenceById(id);
     }
 
-    //изменение продукта
+
+    // Обновление продукта
     public boolean updateProduct(int id, ProductFlor product) {
-        return productRepository.updateProduct(id, product) > 0;
+        return productRepository.updateProduct(
+                id,
+                product.getName(),
+                product.getPrice(),
+                product.getDescription(),
+                product.getStockQuantity()
+        ) > 0;
     }
 
-    // удаление продукта
+    // Удаление продукта
     public boolean deleteProduct(int id) {
         return productRepository.deleteProduct(id) > 0;
     }

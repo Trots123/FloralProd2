@@ -1,7 +1,6 @@
 package com.flora.FlorDTO;
 
 import java.math.BigDecimal;
-import java.time.OffsetDateTime;
 import java.util.List;
 
 
@@ -10,7 +9,7 @@ public record OrderHistoryDTO(
         long cartId,
         BigDecimal totalPrice,
         boolean paid,
-        OffsetDateTime createdAt,
+        java.time.LocalDateTime createdAt,
         String deliveryAddress,
         List<OrderItemDTO> items
 ) {
@@ -22,4 +21,5 @@ public record OrderHistoryDTO(
             BigDecimal total
     ) {
     }
+
 }
