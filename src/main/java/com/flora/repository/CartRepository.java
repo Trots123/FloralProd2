@@ -1,21 +1,40 @@
 package com.flora.repository;
 
 import com.flora.entity.Cart;
-import com.flora.entity.ClientFlorr;
-import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.data.jpa.repository.EntityGraph;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import com.flora.entity.Cart;
-import org.springframework.jdbc.core.JdbcTemplate;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.List;
 import java.util.Optional;
 
 @Repository
-public class CartRepository {
+public interface CartRepository extends JpaRepository<Cart, Integer> {
 
+    @EntityGraph(attributePaths = {"client"})
+    @Query("""
+        SELECT c
+        FROM Cart c
+        WHERE c.client.id = :clientId
+          AND c.dralStstus = false
+        """)
+
+    Optional<Cart> getCartByClientId(
+            @Param("clientId") int clientId
+    );
+}
+
+
+
+
+
+
+
+
+
+    /*
     private final JdbcTemplate jdbcTemplate;
 
     public CartRepository(JdbcTemplate jdbcTemplate) {
@@ -38,7 +57,7 @@ public class CartRepository {
                 rs -> rs.next()
                         ? Optional.of(new Cart(
                         rs.getInt("id"),
-                        rs.getInt(""),
+                        (ClientFlorr) rs,
                         rs.getBoolean("dral_ststus")
                 ))
                         : Optional.empty(),
@@ -77,7 +96,7 @@ public class CartRepository {
                 rs -> rs.next()
                         ? Optional.of(new Cart(
                         rs.getInt("id"),
-                        client,
+                        (ClientFlorr) rs,
                         rs.getBoolean("dral_ststus")
                 ))
                         : Optional.empty(),
@@ -89,47 +108,4 @@ public class CartRepository {
 
 
 
-
-
-
-
-
-
-/*
-    //  Получить все корзины
-    public List<Cart> getAllCarts() {
-        String sql = """
-                SELECT id, user_id, dral_ststus
-                FROM cart
-                """;
-        return jdbcTemplate.query(sql, (rs, rowNum) ->
-                new Cart(
-                        rs.getInt("id"),
-                        rs.getInt("user_id"),
-                        rs.getBoolean("dral_ststus")
-                )
-        );
-    }
-    // Обновить корзину
-    public int updateCart(Cart cart) {
-        String sql = """
-                UPDATE cart
-                SET user_id = ?, dral_ststus = ?
-                WHERE id = ?
-                """;
-        return jdbcTemplate.update(
-                sql,
-                cart.getUserId(),
-                cart.isDralStstus(),
-                cart.getId()
-        );
-    }
-    //  Удалить корзину
-    public int deleteCart(int id) {
-        String sql = """
-                DELETE FROM cart
-                WHERE id = ?
-                """;
-        return jdbcTemplate.update(sql, id);
-    }
- */
+     */

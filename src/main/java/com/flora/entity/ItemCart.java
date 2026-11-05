@@ -1,6 +1,7 @@
 package com.flora.entity;
 
 
+import jakarta.persistence.Column;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -34,6 +35,7 @@ public class ItemCart {
     @JoinColumn(name = "product_flor", nullable = false)
     private ProductFlor productFlor;
 
+    @Column(name = "quantity", nullable = false)
     private int quantity;
 
 

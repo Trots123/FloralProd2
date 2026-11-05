@@ -1,5 +1,6 @@
 package com.flora.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -25,7 +26,7 @@ public class OrderItem {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private int id;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_id", nullable = false)
@@ -35,8 +36,13 @@ public class OrderItem {
     @JoinColumn(name = "prod_id", nullable = false)
     private ProductFlor productFlor;
 
+    @Column(name = "prod_name", nullable = false)
     private String prodName;
+
+    @Column(name = "quantity", nullable = false)
     private long quantity;
+
+    @Column(name = "price", nullable = false)
     private BigDecimal price;
 
 }

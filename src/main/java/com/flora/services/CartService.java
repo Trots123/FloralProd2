@@ -1,22 +1,29 @@
 package com.flora.services;
 
 import com.flora.entity.Cart;
+import com.flora.entity.ClientFlorr;
 import com.flora.repository.CartRepository;
+import jakarta.persistence.EntityManager;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
 public class CartService {
 
     private final CartRepository cartRepository;
+    private final EntityManager entityManager;
 
-    public CartService(CartRepository cartRepository) {
+    public CartService(
+            CartRepository cartRepository,
+            EntityManager entityManager
+    ) {
         this.cartRepository = cartRepository;
+        this.entityManager = entityManager;
     }
 
-
+    @Transactional
     public int getOrCreateCart(int clientId) {
 
         Optional<Cart> cart =
@@ -26,13 +33,20 @@ public class CartService {
             return cart.get().getId();
         }
 
-        return cartRepository.createCart(clientId);
+        ClientFlorr client =
+                entityManager.getReference(
+                        ClientFlorr.class, clientId
+                );
+
+        Cart newCart = new Cart();
+        newCart.setClient(client);
+        newCart.setDralStstus(false);
+
+        Cart savedCart = cartRepository.save(newCart);
+
+        return savedCart.getId();
     }
-
-
 }
-
-
 
 
 

@@ -1,16 +1,18 @@
 package com.flora.services;
 
+import com.flora.entity.Cart;
 import com.flora.entity.ItemCart;
 import com.flora.entity.ProductFlor;
 import com.flora.repository.ItemCartRepository;
 import com.flora.repository.ProductRepository;
+
+import jakarta.persistence.EntityManager;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -19,64 +21,78 @@ public class ItemCartService {
     private final ItemCartRepository itemCartRepository;
     private final CartService cartService;
     private final ProductRepository productRepository;
+    private final EntityManager entityManager;
 
     public ItemCartService(
             ItemCartRepository itemCartRepository,
             CartService cartService,
-            ProductRepository productRepository) {
-
+            ProductRepository productRepository,
+            EntityManager entityManager
+    ) {
         this.itemCartRepository = itemCartRepository;
         this.cartService = cartService;
         this.productRepository = productRepository;
+        this.entityManager = entityManager;
     }
 
-
-    // Добавить товар в корзину клиента
+    // Добавить товар в корзину
     @Transactional
     public void addProductToCart(
             int clientId,
             int prodId,
-            int quantity) {
+            int quantity
+    ) {
 
         // 1. Проверяем количество
         if (quantity <= 0) {
-            throw new IllegalArgumentException(
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
                     "Количество должно быть больше нуля"
             );
         }
 
-        // 2. Проверяем существование товара
-        ProductFlor product = productRepository.getById(prodId)
-                .orElseThrow(() -> new IllegalArgumentException(
-                        "Товар с ID " + prodId + " не найден"
+        // 2. Получаем товар
+        ProductFlor product = productRepository
+                .findById(prodId)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "Товар не найден"
                 ));
 
-        // 3. Получаем или создаём открытую корзину
+        // 3. Получаем или создаём корзину
         int cartId = cartService.getOrCreateCart(clientId);
-
-        System.out.println("clientId = " + clientId);
-        System.out.println("cartId = " + cartId);
 
         // 4. Ищем товар в корзине
         Optional<ItemCart> existingItem =
-                itemCartRepository.getItemByCartIdAndProdId(
-                        cartId,
-                        prodId
-                );
+                itemCartRepository
+                        .findFirstByCart_IdAndProductFlor_Id(
+                                cartId,
+                                prodId
+                        );
 
         int currentQuantity = existingItem
                 .map(ItemCart::getQuantity)
                 .orElse(0);
 
-        // 5. Считаем итоговое количество
-        int totalQuantity = Math.addExact(
-                currentQuantity,
-                quantity
-        );
+        // 5. Считаем новое количество
+        int totalQuantity;
+
+        try {
+            totalQuantity = Math.addExact(
+                    currentQuantity,
+                    quantity
+            );
+        } catch (ArithmeticException e) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "Слишком большое количество товара"
+            );
+        }
 
         // 6. Проверяем остаток
         if (totalQuantity > product.getStockQuantity()) {
-            throw new IllegalArgumentException(
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
                     "Недостаточно товара на складе. Доступно: "
                             + product.getStockQuantity()
             );
@@ -86,34 +102,34 @@ public class ItemCartService {
         if (existingItem.isPresent()) {
 
             ItemCart item = existingItem.get();
+
             item.setQuantity(totalQuantity);
 
-            itemCartRepository.updateItemCart(item);
+            // Hibernate сохранит изменение при commit
 
         } else {
 
-            ItemCart newItem = new ItemCart(
-                    0,
-                    cartId,
-                    prodId,
-                    quantity
+            Cart cart = entityManager.getReference(
+                    Cart.class,
+                    cartId
             );
 
-            System.out.println(
-                    "newItem.cartId = " + newItem.getCartId()
-            );
+            ItemCart newItem = new ItemCart();
 
-            if (newItem.getCartId() != cartId) {
-                throw new IllegalStateException(
-                        "Ошибка присвоения cartId в ItemCart"
-                );
-            }
+            newItem.setCart(cart);
+            newItem.setProductFlor(product);
+            newItem.setQuantity(quantity);
 
-            itemCartRepository.createItemCart(newItem);
+            itemCartRepository.save(newItem);
         }
     }
+
+    // Удалить товар из своей активной корзины
     @Transactional
-    public void deleteMyItem(int clientId, int itemId) {
+    public void deleteMyItem(
+            int clientId,
+            int itemId
+    ) {
 
         int deleted = itemCartRepository.deleteMyItem(
                 itemId,
@@ -127,6 +143,8 @@ public class ItemCartService {
             );
         }
     }
+
+    // Изменить количество товара
     @Transactional
     public void updateMyItemQuantity(
             int clientId,
@@ -142,7 +160,7 @@ public class ItemCartService {
             );
         }
 
-        // 2. Получаем позицию корзины
+        // 2. Находим позицию в своей активной корзине
         ItemCart item = itemCartRepository
                 .getMyItemById(itemId, clientId)
                 .orElseThrow(() -> new ResponseStatusException(
@@ -150,24 +168,21 @@ public class ItemCartService {
                         "Товар не найден в вашей открытой корзине"
                 ));
 
-        // 3. Проверяем, что товар существует
-        ProductFlor product = productRepository
-                .getById(item.getProdId())
-                .orElseThrow(() -> new ResponseStatusException(
-                        HttpStatus.NOT_FOUND,
-                        "Продукт не найден"
-                ));
+        // 3. Получаем товар
+        ProductFlor product = item.getProductFlor();
 
-        // 4. Проверяем остаток на складе
-        int quantityInOtherRows = itemCartRepository
+        // 4. Проверяем количество в других строках
+        Long quantityInOtherRows = itemCartRepository
                 .getQuantityInCart(
-                        item.getCartId(),
-                        item.getProdId(),
+                        item.getCart().getId(),
+                        product.getId(),
                         itemId
                 );
 
-        long totalQuantity = (long) quantity + quantityInOtherRows;
+        long totalQuantity =
+                (long) quantity + quantityInOtherRows;
 
+        // 5. Проверяем остаток
         if (totalQuantity > product.getStockQuantity()) {
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST,
@@ -176,59 +191,10 @@ public class ItemCartService {
             );
         }
 
-        // 5. Изменяем количество только в своей открытой корзине
-        int updated = itemCartRepository.updateMyItemQuantity(
-                itemId,
-                clientId,
-                quantity
-        );
+        // 6. Обновляем количество
+        item.setQuantity(quantity);
 
-        if (updated == 0) {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND,
-                    "Товар не найден в вашей открытой корзине"
-            );
-        }
+        // Hibernate автоматически сохранит изменение
+        // в конце транзакции
     }
 }
-
-
-/*
-
-    // Получить все позиции корзины
-    public List<ItemCart> getAllItemCarts() {
-        return itemCartRepository.getAllItemCarts();
-    }
-
-    // Получить позицию по ID
-    public Optional<ItemCart> getItemCartById(int id) {
-        return itemCartRepository.getItemCartById(id);
-    }
-
-    // Создать позицию корзины
-    public int createItemCart(ItemCart itemCart) {
-        if (itemCart.getQuantity() <= 0) {
-            throw new IllegalArgumentException(
-                    "Количество товара должно быть больше нуля"
-            );
-        }
-
-        return itemCartRepository.createItemCart(itemCart);
-    }
-
-    // Обновить позицию
-    public int updateItemCart(ItemCart itemCart) {
-        if (itemCart.getQuantity() <= 0) {
-            throw new IllegalArgumentException(
-                    "Количество товара должно быть больше нуля"
-            );
-        }
-
-        return itemCartRepository.updateItemCart(itemCart);
-    }
-
-    // Удалить позицию
-    public int deleteItemCart(int id) {
-        return itemCartRepository.deleteItemCart(id);
-    }
- */

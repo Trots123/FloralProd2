@@ -1,31 +1,30 @@
 package com.flora.entity;
-
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import jakarta.persistence.*;
+import lombok.*;
 
 import java.math.BigDecimal;
 
-@Setter
+@Entity
 @Getter
-@AllArgsConstructor
+@Setter
 @NoArgsConstructor
-@Table (name = "product_flor")
+@AllArgsConstructor
+@Table(name = "product_flor")
 public class ProductFlor {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    @Column(name = "name", nullable = false)
     private String name;
+
+    @Column(name = "price", nullable = false)
     private BigDecimal price;
+
+    @Column(name = "description")
     private String description;
 
+    @Column(name = "stock_quantity", nullable = false)
     private int stockQuantity;
-
 }
