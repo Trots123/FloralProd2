@@ -1,9 +1,7 @@
 package com.flora.services;
 
 import com.flora.FlorDTO.CartDTO;
-import com.flora.entity.Cart;
-import com.flora.repository.CartDTORepository;
-import com.flora.repository.CartRepository;
+import com.flora.repository.DTO.CartDTORepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

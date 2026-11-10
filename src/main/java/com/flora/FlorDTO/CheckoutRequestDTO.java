@@ -1,7 +1,5 @@
 package com.flora.FlorDTO;
 
 
-public record CheckoutRequestDTO(
-        String deliveryAddress
-) {
+public record CheckoutRequestDTO(String deliveryAddress) {
 }
